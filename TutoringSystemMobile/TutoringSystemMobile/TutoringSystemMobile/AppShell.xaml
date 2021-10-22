@@ -14,7 +14,7 @@
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light=#2196F3, Dark=Black}" />
                 <Setter Property="Shell.ForegroundColor" Value="White" />
                 <Setter Property="Shell.TitleColor" Value="White" />
                 <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
@@ -78,15 +78,30 @@
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
-    <FlyoutItem Title="About" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+    <FlyoutItem Title="Start" Icon="icon_home.png">
+        <ShellContent Route="StartTutorPage" ContentTemplate="{DataTemplate local:StartTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Browse" Icon="icon_feed.png">
-        <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
+    <FlyoutItem Title="Rezerwacje" Icon="icon_reservations.png">
+        <ShellContent Route="ReservationTutorPage" ContentTemplate="{DataTemplate local:ReservationTutorPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Dodatkowe zlecenia" Icon="icon_orders.png">
+        <ShellContent Route="OrdersTutorPage" ContentTemplate="{DataTemplate local:OrdersTutorPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Statystyki" Icon="icon_report.png">
+        <ShellContent Route="ReportTutorPage" ContentTemplate="{DataTemplate local:ReportTutorPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Studenci" Icon="icon_students.png">
+        <ShellContent Route="StudentsTutorPage" ContentTemplate="{DataTemplate local:StudentsTutorPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Przedmioty" Icon="icon_subjects.png">
+        <ShellContent Route="SubjectsTutorPage" ContentTemplate="{DataTemplate local:SubjectsTutorPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Konto" Icon="icon_account.png">
+        <ShellContent Route="AccountTutorPage" ContentTemplate="{DataTemplate local:AccountTutorPage}" />
     </FlyoutItem>
 
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
-    <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
+    <MenuItem Text="Wyloguj się" IconImageSource="icon_logout.png" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>
 
     <!--
