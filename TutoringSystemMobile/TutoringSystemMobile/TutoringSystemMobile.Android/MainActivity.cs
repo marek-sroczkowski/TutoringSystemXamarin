@@ -1,9 +1,14 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using TutoringSystemMobile.Services.Utils;
+using Android.Widget;
+using Xamarin.Essentials;
+using Xamarin.Forms;
+using TutoringSystemMobile.Droid;
+
+[assembly: Dependency(typeof(Toaster))]
 
 namespace TutoringSystemMobile.Droid
 {
@@ -23,6 +28,14 @@ namespace TutoringSystemMobile.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public class Toaster : IToast
+    {
+        public void MakeToast(string message)
+        {
+            Toast.MakeText(Platform.AppContext, message, ToastLength.Long).Show();
         }
     }
 }
