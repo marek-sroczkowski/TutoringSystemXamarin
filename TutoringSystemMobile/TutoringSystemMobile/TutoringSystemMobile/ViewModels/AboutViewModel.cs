@@ -9,7 +9,7 @@ namespace TutoringSystemMobile.ViewModels
     {
         public AboutViewModel()
         {
-            Title = "About";
+            //Title = "About";
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://aka.ms/xamarin-quickstart"));
         }
 

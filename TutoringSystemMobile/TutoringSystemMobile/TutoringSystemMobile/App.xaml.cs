@@ -1,8 +1,5 @@
-﻿using System;
-using TutoringSystemMobile.Services;
-using TutoringSystemMobile.Views;
+﻿using TutoringSystemMobile.Services;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace TutoringSystemMobile
 {

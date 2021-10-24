@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using TutoringSystemMobile.ViewModels;
 using TutoringSystemMobile.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile
@@ -21,6 +20,7 @@ namespace TutoringSystemMobile
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
         {
+            SecureStorage.Remove("token");
             await Shell.Current.GoToAsync("//LoginPage");
         }
     }

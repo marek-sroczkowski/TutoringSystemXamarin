@@ -5,9 +5,41 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="TutoringSystemMobile.Views.LoginPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
+
+    <ContentPage.Resources>
+
+        <Color x:Key="LightPrimaryColor">WhiteSmoke</Color>
+        <Color x:Key="DarkPrimaryColor">Black</Color>
+
+        <Style x:Key="LabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
+        </Style>
+
+        <Style x:Key="EntryStyle"
+               TargetType="Entry">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
+        </Style>
+
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
+            <Label Text="Login" 
+                   Style="{StaticResource LabelStyle}"/>
+            <Entry Text="{Binding Username}"
+                   Style="{StaticResource EntryStyle}"
+                   Placeholder="Login"/>
+            <Label Text="Hasło" 
+                   Style="{StaticResource LabelStyle}"/>
+            <Entry Text="{Binding Password}"
+                   Placeholder="Hasło"
+                   Style="{StaticResource EntryStyle}"
+                   IsPassword="True"/>
             <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
         </StackLayout>
     </ContentPage.Content>

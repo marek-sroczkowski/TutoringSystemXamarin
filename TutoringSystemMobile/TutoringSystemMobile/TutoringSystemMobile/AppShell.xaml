@@ -115,6 +115,10 @@
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
     </TabBar>
 
+    <TabBar>
+        <ShellContent Route="AccountActivationPage" ContentTemplate="{DataTemplate local:AccountActivationPage}" />
+    </TabBar>
+
     <!-- Optional Templates 
     // These may be provided inline as below or as separate classes.
 

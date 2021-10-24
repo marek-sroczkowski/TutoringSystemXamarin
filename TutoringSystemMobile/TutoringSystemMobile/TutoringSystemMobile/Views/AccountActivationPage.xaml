@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.AccountActivationPage"
+             Title="Aktywacja konta"
+             BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
+    <ContentPage.Resources>
+
+        <Color x:Key="LightPrimaryColor">WhiteSmoke</Color>
+        <Color x:Key="DarkPrimaryColor">Black</Color>
+
+        <Style x:Key="LabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
+        </Style>
+
+        <Style x:Key="EntryStyle"
+               TargetType="Entry">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
+            <Setter Property="PlaceholderColor"
+                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
+        </Style>
+
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="Center"
+                     HorizontalOptions="Center">
+            <Label Text="Aktywuj swoje konto"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   Padding="0,0,0,80"
+                   Style="{StaticResource LabelStyle}"/>
+            <Label Text="Podaj kod aktywacyjny"
+                   HorizontalTextAlignment="Center"
+                   FontSize="16"
+                   Style="{StaticResource LabelStyle}"/>
+            <Entry Text="{Binding ActivationToken}"
+                   Placeholder="Kod aktywacyjny"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,20"
+                   FontSize="16" 
+                   Style="{StaticResource EntryStyle}"/>
+            <Button Text="Aktywuj" 
+                    Margin="0,0,0,40"
+                    Command="{Binding ActivateAccountCommand}"/>
+            
+            <Label Text="Nie otrzymałeś kodu aktywacyjnego?"
+                   Style="{StaticResource LabelStyle}"/>
+            <Button Text="Wyślij nowy" 
+                    BackgroundColor="DarkOrange"
+                    Command="{Binding NewActivationCodeCommand}"/>
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

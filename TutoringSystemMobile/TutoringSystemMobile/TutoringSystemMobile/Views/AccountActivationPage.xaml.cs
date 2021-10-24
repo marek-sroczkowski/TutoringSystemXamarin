@@ -5,12 +5,12 @@ using Xamarin.Forms.Xaml;
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
+    public partial class AccountActivationPage : ContentPage
     {
-        public LoginPage()
+        public AccountActivationPage()
         {
             InitializeComponent();
-            BindingContext = new LoginViewModel();
+            BindingContext = new AccountActivationViewModel();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace TutoringSystemMobile.ViewModels
 
         public ItemsViewModel()
         {
-            Title = "Browse";
+            //Title = "Browse";
             Items = new ObservableCollection<Item>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
@@ -30,31 +30,31 @@ namespace TutoringSystemMobile.ViewModels
 
         async Task ExecuteLoadItemsCommand()
         {
-            IsBusy = true;
+            //IsBusy = true;
 
-            try
-            {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            //try
+            //{
+            //    Items.Clear();
+            //    var items = await DataStore.GetItemsAsync(true);
+            //    foreach (var item in items)
+            //    {
+            //        Items.Add(item);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine(ex);
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
         }
 
         public void OnAppearing()
         {
-            IsBusy = true;
-            SelectedItem = null;
+            //IsBusy = true;
+            //SelectedItem = null;
         }
 
         public Item SelectedItem
@@ -62,7 +62,7 @@ namespace TutoringSystemMobile.ViewModels
             get => _selectedItem;
             set
             {
-                SetProperty(ref _selectedItem, value);
+                SetValue(ref _selectedItem, value);
                 OnItemSelected(value);
             }
         }

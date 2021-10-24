@@ -17,13 +17,13 @@ namespace TutoringSystemMobile.ViewModels
         public string Text
         {
             get => text;
-            set => SetProperty(ref text, value);
+            set => SetValue(ref text, value);
         }
 
         public string Description
         {
             get => description;
-            set => SetProperty(ref description, value);
+            set => SetValue(ref description, value);
         }
 
         public string ItemId
@@ -41,17 +41,17 @@ namespace TutoringSystemMobile.ViewModels
 
         public async void LoadItemId(string itemId)
         {
-            try
-            {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
-                Text = item.Text;
-                Description = item.Description;
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Failed to Load Item");
-            }
+            //try
+            //{
+            //    var item = await DataStore.GetItemAsync(itemId);
+            //    Id = item.Id;
+            //    Text = item.Text;
+            //    Description = item.Description;
+            //}
+            //catch (Exception)
+            //{
+            //    Debug.WriteLine("Failed to Load Item");
+            //}
         }
     }
 }
