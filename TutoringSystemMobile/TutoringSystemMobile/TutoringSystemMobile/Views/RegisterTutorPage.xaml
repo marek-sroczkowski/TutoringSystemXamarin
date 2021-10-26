@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.RegisterTutorPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#f3f3f3, Dark=#191919}">
+    <ContentPage.Resources>
+
+        <Color x:Key="LightPrimaryColor">WhiteSmoke</Color>
+        <Color x:Key="DarkPrimaryColor">Black</Color>
+
+        <Style x:Key="LabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
+        </Style>
+
+        <Style x:Key="EntryStyle"
+               TargetType="Entry">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
+        </Style>
+
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Login" Style="{StaticResource LabelStyle}"/>
+                            <Span Text="*" TextColor="Red"/>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Entry Text="{Binding Username}"
+                   Style="{StaticResource EntryStyle}"
+                   Placeholder="Login"/>
+            
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Imię" Style="{StaticResource LabelStyle}"/>
+                            <Span Text="*" TextColor="Red"/>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Entry Text="{Binding FirstName}"
+                   Style="{StaticResource EntryStyle}"
+                   Placeholder="Imię"/>
+            
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Nazwisko" Style="{StaticResource LabelStyle}"/>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Entry Text="{Binding LastName}"
+                   Style="{StaticResource EntryStyle}"
+                   Placeholder="Nazwisko"/>
+            
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Email" Style="{StaticResource LabelStyle}"/>
+                            <Span Text="*" TextColor="Red"/>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label Text="Niepoprawny email"
+                   TextColor="Red"
+                   IsVisible="{Binding IsEmailIncorrect}" />
+            <Entry Text="{Binding Email}"
+                   Style="{StaticResource EntryStyle}"
+                   Placeholder="Email"/>
+
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Hasło" Style="{StaticResource LabelStyle}"/>
+                            <Span Text="*" TextColor="Red"/>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label Text="Hasło musi mieć od 6 do 32 znaków i zawierać minimum 1 cyfrę i literę"
+                   TextColor="Red"
+                   IsVisible="{Binding IsPasswordIncorrect}" />
+            <Entry Text="{Binding Password}"
+                   Placeholder="Hasło"
+                   Style="{StaticResource EntryStyle}"
+                   IsPassword="True"/>
+
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Powtórz hasło" Style="{StaticResource LabelStyle}"/>
+                            <Span Text="*" TextColor="Red"/>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label Text="Hasła różnią się"
+                   TextColor="Red"
+                   IsVisible="{Binding IsConfirmPasswordIncorrect}" />
+            <Entry Text="{Binding ConfirmPassword}"
+                   Placeholder="Powtórz hasło"
+                   Style="{StaticResource EntryStyle}"
+                   IsPassword="True"/>
+
+            <Button VerticalOptions="Center" 
+                    Text="Zarejestruj się" 
+                    Margin="0,10,0,0"
+                    Command="{Binding RegisterCommand}"/>
+
+            <Label Padding="0,20,0,0">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="*" TextColor="Red"/>
+                            <Span Text=" obowiązkowe" Style="{StaticResource LabelStyle}"/>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

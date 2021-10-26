@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              x:Class="TutoringSystemMobile.Views.LoginPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
+             BackgroundColor="{AppThemeBinding Light=White, Dark=#191919}">
 
     <ContentPage.Resources>
 
@@ -40,7 +40,18 @@
                    Placeholder="Hasło"
                    Style="{StaticResource EntryStyle}"
                    IsPassword="True"/>
-            <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+            <Button VerticalOptions="Center" 
+                    Text="Zaloguj się" 
+                    Command="{Binding LoginCommand}"/>
+
+            <Label Text="Nie masz jeszcze konta?"
+                   Margin="0,30,0,0"
+                   HorizontalOptions="Center"
+                   Style="{StaticResource LabelStyle}" />
+            <Button VerticalOptions="Center" 
+                    Text="Zarejestruj się"
+                    BackgroundColor="DarkGreen"
+                    Command="{Binding RegisterTutorCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

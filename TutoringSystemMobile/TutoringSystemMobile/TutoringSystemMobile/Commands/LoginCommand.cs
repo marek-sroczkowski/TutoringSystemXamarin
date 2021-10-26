@@ -30,7 +30,7 @@ namespace TutoringSystemMobile.Commands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.Password) &&
+            return !string.IsNullOrEmpty(viewModel.Username) &&
                 !string.IsNullOrEmpty(viewModel.Password);
         }
 

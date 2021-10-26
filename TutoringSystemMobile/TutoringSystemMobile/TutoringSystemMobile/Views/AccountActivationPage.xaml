@@ -19,8 +19,6 @@
                TargetType="Entry">
             <Setter Property="TextColor"
                     Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
-            <Setter Property="PlaceholderColor"
-                    Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
         </Style>
 
     </ContentPage.Resources>

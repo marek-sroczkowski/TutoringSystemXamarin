@@ -119,6 +119,10 @@
         <ShellContent Route="AccountActivationPage" ContentTemplate="{DataTemplate local:AccountActivationPage}" />
     </TabBar>
 
+    <TabBar>
+        <ShellContent Route="RegisterTutorPage" ContentTemplate="{DataTemplate local:RegisterTutorPage}" />
+    </TabBar>
+
     <!-- Optional Templates 
     // These may be provided inline as below or as separate classes.
 

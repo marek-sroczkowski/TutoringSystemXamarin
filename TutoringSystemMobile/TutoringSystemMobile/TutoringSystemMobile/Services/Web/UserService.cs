@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
@@ -43,9 +44,16 @@ namespace TutoringSystemMobile.Services.Web
             throw new NotImplementedException();
         }
 
-        public Task<bool> RegisterTutorAsync(RegisterTutorDto tutor)
+        public async Task<RegisterErrorTypes> RegisterTutorAsync(RegisterTutorDto tutor)
         {
-            throw new NotImplementedException();
+            string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/register/tutor";
+            var response = await url
+                .AllowAnyHttpStatus()
+                .PostJsonAsync(tutor);
+
+            var content = await response.GetJsonAsync<RegisterError>();
+
+            return content is null ? null : content.Errors;
         }
 
         public async Task<bool> SendNewActivationTokenAsync()
