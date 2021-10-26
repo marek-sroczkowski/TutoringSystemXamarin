@@ -30,13 +30,17 @@ namespace TutoringSystemMobile.Commands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.Username) &&
+            return !viewModel.IsBusy &&
+                !string.IsNullOrEmpty(viewModel.Username) &&
                 !string.IsNullOrEmpty(viewModel.Password);
         }
 
         public async void Execute(object parameter)
         {
+            viewModel.IsBusy = true;
             var loginResult = await userService.TryLoginAsync(new LoginUserDto(viewModel.Username, viewModel.Password));
+            viewModel.IsBusy = false;
+
             switch (loginResult)
             {
                 case LoginStatus.LoggedInCorrectly:

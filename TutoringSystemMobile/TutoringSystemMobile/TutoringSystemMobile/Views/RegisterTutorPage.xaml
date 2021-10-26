@@ -2,8 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.RegisterTutorPage"
-             Shell.NavBarIsVisible="False"
+             Shell.NavBarIsVisible="True"
+             Title="Rejestracja"
              BackgroundColor="{AppThemeBinding Light=#f3f3f3, Dark=#191919}">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GoBackCommand}" IconOverride="icon_back_button.png" />
+    </Shell.BackButtonBehavior>
+    
     <ContentPage.Resources>
 
         <Color x:Key="LightPrimaryColor">WhiteSmoke</Color>
@@ -22,7 +28,7 @@
         </Style>
 
     </ContentPage.Resources>
-    
+
     <ContentPage.Content>
         <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
             <Label>
@@ -38,7 +44,7 @@
             <Entry Text="{Binding Username}"
                    Style="{StaticResource EntryStyle}"
                    Placeholder="Login"/>
-            
+
             <Label>
                 <Label.FormattedText>
                     <FormattedString>
@@ -52,7 +58,7 @@
             <Entry Text="{Binding FirstName}"
                    Style="{StaticResource EntryStyle}"
                    Placeholder="Imię"/>
-            
+
             <Label>
                 <Label.FormattedText>
                     <FormattedString>
@@ -65,7 +71,7 @@
             <Entry Text="{Binding LastName}"
                    Style="{StaticResource EntryStyle}"
                    Placeholder="Nazwisko"/>
-            
+
             <Label>
                 <Label.FormattedText>
                     <FormattedString>
@@ -118,6 +124,11 @@
                    Placeholder="Powtórz hasło"
                    Style="{StaticResource EntryStyle}"
                    IsPassword="True"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Color="Blue"/>
 
             <Button VerticalOptions="Center" 
                     Text="Zarejestruj się" 

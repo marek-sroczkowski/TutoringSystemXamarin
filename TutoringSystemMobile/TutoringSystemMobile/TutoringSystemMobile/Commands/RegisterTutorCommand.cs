@@ -49,7 +49,10 @@ namespace TutoringSystemMobile.Commands
 
         public async void Execute(object parameter)
         {
+            viewModel.IsBusy = true;
             var errors = await userService.RegisterTutorAsync(new RegisterTutorDto(viewModel.Username, viewModel.FirstName, viewModel.LastName, viewModel.Email, viewModel.Password, viewModel.ConfirmPassword));
+            viewModel.IsBusy = false;
+
             if (errors is null)
                 await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
             else

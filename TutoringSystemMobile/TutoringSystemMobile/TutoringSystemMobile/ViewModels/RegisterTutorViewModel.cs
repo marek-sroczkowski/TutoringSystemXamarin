@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using TutoringSystemMobile.Commands;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels
@@ -71,10 +72,12 @@ namespace TutoringSystemMobile.ViewModels
         }
 
         public ICommand RegisterCommand { get; }
+        public ICommand GoBackCommand { get; set; }
 
         public RegisterTutorViewModel()
         {
             RegisterCommand = new RegisterTutorCommand(this, DependencyService.Get<IUserService>());
+            GoBackCommand = new GoBackCommand(nameof(LoginPage));
         }
     }
 }

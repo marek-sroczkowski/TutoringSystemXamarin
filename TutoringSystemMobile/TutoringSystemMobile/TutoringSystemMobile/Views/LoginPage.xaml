@@ -40,18 +40,23 @@
                    Placeholder="Hasło"
                    Style="{StaticResource EntryStyle}"
                    IsPassword="True"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"    
+                    Color="Blue"/>
+            
             <Button VerticalOptions="Center" 
                     Text="Zaloguj się" 
-                    Command="{Binding LoginCommand}"/>
+                    Command="{Binding LoginCommand}" />
 
             <Label Text="Nie masz jeszcze konta?"
                    Margin="0,30,0,0"
                    HorizontalOptions="Center"
                    Style="{StaticResource LabelStyle}" />
             <Button VerticalOptions="Center" 
-                    Text="Zarejestruj się"
-                    BackgroundColor="DarkGreen"
-                    Command="{Binding RegisterTutorCommand}"/>
+                   Text="Zarejestruj się"
+                   BackgroundColor="DarkGreen"
+                   Command="{Binding RegisterTutorCommand}" />
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
