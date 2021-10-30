@@ -1,5 +1,5 @@
-﻿using TutoringSystemMobile.Commands.AccountCommands;
-using TutoringSystemMobile.Models.Enums;
+﻿using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels
@@ -22,25 +22,13 @@ namespace TutoringSystemMobile.ViewModels
 
         public AppShellViewModel()
         {
-            MessagingCenter.Subscribe<LoginCommand>(this, message: Role.Tutor.ToString(), (sender) =>
+            MessagingCenter.Subscribe<FlyoutItemService>(this, message: Role.Tutor.ToString(), (sender) =>
             {
                 IsTutor = true;
                 IsStudent = false;
             });
 
-            MessagingCenter.Subscribe<LoginCommand>(this, message: Role.Student.ToString(), (sender) =>
-            {
-                IsTutor = false;
-                IsStudent = true;
-            });
-
-            MessagingCenter.Subscribe<App>(this, message: Role.Tutor.ToString(), (sender) =>
-            {
-                IsTutor = true;
-                IsStudent = false;
-            });
-
-            MessagingCenter.Subscribe<App>(this, message: Role.Student.ToString(), (sender) =>
+            MessagingCenter.Subscribe<FlyoutItemService>(this, message: Role.Student.ToString(), (sender) =>
             {
                 IsTutor = false;
                 IsStudent = true;

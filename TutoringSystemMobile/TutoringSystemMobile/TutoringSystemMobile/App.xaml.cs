@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services;
+using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -10,10 +11,12 @@ namespace TutoringSystemMobile
 {
     public partial class App : Application
     {
+        private readonly IFlyoutItemService flyoutItemService;
 
         public App()
         {
             InitializeComponent();
+            flyoutItemService = DependencyService.Get<IFlyoutItemService>();
 
             DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
@@ -26,16 +29,14 @@ namespace TutoringSystemMobile
             switch (accountStatus)
             {
                 case AccountStatus.LoggedAsTutor:
-                    MessagingCenter.Send(this, Role.Tutor.ToString());
+                    flyoutItemService.EnableTutorFlyoutItems();
                     await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
                     break;
                 case AccountStatus.LoggedAsStudent:
-                    MessagingCenter.Send(this, Role.Student.ToString());
+                    flyoutItemService.EnableStudentFlyoutItems();
                     await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
                     break;
                 case AccountStatus.InactiveAccount:
-                    await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
-                    break;
                 case AccountStatus.LoggedOut:
                     await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
                     break;
