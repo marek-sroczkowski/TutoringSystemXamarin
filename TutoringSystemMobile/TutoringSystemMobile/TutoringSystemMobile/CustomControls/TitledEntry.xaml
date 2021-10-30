@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:TutoringSystemMobile.CustomControls"
              x:Class="TutoringSystemMobile.CustomControls.TitledEntry">
 
     <ContentView.Resources>
@@ -21,7 +22,7 @@
     </ContentView.Resources>
     
     <ContentView.Content>
-        <Grid Focused="Handle_ContainerFocused">
+        <Grid Focused="Handle_ContainerFocused" x:DataType="model:TitledEntry">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -29,6 +30,7 @@
 
             <Label Grid.Row="0" 
                    x:Name="LabelTitle" />
+            
             <Entry Grid.Row="1" 
                    x:Name="EntryContent" 
                    Placeholder="{Binding Placeholder}" 
@@ -39,6 +41,7 @@
                    Unfocused="Handle_Unfocused" 
                    TextChanged="Handle_TextChanged"
                    Style="{StaticResource EntryStyle}"/>
+            
         </Grid>
     </ContentView.Content>
 </ContentView>
