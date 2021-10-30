@@ -75,6 +75,7 @@ namespace TutoringSystemMobile.Services.Web
             string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/newCode";
             var response = await url
                 .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
                 .PostAsync();
 
             return response.StatusCode == 200;

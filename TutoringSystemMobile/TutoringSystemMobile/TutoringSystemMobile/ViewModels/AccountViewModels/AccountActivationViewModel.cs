@@ -19,7 +19,7 @@ namespace TutoringSystemMobile.ViewModels.AccountViewModels
 
         public AccountActivationViewModel()
         {
-            ActivateAccountCommand = new ActivateAccountCommand(this, DependencyService.Get<IUserService>());
+            ActivateAccountCommand = new ActivateAccountCommand(this, DependencyService.Get<IUserService>(), DependencyService.Get<IFlyoutItemService>());
             NewActivationCodeCommand = new NewActivationCodeCommand(this, DependencyService.Get<IUserService>());
         }
     }

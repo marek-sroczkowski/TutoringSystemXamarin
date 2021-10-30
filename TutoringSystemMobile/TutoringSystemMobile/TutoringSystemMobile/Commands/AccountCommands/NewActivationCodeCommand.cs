@@ -11,7 +11,7 @@ namespace TutoringSystemMobile.Commands.AccountCommands
     public class NewActivationCodeCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
-        private AccountActivationViewModel viewModel;
+        private readonly AccountActivationViewModel viewModel;
         private readonly IUserService userService;
 
         public NewActivationCodeCommand(AccountActivationViewModel viewModel, IUserService userService)
@@ -35,6 +35,8 @@ namespace TutoringSystemMobile.Commands.AccountCommands
         {
             if (await userService.SendNewActivationTokenAsync())
                 DependencyService.Get<IToast>()?.MakeToast("Wysłano nowy kod aktywacyjny!");
+            else
+                DependencyService.Get<IToast>()?.MakeToast("Błąd wysyłania! Spróbuj ponownie");
         }
     }
 }
