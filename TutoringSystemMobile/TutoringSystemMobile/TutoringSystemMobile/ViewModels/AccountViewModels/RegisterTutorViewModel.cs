@@ -9,7 +9,6 @@ namespace TutoringSystemMobile.ViewModels.AccountViewModels
     {
         private string username;
         private string firstName;
-        private string lastName;
         private string email;
         private string password = "";
         private string confirmPassword = "";
@@ -27,12 +26,6 @@ namespace TutoringSystemMobile.ViewModels.AccountViewModels
         {
             get => firstName;
             set => SetValue(ref firstName, value);
-        }
-
-        public string LastName
-        {
-            get => lastName;
-            set => SetValue(ref lastName, value);
         }
 
         public string Email
