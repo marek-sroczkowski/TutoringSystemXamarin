@@ -1,13 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TutoringSystemMobile.Views.StudentsTutorPage"
-             Title="Studenci">
+             x:Class="TutoringSystemMobile.Views.ProfileTutorPage"
+             Title="Mój profil"
+             Style="{StaticResource PageStyle}">
+
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to students page"
+            <Label Text="Welcome to profile tutor page"
                 VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                HorizontalOptions="CenterAndExpand"
+                   Style="{StaticResource LabelStyle}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

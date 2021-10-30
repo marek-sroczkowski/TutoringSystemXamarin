@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AccountTutorPage : ContentPage
+    public partial class StartStudentPage : ContentPage
     {
-        public AccountTutorPage()
+        public StartStudentPage()
         {
             InitializeComponent();
         }

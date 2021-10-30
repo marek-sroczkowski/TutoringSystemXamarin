@@ -1,16 +1,16 @@
-﻿using TutoringSystemMobile.ViewModels;
+﻿using TutoringSystemMobile.ViewModels.OrderViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AccountActivationPage : ContentPage
+    public partial class OrderDetailsPage : ContentPage
     {
-        public AccountActivationPage()
+        public OrderDetailsPage()
         {
             InitializeComponent();
-            BindingContext = new AccountActivationViewModel();
+            BindingContext = new OrderDetailsViewModel();
         }
     }
 }
