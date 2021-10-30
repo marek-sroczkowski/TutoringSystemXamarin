@@ -15,5 +15,6 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<ICollection<WrongPasswordStatus>> ChangePasswordAsync(PasswordDto passwordModel);
         Task<bool> ActivateUserByTokenAsync(string activationToken);
         Task<bool> SendNewActivationTokenAsync();
+        Task<Role> GetUserRole();
     }
 }

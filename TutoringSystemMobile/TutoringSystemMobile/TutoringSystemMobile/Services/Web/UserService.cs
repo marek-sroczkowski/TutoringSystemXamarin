@@ -18,7 +18,7 @@ namespace TutoringSystemMobile.Services.Web
     {
         public async Task<bool> ActivateUserByTokenAsync(string activationToken)
         {
-            var token = await SecureStorage.GetAsync("token");
+            string token = await SecureStorage.GetAsync("token");
             string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/activate";
             var response = await url
                 .SetQueryParam("token", activationToken)
@@ -37,6 +37,19 @@ namespace TutoringSystemMobile.Services.Web
         public Task<bool> DeactivateUserAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Role> GetUserRole()
+        {
+            string token = await SecureStorage.GetAsync("token");
+            string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/role";
+            var response = await url
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            var userRole = await GetUserRole(response);
+
+            return userRole;
         }
 
         public Task<bool> RegisterStudentAsync(RegisterStudentDto student)
@@ -58,7 +71,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> SendNewActivationTokenAsync()
         {
-            var token = await SecureStorage.GetAsync("token");
+            string token = await SecureStorage.GetAsync("token");
             string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/newCode";
             var response = await url
                 .WithOAuthBearerToken(token)
@@ -86,6 +99,13 @@ namespace TutoringSystemMobile.Services.Web
             var loginStatus = await response.GetStringAsync();
 
             return (LoginStatus)Enum.Parse(typeof(LoginStatus), loginStatus.Trim('\"'));
+        }
+
+        private async Task<Role> GetUserRole(IFlurlResponse response)
+        {
+            var role = await response.GetStringAsync();
+
+            return (Role)Enum.Parse(typeof(Role), role.Trim('\"'));
         }
     }
 }

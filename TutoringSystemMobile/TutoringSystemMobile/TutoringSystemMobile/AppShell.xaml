@@ -2,8 +2,13 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:TutoringSystemMobile.Views"
+       xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels"
        Title="TutoringSystemMobile"
        x:Class="TutoringSystemMobile.AppShell">
+
+    <Shell.BindingContext>
+        <viewModel:AppShellViewModel />
+    </Shell.BindingContext>
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.
@@ -78,26 +83,39 @@
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
-    <FlyoutItem Title="Start" Icon="icon_home.png">
+    <FlyoutItem Title="Start" Icon="icon_home.png" IsVisible="{Binding IsTutor}">
         <ShellContent Route="StartTutorPage" ContentTemplate="{DataTemplate local:StartTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Rezerwacje" Icon="icon_reservations.png">
+    <FlyoutItem Title="Rezerwacje" Icon="icon_reservations.png" IsVisible="{Binding IsTutor}">
         <ShellContent Route="ReservationTutorPage" ContentTemplate="{DataTemplate local:ReservationTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Dodatkowe zlecenia" Icon="icon_orders.png">
+    <FlyoutItem Title="Dodatkowe zlecenia" Icon="icon_orders.png" IsVisible="{Binding IsTutor}">
         <ShellContent Route="OrdersTutorPage" ContentTemplate="{DataTemplate local:OrdersTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Statystyki" Icon="icon_report.png">
+    <FlyoutItem Title="Statystyki" Icon="icon_report.png" IsVisible="{Binding IsTutor}">
         <ShellContent Route="ReportTutorPage" ContentTemplate="{DataTemplate local:ReportTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Studenci" Icon="icon_students.png">
+    <FlyoutItem Title="Studenci" Icon="icon_students.png" IsVisible="{Binding IsTutor}">
         <ShellContent Route="StudentsTutorPage" ContentTemplate="{DataTemplate local:StudentsTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Przedmioty" Icon="icon_subjects.png">
+    <FlyoutItem Title="Przedmioty" Icon="icon_subjects.png" IsVisible="{Binding IsTutor}">
         <ShellContent Route="SubjectsTutorPage" ContentTemplate="{DataTemplate local:SubjectsTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Konto" Icon="icon_account.png">
-        <ShellContent Route="AccountTutorPage" ContentTemplate="{DataTemplate local:AccountTutorPage}" />
+    <FlyoutItem Title="Konto" Icon="icon_account.png" IsVisible="{Binding IsTutor}">
+        <ShellContent Route="ProfileTutorPage" ContentTemplate="{DataTemplate local:ProfileTutorPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Start" Icon="icon_home.png" IsVisible="{Binding IsStudent}">
+        <ShellContent Route="StartStudentPage" ContentTemplate="{DataTemplate local:StartStudentPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Rezerwacje" Icon="icon_reservations.png" IsVisible="{Binding IsStudent}">
+        <ShellContent Route="ReservationStudentPage" ContentTemplate="{DataTemplate local:ReservationStudentPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Korepetytorzy" Icon="icon_tutors.png" IsVisible="{Binding IsStudent}">
+        <ShellContent Route="TutorsStudentPage" ContentTemplate="{DataTemplate local:TutorsStudentPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Konto" Icon="icon_account.png" IsVisible="{Binding IsStudent}">
+        <ShellContent Route="ProfileStudentPage" ContentTemplate="{DataTemplate local:ProfileStudentPage}" />
     </FlyoutItem>
 
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
@@ -112,16 +130,13 @@
         await Shell.Current.GoToAsync("//LoginPage");
     -->
     <TabBar>
-        <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
+        <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}"/>
     </TabBar>
 
     <TabBar>
         <ShellContent Route="AccountActivationPage" ContentTemplate="{DataTemplate local:AccountActivationPage}" />
     </TabBar>
 
-    <TabBar>
-        <ShellContent Route="RegisterTutorPage" ContentTemplate="{DataTemplate local:RegisterTutorPage}" />
-    </TabBar>
 
     <!-- Optional Templates 
     // These may be provided inline as below or as separate classes.
