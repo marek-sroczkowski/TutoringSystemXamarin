@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Windows.Input;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
-using TutoringSystemMobile.ViewModels;
+using TutoringSystemMobile.ViewModels.AccountViewModels;
 using Xamarin.Forms;
 
-namespace TutoringSystemMobile.Commands
+namespace TutoringSystemMobile.Commands.AccountCommands
 {
     public class NewActivationCodeCommand : ICommand
     {

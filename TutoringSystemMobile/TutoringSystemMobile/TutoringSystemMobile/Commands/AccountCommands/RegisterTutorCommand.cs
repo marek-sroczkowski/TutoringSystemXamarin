@@ -6,11 +6,11 @@ using System.Windows.Input;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.ViewModels;
+using TutoringSystemMobile.ViewModels.AccountViewModels;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
-namespace TutoringSystemMobile.Commands
+namespace TutoringSystemMobile.Commands.AccountCommands
 {
     class RegisterTutorCommand : ICommand
     {
