@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.AccountViewModels"
+             x:Class="TutoringSystemMobile.Views.RegisterTutorPage"
+             Shell.NavBarIsVisible="True"
+             Title="Rejestracja"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:RegisterTutorViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Padding="15,0,15,0" 
+                     VerticalOptions="Center">
+            
+            <custom:TitledEntry Text="{Binding Username}" 
+                                Placeholder="Login"/>
+
+            <custom:TitledEntry Text="{Binding FirstName}" 
+                                Placeholder="Imię"
+                                EntryKeyboard="Text"/>
+
+            <custom:TitledEntry Text="{Binding Email}" 
+                                Placeholder="Email"
+                                EntryKeyboard="Email" />
+
+            <Label Text="Niepoprawny email"
+                   TextColor="Red"
+                   IsVisible="{Binding IsEmailIncorrect}"/>
+
+            <custom:TitledEntry Text="{Binding Password}" 
+                                Placeholder="Hasło"
+                                IsPassword="True" />
+
+            <Label Text="Hasło musi mieć od 6 do 32 znaków i zawierać minimum 1 cyfrę i literę"
+                   TextColor="Red"
+                   IsVisible="{Binding IsPasswordIncorrect}" />
+
+            <custom:TitledEntry Text="{Binding ConfirmPassword}" 
+                                Placeholder="Powtórz hasło"
+                                IsPassword="True"/>
+
+            <Label Text="Hasła różnią się"
+                   TextColor="Red"
+                   IsVisible="{Binding IsConfirmPasswordIncorrect}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                    IsVisible="{Binding IsBusy}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Color="Blue"/>
+
+            <Button VerticalOptions="Center" 
+                    Text="Zarejestruj się" 
+                    Margin="0,20,0,0"
+                    Style="{StaticResource PrimaryBlueButtonStyle}"
+                    Command="{Binding RegisterCommand}"/>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
