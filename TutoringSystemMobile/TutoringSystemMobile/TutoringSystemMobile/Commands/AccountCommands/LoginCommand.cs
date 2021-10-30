@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.ViewModels.AccountViewModels;
 using TutoringSystemMobile.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Commands.AccountCommands
@@ -15,11 +17,13 @@ namespace TutoringSystemMobile.Commands.AccountCommands
         public event EventHandler CanExecuteChanged;
         private readonly LoginViewModel viewModel;
         private readonly IUserService userService;
+        private readonly IFlyoutItemService flyoutItemService;
 
-        public LoginCommand(LoginViewModel viewModel, IUserService userService)
+        public LoginCommand(LoginViewModel viewModel, IUserService userService, IFlyoutItemService flyoutItemService)
         {
             this.viewModel = viewModel;
             this.userService = userService;
+            this.flyoutItemService = flyoutItemService;
             this.viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
@@ -44,15 +48,58 @@ namespace TutoringSystemMobile.Commands.AccountCommands
             switch (loginResult)
             {
                 case LoginStatus.LoggedInCorrectly:
-                    await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
+                    await LoggedInCorrectly();
                     break;
                 case LoginStatus.InactiveAccount:
-                    await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
+                    await InactiveAccount();
                     break;
                 case LoginStatus.InvalidUsernameOrPassword:
-                    await Application.Current.MainPage.DisplayAlert("Uwaga!", "Nieprawidłowe dane logowania", "OK");
+                    await InvalidUsernameOrPassword();
                     break;
             }
+        }
+
+        private async Task LoggedInCorrectly()
+        {
+            viewModel.IsBusy = true;
+            var role = await userService.GetUserRole();
+            viewModel.IsBusy = false;
+
+            switch (role)
+            {
+                case Role.Tutor:
+                    await LoggedAsTutor();
+                    break;
+                case Role.Student:
+                    await LoggedAdStudent();
+                    break;
+            }
+        }
+
+        private async Task InactiveAccount()
+        {
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.InactiveAccount.ToString());
+            await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
+        }
+
+        private async Task InvalidUsernameOrPassword()
+        {
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
+            await Application.Current.MainPage.DisplayAlert("Uwaga!", "Nieprawidłowe dane logowania", "OK");
+        }
+
+        private async Task LoggedAsTutor()
+        {
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
+            flyoutItemService.EnableTutorFlyoutItems();
+            await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
+        }
+
+        private async Task LoggedAdStudent()
+        {
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
+            flyoutItemService.EnableStudentFlyoutItems();
+            await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
         }
     }
 }
