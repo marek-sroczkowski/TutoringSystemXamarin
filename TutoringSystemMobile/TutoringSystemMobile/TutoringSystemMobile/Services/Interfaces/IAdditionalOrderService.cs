@@ -7,9 +7,9 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface IAdditionalOrderService
     {
-        Task<ICollection<OrderDto>> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters);
+        Task<IEnumerable<OrderDto>> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters);
         Task<OrderDetailsDto> GetAdditionalOrderByIdAsync(long orderId);
-        Task<OrderDto> AddAdditionalOrderAsync(NewOrderDto newOrder);
+        Task<bool> AddAdditionalOrderAsync(NewOrderDto newOrder);
         Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder);
         Task<bool> DeleteAdditionalOrderAsync(long orderId);
         Task<bool> SetInProgressStatusAsync(long orderId);

@@ -1,5 +1,4 @@
-﻿using TutoringSystemMobile.ViewModels.OrderViewModels;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TutoringSystemMobile.Views
@@ -10,7 +9,6 @@ namespace TutoringSystemMobile.Views
         public OrderDetailsPage()
         {
             InitializeComponent();
-            BindingContext = new OrderDetailsViewModel();
         }
     }
 }

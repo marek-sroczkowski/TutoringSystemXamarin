@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.OrdersTutorPage"
+             xmlns:local="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.AdditionalOrderDtos"
+             Title="Zlecenia"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding FilterOrdersCommand}" />
+        <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewOrderFormCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView x:DataType="local:OrdersViewModel" Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Blue">
+        <CollectionView ItemsSource="{Binding Orders}"
+                SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10" x:DataType="model:OrderDto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <BoxView CornerRadius="10"
+                                    BackgroundColor="{AppThemeBinding Light=White, Dark=#191919}"
+                                    AbsoluteLayout.LayoutBounds="0, 0, 1, 0.5"
+                                    AbsoluteLayout.LayoutFlags="SizeProportional"/>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0" Padding="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Row="0" Text="{Binding Name}" 
+                                        LineBreakMode="WordWrap" 
+                                        Style="{StaticResource LabelStyle}"
+                                        FontAttributes="Bold"
+                                        FontSize="18" />
+
+                                    <Label Grid.Row="1"
+                                        Style="{StaticResource LabelStyle}"
+                                        FontSize="13">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <FormattedString.Spans>
+                                                    <Span Text="Termin upływa " />
+                                                    <Span Text="{Binding Deadline, StringFormat='{0:dd/MM/yyyy}'}" FontAttributes="Bold" />
+                                                </FormattedString.Spans>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label Grid.Row="2"
+                                        Style="{StaticResource LabelStyle}"
+                                        FontSize="13">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <FormattedString.Spans>
+                                                    <Span Text="Przychód " />
+                                                    <Span Text="{Binding Cost}" FontAttributes="Bold" />
+                                                    <Span Text=" zł" />
+                                                </FormattedString.Spans>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                                
+                                <Grid Grid.Column="1">
+                                    
+                                    <Image Source="icon_get_details.png" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:OrdersViewModel}}, Path=OrderTapped}"		
+                                CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

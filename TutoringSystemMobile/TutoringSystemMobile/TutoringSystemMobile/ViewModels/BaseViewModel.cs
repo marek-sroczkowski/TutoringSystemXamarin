@@ -9,8 +9,8 @@ namespace TutoringSystemMobile.ViewModels
         bool isBusy = false;
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { SetValue(ref isBusy, value); }
+            get => isBusy;
+            set => SetValue(ref isBusy, value);
         }
 
         protected void SetValue<T>(ref T privateField, T value, [CallerMemberName] string propertyName = "")
