@@ -1,10 +1,10 @@
 ﻿using System.Windows.Input;
-using TutoringSystemMobile.Commands;
+using TutoringSystemMobile.Commands.AccountCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
-namespace TutoringSystemMobile.ViewModels
+namespace TutoringSystemMobile.ViewModels.AccountViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
@@ -24,12 +24,18 @@ namespace TutoringSystemMobile.ViewModels
         }
 
         public ICommand LoginCommand { get; }
-        public ICommand RegisterTutorCommand { get; }
+        public Command RegisterTutorCommand { get; }
 
         public LoginViewModel()
         {
             LoginCommand = new LoginCommand(this, DependencyService.Get<IUserService>());
-            RegisterTutorCommand = new NewRegisterTutorFormCommand(this);
+            RegisterTutorCommand = new Command(OnRegisterFormClick);
+        }
+
+        public async void OnRegisterFormClick()
+        {
+            if (!IsBusy)
+                await Shell.Current.GoToAsync($"{nameof(RegisterTutorPage)}");
         }
     }
 }

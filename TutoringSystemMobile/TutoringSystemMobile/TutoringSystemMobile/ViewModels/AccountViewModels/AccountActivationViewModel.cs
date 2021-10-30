@@ -1,11 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands;
+﻿using System.Windows.Input;
+using TutoringSystemMobile.Commands.AccountCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
 
-namespace TutoringSystemMobile.ViewModels
+namespace TutoringSystemMobile.ViewModels.AccountViewModels
 {
     public class AccountActivationViewModel : BaseViewModel
     {
@@ -23,12 +21,6 @@ namespace TutoringSystemMobile.ViewModels
         {
             ActivateAccountCommand = new ActivateAccountCommand(this, DependencyService.Get<IUserService>());
             NewActivationCodeCommand = new NewActivationCodeCommand(this, DependencyService.Get<IUserService>());
-
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-            {
-                Debug.WriteLine("Hello");
-                return true;
-            });
         }
     }
 }
