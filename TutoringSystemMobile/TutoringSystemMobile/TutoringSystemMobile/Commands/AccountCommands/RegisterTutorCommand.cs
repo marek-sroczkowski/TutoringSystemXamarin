@@ -6,13 +6,14 @@ using System.Windows.Input;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.AccountViewModels;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Commands.AccountCommands
 {
-    class RegisterTutorCommand : ICommand
+    public class RegisterTutorCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
         private readonly RegisterTutorViewModel viewModel;
@@ -50,13 +51,18 @@ namespace TutoringSystemMobile.Commands.AccountCommands
         public async void Execute(object parameter)
         {
             viewModel.IsBusy = true;
-            var errors = await userService.RegisterTutorAsync(new RegisterTutorDto(viewModel.Username, viewModel.FirstName, viewModel.LastName, viewModel.Email, viewModel.Password, viewModel.ConfirmPassword));
+            var errors = await userService.RegisterTutorAsync(new RegisterTutorDto(viewModel.Username, viewModel.FirstName, viewModel.Email, viewModel.Password, viewModel.ConfirmPassword));
             viewModel.IsBusy = false;
 
             if (errors is null)
-                await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
+            {
+                DependencyService.Get<IToast>()?.MakeToast("Rejestracja powiodła się!");
+                await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            }
             else
+            {
                 await Application.Current.MainPage.DisplayAlert("Uwaga!", GetErrorsMessage(errors), "OK");
+            }
         }
 
         public string GetErrorsMessage(RegisterErrorTypes errors)

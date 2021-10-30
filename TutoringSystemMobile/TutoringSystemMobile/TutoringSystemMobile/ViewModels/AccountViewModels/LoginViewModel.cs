@@ -28,7 +28,7 @@ namespace TutoringSystemMobile.ViewModels.AccountViewModels
 
         public LoginViewModel()
         {
-            LoginCommand = new LoginCommand(this, DependencyService.Get<IUserService>());
+            LoginCommand = new LoginCommand(this, DependencyService.Get<IUserService>(), DependencyService.Get<IFlyoutItemService>());
             RegisterTutorCommand = new Command(OnRegisterFormClick);
         }
 
