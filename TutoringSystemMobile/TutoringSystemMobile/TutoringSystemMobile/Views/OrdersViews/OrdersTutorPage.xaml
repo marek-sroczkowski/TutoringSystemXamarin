@@ -2,15 +2,27 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.OrdersTutorPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
              xmlns:model="clr-namespace:TutoringSystemMobile.Models.AdditionalOrderDtos"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
              Title="Zlecenia"
              Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:OrdersViewModel />
+    </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding FilterOrdersCommand}" />
         <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewOrderFormCommand}" />
     </ContentPage.ToolbarItems>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
 
     <RefreshView x:DataType="local:OrdersViewModel" Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Blue">
         <CollectionView ItemsSource="{Binding Orders}"

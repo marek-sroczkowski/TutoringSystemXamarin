@@ -6,7 +6,7 @@ namespace TutoringSystemMobile.CustomControls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TitledEntry : ContentView
     {
-        string placeholder = string.Empty;
+        private string placeholder = string.Empty;
 
         public enum KeyboardEnum
         {
