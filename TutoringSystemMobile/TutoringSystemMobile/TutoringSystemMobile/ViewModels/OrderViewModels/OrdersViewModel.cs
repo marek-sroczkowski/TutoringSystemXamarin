@@ -27,6 +27,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public Command NewOrderFormCommand { get; }
         public Command FilterOrdersCommand { get; }
         public Command<OrderDto> OrderTapped { get; }
+        public Command PageAppearingCommand { get; }
 
         public OrdersViewModel()
         {
@@ -35,9 +36,10 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             NewOrderFormCommand = new Command(OnNewOrderClick);
             FilterOrdersCommand = new Command(OnFilteringOrdersClick);
             OrderTapped = new Command<OrderDto>(OnOrderSelected);
+            PageAppearingCommand = new Command(OnAppearing);
         }
 
-        public void OnAppearing()
+        private void OnAppearing()
         {
             IsBusy = true;
             selectedOrder = null;

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using TutoringSystemMobile.Services.Utils;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TutoringSystemMobile.CustomControls
@@ -6,7 +7,8 @@ namespace TutoringSystemMobile.CustomControls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TitledEntry : ContentView
     {
-        string placeholder = string.Empty;
+        private string placeholder = string.Empty;
+        private bool reEntry = false;
 
         public enum KeyboardEnum
         {
@@ -26,6 +28,11 @@ namespace TutoringSystemMobile.CustomControls
             EntryContent.BindingContext = this;
             LabelTitle.BindingContext = this;
             LabelTitle.SetAppThemeColor(Label.TextColorProperty, Color.Black, Color.WhiteSmoke);
+
+            MessagingCenter.Subscribe<TitledEntryService>(this, message: "entry", (sender) =>
+            {
+                reEntry = true;
+            });
         }
 
         public static BindableProperty PlaceholderProperty =
@@ -84,6 +91,12 @@ namespace TutoringSystemMobile.CustomControls
 
         void Handle_Focused(object sender, FocusEventArgs e)
         {
+            if (reEntry)
+            {
+                reEntry = false;
+                return;
+            }
+
             LabelTitle.Text = Placeholder;
             LabelTitle.IsVisible = true;
             LabelTitle.SetAppThemeColor(Label.TextColorProperty, Color.FromHex("#2196F3"), Color.FromHex("#2196F3"));
