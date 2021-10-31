@@ -1,5 +1,4 @@
-﻿using TutoringSystemMobile.Services.Utils;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TutoringSystemMobile.CustomControls
@@ -28,11 +27,6 @@ namespace TutoringSystemMobile.CustomControls
             EntryContent.BindingContext = this;
             LabelTitle.BindingContext = this;
             LabelTitle.SetAppThemeColor(Label.TextColorProperty, Color.Black, Color.WhiteSmoke);
-
-            MessagingCenter.Subscribe<TitledEntryService>(this, message: "entry", (sender) =>
-            {
-                reEntry = true;
-            });
         }
 
         public static BindableProperty PlaceholderProperty =
