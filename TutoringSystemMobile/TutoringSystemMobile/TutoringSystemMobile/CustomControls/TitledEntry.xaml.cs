@@ -7,7 +7,6 @@ namespace TutoringSystemMobile.CustomControls
     public partial class TitledEntry : ContentView
     {
         private string placeholder = string.Empty;
-        private bool reEntry = false;
 
         public enum KeyboardEnum
         {
@@ -85,12 +84,6 @@ namespace TutoringSystemMobile.CustomControls
 
         void Handle_Focused(object sender, FocusEventArgs e)
         {
-            if (reEntry)
-            {
-                reEntry = false;
-                return;
-            }
-
             LabelTitle.Text = Placeholder;
             LabelTitle.IsVisible = true;
             LabelTitle.SetAppThemeColor(Label.TextColorProperty, Color.FromHex("#2196F3"), Color.FromHex("#2196F3"));
