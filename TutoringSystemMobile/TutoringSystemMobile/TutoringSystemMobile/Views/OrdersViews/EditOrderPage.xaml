@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.EditOrderPage"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
+             Title="Edycja"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:EditOrderViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Welcome to edit order view"
+                Style="{StaticResource LabelStyle}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
