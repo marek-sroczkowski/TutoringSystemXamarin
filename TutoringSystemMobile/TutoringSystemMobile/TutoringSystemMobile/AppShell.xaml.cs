@@ -12,21 +12,11 @@ namespace TutoringSystemMobile
         {
             InitializeComponent();
 
-            Routing.RegisterRoute(nameof(StartTutorPage), typeof(StartTutorPage));
-            Routing.RegisterRoute(nameof(ReservationTutorPage), typeof(ReservationTutorPage));
-            Routing.RegisterRoute(nameof(OrdersTutorPage), typeof(OrdersTutorPage));
-            Routing.RegisterRoute(nameof(ReportTutorPage), typeof(ReportTutorPage));
-            Routing.RegisterRoute(nameof(StudentsTutorPage), typeof(StudentsTutorPage));
-            Routing.RegisterRoute(nameof(ProfileTutorPage), typeof(ProfileTutorPage));
             Routing.RegisterRoute(nameof(RegisterTutorPage), typeof(RegisterTutorPage));
             Routing.RegisterRoute(nameof(OrderDetailsPage), typeof(OrderDetailsPage));
             Routing.RegisterRoute(nameof(NewOrderPage), typeof(NewOrderPage));
             Routing.RegisterRoute(nameof(OrderFilteringPage), typeof(OrderFilteringPage));
-
-            Routing.RegisterRoute(nameof(StartStudentPage), typeof(StartStudentPage));
-            Routing.RegisterRoute(nameof(ReservationStudentPage), typeof(ReservationStudentPage));
-            Routing.RegisterRoute(nameof(TutorsStudentPage), typeof(TutorsStudentPage));
-            Routing.RegisterRoute(nameof(ProfileStudentPage), typeof(ProfileStudentPage));
+            Routing.RegisterRoute(nameof(EditOrderPage), typeof(EditOrderPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
