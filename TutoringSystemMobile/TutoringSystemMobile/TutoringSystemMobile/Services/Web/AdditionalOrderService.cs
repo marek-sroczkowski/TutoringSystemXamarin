@@ -1,7 +1,6 @@
 ﻿using Flurl.Http;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Parameters;
@@ -15,11 +14,17 @@ namespace TutoringSystemMobile.Services.Web
 {
     public class AdditionalOrderService : IAdditionalOrderService
     {
+        private readonly string baseUrl;
+
+        public AdditionalOrderService()
+        {
+            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "order";
+        }
+
         public async Task<bool> AddAdditionalOrderAsync(NewOrderDto newOrder)
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "order";
-            var response = await url
+            var response = await baseUrl
                 .AllowAnyHttpStatus()
                 .WithOAuthBearerToken(token)
                 .PostJsonAsync(newOrder);
@@ -30,35 +35,32 @@ namespace TutoringSystemMobile.Services.Web
         public async Task<bool> DeleteAdditionalOrderAsync(long orderId)
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "order";
-            var response = await url
+            var response = await baseUrl
                 .AllowAnyHttpStatus()
-                .SetQueryParam("orderId", orderId)
+                .AppendPathSegment(orderId)
                 .WithOAuthBearerToken(token)
                 .DeleteAsync();
 
-            return response.StatusCode == 200;
+            return response.StatusCode == 204;
         }
 
         public async Task<OrderDetailsDto> GetAdditionalOrderByIdAsync(long orderId)
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "order";
-            var response = await url
+            var response = await baseUrl
                 .AllowAnyHttpStatus()
-                .SetQueryParam("orderId", orderId)
+                .AppendPathSegment(orderId)
                 .WithOAuthBearerToken(token)
                 .GetAsync();
 
-            var orders = response.StatusCode == 200 ? await response.GetJsonAsync<ICollection<OrderDetailsDto>>() : new List<OrderDetailsDto>();
-            return orders.Count > 0 ? orders.First() : new OrderDetailsDto();
+            var order = response.StatusCode == 200 ? await response.GetJsonAsync<OrderDetailsDto>() : new OrderDetailsDto();
+            return order;
         }
 
         public async Task<IEnumerable<OrderDto>> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters)
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "order";
-            var response = await url
+            var response = await baseUrl
                 .AllowAnyHttpStatus()
                 .SetQueryParams(parameters)
                 .WithOAuthBearerToken(token)
@@ -80,8 +82,7 @@ namespace TutoringSystemMobile.Services.Web
         public async Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder)
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "order";
-            var response = await url
+            var response = await baseUrl
                 .AllowAnyHttpStatus()
                 .WithOAuthBearerToken(token)
                 .PutJsonAsync(updatedOrder);
