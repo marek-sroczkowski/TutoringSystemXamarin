@@ -23,7 +23,7 @@ namespace TutoringSystemMobile
         {
             SecureStorage.Remove("token");
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
-            await Shell.Current.GoToAsync("//LoginPage");
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
     }
 }

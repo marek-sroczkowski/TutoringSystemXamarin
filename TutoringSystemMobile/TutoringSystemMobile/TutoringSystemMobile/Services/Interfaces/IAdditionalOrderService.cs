@@ -9,7 +9,7 @@ namespace TutoringSystemMobile.Services.Interfaces
     {
         Task<IEnumerable<OrderDto>> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters);
         Task<OrderDetailsDto> GetAdditionalOrderByIdAsync(long orderId);
-        Task<bool> AddAdditionalOrderAsync(NewOrderDto newOrder);
+        Task<long> AddAdditionalOrderAsync(NewOrderDto newOrder);
         Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder);
         Task<bool> DeleteAdditionalOrderAsync(long orderId);
         Task<bool> SetInProgressStatusAsync(long orderId);

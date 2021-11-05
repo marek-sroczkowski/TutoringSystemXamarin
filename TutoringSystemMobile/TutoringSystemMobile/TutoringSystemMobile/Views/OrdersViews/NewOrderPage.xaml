@@ -2,15 +2,44 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.NewOrderPage"
+             xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
              Title="Nowe zlecenie"
              Style="{StaticResource PageStyle}">
 
+    <ContentPage.BindingContext>
+        <viewModel:NewOrderViewModel />
+    </ContentPage.BindingContext>
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to new order form"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-                   Style="{StaticResource LabelStyle}"/>
+        <StackLayout Padding="15,20,15,0"
+                     HorizontalOptions="Start">
+
+            <custom:TitledEntry Text="{Binding Name}" 
+                                Placeholder="Nazwa" />
+
+            <custom:TitledEntry Text="{Binding Cost}" 
+                                Placeholder="Przychód"
+                                EntryKeyboard="Numeric" />
+
+            <custom:TitledEntry Text="{Binding Description}" 
+                                Placeholder="Opis" />
+
+            <custom:TitledDatePicker Title="Deadline"
+                                     SelectedDate="{Binding Deadline}"/>
+
+            <custom:TitledCheckbox Text="Opłacone" IsChecked="{Binding IsPaid}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"  
+                               IsVisible="{Binding IsBusy}"
+                               Color="Blue"/>
+
+            <Button VerticalOptions="Center" 
+                    Text="Dodaj zlecenie" 
+                    Margin="0,20,0,0"
+                    Style="{StaticResource PrimaryBlueButtonStyle}"
+                    Command="{Binding AddNewOrderCommand}" />
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

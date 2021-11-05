@@ -1,7 +1,9 @@
 ﻿using Flurl.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
@@ -21,7 +23,7 @@ namespace TutoringSystemMobile.Services.Web
             baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "order";
         }
 
-        public async Task<bool> AddAdditionalOrderAsync(NewOrderDto newOrder)
+        public async Task<long> AddAdditionalOrderAsync(NewOrderDto newOrder)
         {
             string token = await SecureStorage.GetAsync("token");
             var response = await baseUrl
@@ -29,7 +31,12 @@ namespace TutoringSystemMobile.Services.Web
                 .WithOAuthBearerToken(token)
                 .PostJsonAsync(newOrder);
 
-            return response.StatusCode == 200;
+            if (response.StatusCode != 201)
+                return -1;
+
+            string location = response.Headers.FirstOrDefault("location");
+
+            return location is null ? -1 : location.GetIdByLocation();
         }
 
         public async Task<bool> DeleteAdditionalOrderAsync(long orderId)
