@@ -19,6 +19,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         private AdditionalOrderStatus status;
         private DateTime receiptDate;
         private string description;
+        private string paidStatus;
+        private string orderStatus;
 
         public long Id
         {
@@ -26,7 +28,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             set
             {
                 id = value;
-                OnLoadOrder();
+                LoadOrder();
             }
         }
 
@@ -37,35 +39,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public AdditionalOrderStatus Status { get => status; set => SetValue(ref status, value); }
         public DateTime ReceiptDate { get => receiptDate; set => SetValue(ref receiptDate, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
-
-        public string PaidStatus
-        {
-            get
-            {
-                if (isPaid)
-                    return "Zapłacono";
-                else
-                    return "Nie zapłacono";
-            }
-        }
-
-        public string OrderStatus
-        {
-            get
-            {
-                switch (status)
-                {
-                    case AdditionalOrderStatus.Pending:
-                        return "Oczekujące";
-                    case AdditionalOrderStatus.InProgress:
-                        return "W realizacji";
-                    case AdditionalOrderStatus.Realized:
-                        return "Zrealizowane";
-                    default:
-                        return "Nie określony";
-                }
-            }
-        }
+        public string PaidStatus { get => paidStatus; set => SetValue(ref paidStatus, value); }
+        public string OrderStatus { get => orderStatus; set => SetValue(ref orderStatus, value); }
 
         public Command LoadOrderCommand { get; }
         public Command EditOrderCommand { get; }
@@ -76,12 +51,12 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public OrderDetailsViewModel()
         {
             orderService = DependencyService.Get<IAdditionalOrderService>();
-            LoadOrderCommand = new Command(OnLoadOrder);
+            LoadOrderCommand = new Command(LoadOrder);
             EditOrderCommand = new Command(OnRedirectToOrderEditPage);
             RemoveOrderCommand = new Command(OnRemoveRequest);
         }
 
-        private async void OnLoadOrder()
+        private async void LoadOrder()
         {
             await LoadOrderById(Id);
         }
@@ -97,6 +72,32 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             Status = order.Status;
             ReceiptDate = order.ReceiptDate;
             Description = order.Description;
+            SetPaidStatus();
+            SetOrderStatus();
+        }
+
+        private void SetPaidStatus()
+        {
+            if (isPaid)
+                PaidStatus = "Zapłacono";
+            else
+                PaidStatus = "Nie zapłacono";
+        }
+
+        private void SetOrderStatus()
+        {
+            switch (Status)
+            {
+                case AdditionalOrderStatus.Pending:
+                    OrderStatus = "Oczekujące";
+                    break;
+                case AdditionalOrderStatus.InProgress:
+                    OrderStatus = "W realizacji";
+                    break;
+                case AdditionalOrderStatus.Realized:
+                    OrderStatus = "Zrealizowane";
+                    break;
+            }
         }
 
         private async void OnRedirectToOrderEditPage()
