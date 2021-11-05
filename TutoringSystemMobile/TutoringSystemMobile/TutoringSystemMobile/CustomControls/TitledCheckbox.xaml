@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:TutoringSystemMobile.CustomControls"
+             x:Class="TutoringSystemMobile.CustomControls.TitledCheckbox">
+
+    <ContentView.Content>
+        <Grid x:DataType="model:TitledCheckbox">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Column="0"
+                          x:Name="CheckBoxContent"
+                          HorizontalOptions="Center"
+                          IsChecked="{Binding IsChecked}"/>
+
+                <Label Grid.Column="1"
+                       x:Name="LabelTitle"
+                       VerticalTextAlignment="Center"
+                       Text="{Binding Text}"
+                       Style="{StaticResource CheckboxTitleStyle}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

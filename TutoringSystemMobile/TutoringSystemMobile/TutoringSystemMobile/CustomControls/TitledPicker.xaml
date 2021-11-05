@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:TutoringSystemMobile.CustomControls"
+             x:Class="TutoringSystemMobile.CustomControls.TitledPicker"
+             x:Name="PickerContentView">
+    
+  <ContentView.Content>
+        <Grid x:DataType="model:TitledPicker">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" 
+                   Margin="0,0,0,-5"
+                   IsVisible="False"
+                   Style="{StaticResource LabelStyle}"
+                   x:Name="LabelTitle" />
+
+            <Picker Grid.Row="1" 
+                        SelectedItem="{Binding Source={x:Reference PickerContentView}, Path=SelectedItem}"
+                        ItemsSource="{Binding Source={x:Reference PickerContentView}, Path=ItemsSource}"
+                        Title="{Binding Source={x:Reference PickerContentView}, Path=Placeholder}"
+                        x:Name="PickerContent" 
+                        FontSize="{Binding Source={x:Reference PickerContentView}, Path=FontSize}"
+                        Focused="PickerContent_Focused"
+                        Unfocused="PickerContent_Unfocused" />
+        </Grid>
+    </ContentView.Content>
+</ContentView>

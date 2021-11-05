@@ -9,14 +9,12 @@
         <Color x:Key="LightPrimaryColor">WhiteSmoke</Color>
         <Color x:Key="DarkPrimaryColor">Black</Color>
         <Color x:Key="PlaceholderLightColor">#cccccc</Color>
-        <Color x:Key="PlaceholderDarkColor">#3a3a3a</Color>
+        <Color x:Key="PlaceholderDarkColor">#cccccc</Color>
 
         <Style x:Key="EntryStyle"
                TargetType="Entry">
             <Setter Property="TextColor"
                     Value="{AppThemeBinding Light={StaticResource DarkPrimaryColor}, Dark={StaticResource LightPrimaryColor}}" />
-            <Setter Property="PlaceholderColor"
-                    Value="{AppThemeBinding  Light={StaticResource PlaceholderDarkColor}, Dark={StaticResource PlaceholderLightColor}}" />
         </Style>
 
     </ContentView.Resources>
@@ -29,11 +27,14 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" 
-                   x:Name="LabelTitle" />
+                   x:Name="LabelTitle"
+                   IsVisible="False"
+                   Margin="0,0,0,-5"
+                   Style="{StaticResource LabelStyle}"/>
             
             <Entry Grid.Row="1" 
                    x:Name="EntryContent" 
-                   Placeholder="{Binding Placeholder}" 
+                   Placeholder="{Binding Placeholder}"
                    Text="{Binding Text}"
                    Focused="Handle_Focused" 
                    FontSize="{Binding FontSize}"

@@ -47,7 +47,7 @@ namespace TutoringSystemMobile.CustomControls
         }
 
         public static BindableProperty FontSizeProperty =
-            BindableProperty.Create(nameof(FontSize), typeof(int), typeof(TitledEntry), 16, BindingMode.TwoWay);
+            BindableProperty.Create(nameof(FontSize), typeof(int), typeof(TitledEntry), 18, BindingMode.TwoWay);
 
         public int FontSize
         {
