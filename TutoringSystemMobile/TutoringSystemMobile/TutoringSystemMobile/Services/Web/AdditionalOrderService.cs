@@ -94,7 +94,7 @@ namespace TutoringSystemMobile.Services.Web
                 .WithOAuthBearerToken(token)
                 .PutJsonAsync(updatedOrder);
 
-            return response.StatusCode == 200;
+            return response.StatusCode == 204;
         }
     }
 }

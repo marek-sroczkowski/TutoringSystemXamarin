@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using TutoringSystemMobile.Commands.OrderCommands;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
@@ -14,8 +17,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         private double cost;
         private bool isPaid;
         private AdditionalOrderStatus status;
-        private DateTime receiptDate;
         private string description;
+        private string selectedStatus;
 
         public long Id
         {
@@ -27,19 +30,45 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             }
         }
 
+        public string SelectedStatus
+        {
+            get =>  selectedStatus;
+            set
+            {
+                SetValue(ref selectedStatus, value);
+                switch (selectedStatus)
+                {
+                    case "Oczekujące":
+                        Status = AdditionalOrderStatus.Pending;
+                        break;
+                    case "W realizacji":
+                        Status = AdditionalOrderStatus.InProgress;
+                        break;
+                    case "Zrealizowane":
+                        Status = AdditionalOrderStatus.Realized;
+                        break;
+                }
+            }
+        }
+
         public string Name { get => name; set => SetValue(ref name, value); }
         public DateTime Deadline { get => deadline; set => SetValue(ref deadline, value); }
         public double Cost { get => cost; set => SetValue(ref cost, value); }
         public bool IsPaid { get => isPaid; set => SetValue(ref isPaid, value); }
         public AdditionalOrderStatus Status { get => status; set => SetValue(ref status, value); }
-        public DateTime ReceiptDate { get => receiptDate; set => SetValue(ref receiptDate, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
+
+        public List<string> Statuses { get; set; }
+
+        public ICommand EditOrderCommand { get; }
 
         private readonly IAdditionalOrderService orderService;
 
         public EditOrderViewModel()
         {
             orderService = DependencyService.Get<IAdditionalOrderService>();
+            Statuses = new List<string> { "Oczekujące", "W realizacji", "Zrealizowane" };
+            EditOrderCommand = new EditOrderCommand(this, orderService);
         }
 
         public async void LoadOrderById(long orderId)
@@ -51,8 +80,24 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             Cost = order.Cost;
             IsPaid = order.IsPaid;
             Status = order.Status;
-            ReceiptDate = order.ReceiptDate;
             Description = order.Description;
+            SetSelectedStatus();
+        }
+
+        public void SetSelectedStatus()
+        {
+            switch (Status)
+            {
+                case AdditionalOrderStatus.Pending:
+                    SelectedStatus = "Oczekujące";
+                    break;
+                case AdditionalOrderStatus.InProgress:
+                    SelectedStatus = "W realizacji";
+                    break;
+                case AdditionalOrderStatus.Realized:
+                    SelectedStatus = "Zrealizowane";
+                    break;
+            }
         }
     }
 }

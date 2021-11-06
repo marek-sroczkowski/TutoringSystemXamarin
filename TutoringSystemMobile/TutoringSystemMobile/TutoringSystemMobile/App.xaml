@@ -111,8 +111,13 @@
                 <Setter Property="Color" Value="{AppThemeBinding Light=Black, Dark=#7c7c7c}" />
             </Style>
 
+            <Style x:Key="ListBoxView" TargetType="BoxView">
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#fbfbfb, Dark=#2e2e2e}" />
+            </Style>
+
             <Style x:Key="PageStyle" TargetType="ContentPage">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#f9f9f9, Dark=#0e0e0e}" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#f3f3f3, Dark=Black}" />
             </Style>
         </ResourceDictionary>        
     </Application.Resources>

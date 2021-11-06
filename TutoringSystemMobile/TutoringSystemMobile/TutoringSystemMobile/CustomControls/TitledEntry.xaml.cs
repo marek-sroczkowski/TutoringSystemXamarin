@@ -46,6 +46,15 @@ namespace TutoringSystemMobile.CustomControls
             set => SetValue(IsPasswordProperty, value);
         }
 
+        public static BindableProperty IsTitleVisibleProperty =
+            BindableProperty.Create(nameof(IsTitleVisible), typeof(bool), typeof(TitledEntry), false, BindingMode.TwoWay);
+
+        public bool IsTitleVisible
+        {
+            get => (bool)GetValue(IsTitleVisibleProperty);
+            set => SetValue(IsTitleVisibleProperty, value);
+        }
+
         public static BindableProperty FontSizeProperty =
             BindableProperty.Create(nameof(FontSize), typeof(int), typeof(TitledEntry), 18, BindingMode.TwoWay);
 
@@ -99,7 +108,8 @@ namespace TutoringSystemMobile.CustomControls
         {
             if (EntryContent.Text == null || EntryContent.Text.Length == 0)
             {
-                EntryContent.Placeholder = placeholder;
+                if (placeholder != string.Empty)
+                    EntryContent.Placeholder = placeholder;
                 LabelTitle.IsVisible = false;
             }
             else
