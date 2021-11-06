@@ -16,99 +16,97 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <RefreshView Command="{Binding LoadOrderCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Blue">
-            <StackLayout Spacing="15" Padding="20,20,20,0">
-                
-                <Label Text="{Binding Name}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
+        <StackLayout Spacing="15" Padding="20,20,20,0">
 
-                <BoxView Style="{StaticResource HorizontalLineStyle}" />
+            <Label Text="{Binding Name}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+            <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0">
-                    <Label Grid.Column="0" 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Grid Grid.Row="0">
+                <Label Grid.Column="0" 
                            Text="Przychód" 
                            VerticalOptions="Center"
                            Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="1" 
+                <Label Grid.Column="1" 
                            Style="{StaticResource PropertyLabelStyle}" 
                            VerticalOptions="Center"
                            HorizontalOptions="End" >
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="{Binding Cost}" />
-                                <Span Text=" zł" />
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </Grid>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Cost}" />
+                            <Span Text=" zł" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
 
-                <Grid Grid.Row="1">
-                    <Label Grid.Column="0" 
+            <Grid Grid.Row="1">
+                <Label Grid.Column="0" 
                            Text="Status płatności" 
                            VerticalOptions="Center"
                            Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="1"
+                <Label Grid.Column="1"
                            Text="{Binding PaidStatus}"
                            Style="{StaticResource PropertyLabelStyle}" 
                            VerticalOptions="Center"
                            HorizontalOptions="End" >
-                    </Label>
-                </Grid>
+                </Label>
+            </Grid>
 
-                <Grid Grid.Row="2">
-                    <Label Grid.Column="0" 
+            <Grid Grid.Row="2">
+                <Label Grid.Column="0" 
                            Text="Data zgłoszenia" 
                            VerticalOptions="Center"
                            Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="1" 
+                <Label Grid.Column="1" 
                            Text="{Binding ReceiptDate, StringFormat='{0:dd/MM/yyyy}'}" 
                            Style="{StaticResource PropertyLabelStyle}" 
                            VerticalOptions="Center"
                            HorizontalOptions="End" />
-                </Grid>
+            </Grid>
 
-                <Grid Grid.Row="3">
-                    <Label Grid.Column="0" 
+            <Grid Grid.Row="3">
+                <Label Grid.Column="0" 
                            Text="Deadline" 
                            VerticalOptions="Center"
                            Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="1" 
+                <Label Grid.Column="1" 
                            Text="{Binding Deadline, StringFormat='{0:dd/MM/yyyy}'}" 
                            Style="{StaticResource PropertyLabelStyle}" 
                            VerticalOptions="Center"
                            HorizontalOptions="End" />
-                </Grid>
+            </Grid>
 
-                <Grid Grid.Row="4" Padding="0,0,0,10">
-                    <Label Grid.Column="0" 
+            <Grid Grid.Row="4" Padding="0,0,0,10">
+                <Label Grid.Column="0" 
                            Text="Status" 
                            VerticalOptions="Center"
                            Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="1" 
+                <Label Grid.Column="1" 
                            Text="{Binding OrderStatus}" 
                            Style="{StaticResource PropertyLabelStyle}" 
                            VerticalOptions="Center"
                            HorizontalOptions="End" />
-                </Grid>
+            </Grid>
 
-                <BoxView Style="{StaticResource HorizontalLineStyle}" />
+            <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-                <Label Text="{Binding Description}" Padding="0,10,0,0" Style="{StaticResource ContentLabelStyle}" />
-            </StackLayout>
-        </RefreshView>
+            <Label Text="{Binding Description}" Padding="0,10,0,0" Style="{StaticResource ContentLabelStyle}" />
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

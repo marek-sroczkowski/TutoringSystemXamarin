@@ -29,16 +29,13 @@
                 SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10" x:DataType="model:OrderDto">
+                    <StackLayout Padding="3" x:DataType="model:OrderDto">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <BoxView CornerRadius="10"
-                                    BackgroundColor="{AppThemeBinding Light=White, Dark=#191919}"
-                                    AbsoluteLayout.LayoutBounds="0, 0, 1, 0.5"
-                                    AbsoluteLayout.LayoutFlags="SizeProportional"/>
+                            <BoxView Grid.Row="0" Margin="1" Style="{StaticResource ListBoxView}"/>
 
                             <Grid Grid.Row="0">
 
@@ -87,9 +84,8 @@
                                         </Label.FormattedText>
                                     </Label>
                                 </Grid>
-                                
+
                                 <Grid Grid.Column="1">
-                                    
                                     <Image Source="icon_get_details.png" />
                                 </Grid>
                             </Grid>
