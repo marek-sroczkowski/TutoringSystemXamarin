@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.SubjectDetailsTutorPage"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.SubjectViewModels"
+             Title="Szczegóły"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:SubjectDetailsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_edit.png" Command="{Binding EditSubjectCommand}" />
+        <ToolbarItem IconImageSource="icon_remove.png" Command="{Binding RemoveSubjectCommand}" />
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Content>
+        <StackLayout Spacing="15" Padding="20,20,20,0">
+
+            <ActivityIndicator Color="Blue" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+            <Label Text="{Binding Name}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
+
+            <BoxView Style="{StaticResource HorizontalLineStyle}" />
+
+            <Grid Padding="0,-15,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Grid Grid.Row="0">
+                <Label Grid.Column="0" 
+                           Text="Kategoria" 
+                           VerticalOptions="Center"
+                           Style="{StaticResource LabelStyle}" />
+                <Label Grid.Column="1"
+                           Text="{Binding CategoryPl}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Label Grid.Column="0"
+                           Text="Miejsce zajęć" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"
+                           Style="{StaticResource LabelStyle}" />
+                <Label Grid.Column="1"
+                       Margin="-15,0,0,0"
+                           Text="{Binding PlacePl}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <BoxView Style="{StaticResource HorizontalLineStyle}" />
+
+            <Label Text="{Binding Description}" Padding="0,10,0,0" Style="{StaticResource ContentLabelStyle}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

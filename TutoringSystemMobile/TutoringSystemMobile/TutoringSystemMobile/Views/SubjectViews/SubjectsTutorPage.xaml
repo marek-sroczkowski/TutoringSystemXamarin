@@ -2,15 +2,83 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.SubjectsTutorPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.SubjectDtos"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.SubjectViewModels"
              Title="Przedmioty"
              Style="{StaticResource PageStyle}">
 
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to subjects"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-                   Style="{StaticResource LabelStyle}"/>
-        </StackLayout>
-    </ContentPage.Content>
+    <ContentPage.BindingContext>
+        <viewModel:SubjectsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewSubjectFormCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <RefreshView x:DataType="viewModel:SubjectsViewModel" Command="{Binding LoadSubjectsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Blue">
+        <CollectionView ItemsSource="{Binding Subjects}"
+                SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <StackLayout Padding="3" x:DataType="model:SubjectDto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <BoxView Grid.Row="0" Margin="1" Style="{StaticResource ListBoxView}"/>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0" Padding="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Row="0" Text="{Binding Name}" 
+                                        LineBreakMode="WordWrap" 
+                                        Style="{StaticResource LabelStyle}"
+                                        FontAttributes="Bold"
+                                        FontSize="18" />
+
+                                    <Label Grid.Row="1"
+                                           LineBreakMode="TailTruncation"
+                                           Text="{Binding Description}"
+                                           Style="{StaticResource LabelStyle}"
+                                           FontSize="13">
+                                    </Label>
+                                </Grid>
+
+                                <Grid Grid.Column="1">
+                                    <Image Source="icon_get_details.png" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:SubjectsViewModel}}, Path=SubjectTapped}"		
+                                CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>

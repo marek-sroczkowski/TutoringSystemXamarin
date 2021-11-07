@@ -92,6 +92,8 @@
                 <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White}" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="End" />
             </Style>
 
             <Style x:Key="ContentLabelStyle" 
@@ -108,12 +110,12 @@
             <Style x:Key="HorizontalLineStyle"
                    TargetType="BoxView">
                 <Setter Property="HeightRequest" Value="1" />
-                <Setter Property="Color" Value="{AppThemeBinding Light=Black, Dark=#7c7c7c}" />
+                <Setter Property="Color" Value="{AppThemeBinding Light=#2196F3, Dark=#7c7c7c}" />
             </Style>
 
             <Style x:Key="ListBoxView" TargetType="BoxView">
                 <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#fbfbfb, Dark=#2e2e2e}" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#fbfbfb, Dark=#191919}" />
             </Style>
 
             <Style x:Key="PageStyle" TargetType="ContentPage">

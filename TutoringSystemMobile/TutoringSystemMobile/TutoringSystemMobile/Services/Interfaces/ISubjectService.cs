@@ -6,10 +6,11 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface ISubjectService
     {
-        Task<SubjectDto> AddSubjectAsync(NewSubjectDto newSubjectModel);
+        Task<long> AddSubjectAsync(NewSubjectDto newSubjectModel);
         Task<bool> DeleteSubjectAsync(long subjectId);
         Task<SubjectDetailsDto> GetSubjectByIdAsync(long subjectId);
-        Task<ICollection<SubjectDto>> GetTutorSubjectsAsync();
+        Task<IEnumerable<SubjectDto>> GetSubjectByTutorId(long tutorId);
+        Task<IEnumerable<SubjectDto>> GetSubjectsAsync();
         Task<bool> UpdateSubjectAsync(UpdatedSubjectDto updatedSubject);
     }
 }
