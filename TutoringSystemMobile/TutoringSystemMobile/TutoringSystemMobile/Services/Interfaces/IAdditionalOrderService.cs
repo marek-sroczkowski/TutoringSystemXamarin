@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
+using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
 
 namespace TutoringSystemMobile.Services.Interfaces
@@ -12,7 +13,7 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<long> AddAdditionalOrderAsync(NewOrderDto newOrder);
         Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder);
         Task<bool> DeleteAdditionalOrderAsync(long orderId);
-        Task<bool> SetInProgressStatusAsync(long orderId);
-        Task<bool> SetRealizedStatusAsync(long orderId);
+        Task<bool> ChangeOrderStatusAsync(long orderId, AdditionalOrderStatus status);
+        Task<bool> ChangePaymentStatusAsync(long orderId, bool isPaid);
     }
 }

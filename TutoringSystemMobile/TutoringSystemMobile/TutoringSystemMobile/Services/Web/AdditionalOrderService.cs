@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
+using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -76,14 +77,30 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<OrderDto>>() : new List<OrderDto>();
         }
 
-        public async Task<bool> SetInProgressStatusAsync(long orderId)
+        public async Task<bool> ChangeOrderStatusAsync(long orderId, AdditionalOrderStatus status)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegments("status", orderId)
+                .SetQueryParam("status", status.ToString())
+                .WithOAuthBearerToken(token)
+                .PatchAsync();
+
+            return response.StatusCode == 204;
         }
 
-        public async Task<bool> SetRealizedStatusAsync(long orderId)
+        public async Task<bool> ChangePaymentStatusAsync(long orderId, bool isPaid)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegments("payment", orderId)
+                .SetQueryParam("isPaid", isPaid.ToString())
+                .WithOAuthBearerToken(token)
+                .PatchAsync();
+
+            return response.StatusCode == 204;
         }
 
         public async Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder)
