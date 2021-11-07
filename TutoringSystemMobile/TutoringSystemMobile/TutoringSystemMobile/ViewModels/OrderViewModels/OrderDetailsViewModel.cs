@@ -28,7 +28,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             set
             {
                 id = value;
-                LoadOrder();
+                LoadOrderById(id);
             }
         }
 
@@ -42,7 +42,6 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public string PaidStatus { get => paidStatus; set => SetValue(ref paidStatus, value); }
         public string OrderStatus { get => orderStatus; set => SetValue(ref orderStatus, value); }
 
-        public Command LoadOrderCommand { get; }
         public Command EditOrderCommand { get; }
         public Command RemoveOrderCommand { get; }
 
@@ -51,18 +50,13 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public OrderDetailsViewModel()
         {
             orderService = DependencyService.Get<IAdditionalOrderService>();
-            LoadOrderCommand = new Command(LoadOrder);
             EditOrderCommand = new Command(OnRedirectToOrderEditPage);
             RemoveOrderCommand = new Command(OnRemoveRequest);
         }
 
-        private async void LoadOrder()
+        private async void LoadOrderById(long orderId)
         {
-            await LoadOrderById(Id);
-        }
-
-        private async Task LoadOrderById(long orderId)
-        {
+            IsBusy = true;
             var order = await orderService.GetAdditionalOrderByIdAsync(orderId);
 
             Name = order.Name;
@@ -74,6 +68,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             Description = order.Description;
             SetPaidStatus();
             SetOrderStatus();
+
+            IsBusy = false;
         }
 
         private void SetPaidStatus()
@@ -102,7 +98,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         private async void OnRedirectToOrderEditPage()
         {
-            await Shell.Current.GoToAsync($"{nameof(EditOrderPage)}?{nameof(EditOrderViewModel.Id)}={Id}");
+            await Shell.Current.GoToAsync($"{nameof(EditOrderTutorPage)}?{nameof(EditOrderViewModel.Id)}={Id}");
         }
 
         private async void OnRemoveRequest()

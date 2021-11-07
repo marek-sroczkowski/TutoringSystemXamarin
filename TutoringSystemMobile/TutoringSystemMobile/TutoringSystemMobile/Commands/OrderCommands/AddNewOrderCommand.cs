@@ -44,12 +44,12 @@ namespace TutoringSystemMobile.Commands.OrderCommands
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie");
+                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później");
             }
             else
             {
                 DependencyService.Get<IToast>()?.MakeToast("Dodano zlecenie");
-                await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsPage)}?{nameof(OrderDetailsViewModel.Id)}={newOrderId}");
+                await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={newOrderId}");
             }
         }
     }

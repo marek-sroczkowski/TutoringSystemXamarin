@@ -1,32 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TutoringSystemMobile.Views.NewOrderPage"
+             x:Class="TutoringSystemMobile.Views.EditOrderTutorPage"
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
-             Title="Nowe zlecenie"
+             Title="Edycja"
              Style="{StaticResource PageStyle}">
 
     <ContentPage.BindingContext>
-        <viewModel:NewOrderViewModel />
+        <viewModel:EditOrderViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <StackLayout Padding="15,20,15,0"
-                     HorizontalOptions="Start">
+        <StackLayout Padding="15,0,15,0" 
+                     VerticalOptions="Center" >
 
             <custom:TitledEntry Text="{Binding Name}" 
-                                Placeholder="Nazwa" />
+                                Placeholder="Nazwa"
+                                IsTitleVisible="True"/>
 
             <custom:TitledEntry Text="{Binding Cost}" 
                                 Placeholder="Przychód"
+                                IsTitleVisible="True"
                                 EntryKeyboard="Numeric" />
 
             <custom:TitledEntry Text="{Binding Description}" 
+                                IsTitleVisible="True"
                                 Placeholder="Opis" />
 
             <custom:TitledDatePicker Title="Deadline"
                                      SelectedDate="{Binding Deadline}"/>
+
+            <Label Text="Status"
+                   Margin="0,0,0,-5"
+                   Style="{StaticResource LabelStyle}"/>
+
+            <Picker Title="Status"
+                    ItemsSource="{Binding Statuses}"
+                    SelectedItem="{Binding SelectedStatus}"/>
 
             <custom:TitledCheckbox Text="Opłacone" IsChecked="{Binding IsPaid}" />
 
@@ -35,10 +46,10 @@
                                Color="Blue"/>
 
             <Button VerticalOptions="Center" 
-                    Text="Dodaj zlecenie" 
+                    Text="Zapisz zmiany" 
                     Margin="0,20,0,0"
                     Style="{StaticResource PrimaryBlueButtonStyle}"
-                    Command="{Binding AddNewOrderCommand}" />
+                    Command="{Binding EditOrderCommand}" />
 
         </StackLayout>
     </ContentPage.Content>

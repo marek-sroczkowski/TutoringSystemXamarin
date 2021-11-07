@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class NewOrderPage : ContentPage
+    public partial class OrderDetailsTutorPage : ContentPage
     {
-        public NewOrderPage()
+        public OrderDetailsTutorPage()
         {
             InitializeComponent();
         }

@@ -25,6 +25,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\OrdersViews\EditOrderTutorPage.xaml.cs">
+      <DependentUpon>EditOrderTutorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\OrdersViews\NewOrderTutotPage.xaml.cs">
+      <DependentUpon>NewOrderTutotPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\OrdersViews\OrderDetailsTutorPage.xaml.cs">
+      <DependentUpon>OrderDetailsTutorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\OrdersViews\OrderFilteringTutorPage.xaml.cs">
+      <DependentUpon>OrderFilteringTutorPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TutorsViews\TutorsStudentPage.xaml.cs">
       <DependentUpon>TutorsStudentPage.xaml</DependentUpon>
     </Compile>
@@ -46,16 +58,16 @@
     <EmbeddedResource Update="CustomControls\TitledEntry.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\EditOrderPage.xaml">
+    <EmbeddedResource Update="Views\OrdersViews\EditOrderTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\NewOrderPage.xaml">
+    <EmbeddedResource Update="Views\OrdersViews\NewOrderTutotPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\OrderDetailsPage.xaml">
+    <EmbeddedResource Update="Views\OrdersViews\OrderDetailsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\OrderFilteringPage.xaml">
+    <EmbeddedResource Update="Views\OrdersViews\OrderFilteringTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\OrdersViews\OrdersTutorPage.xaml">
@@ -83,6 +95,15 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StudentsViews\StudentsTutorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SubjectViews\EditSubjectTutorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SubjectViews\NewSubjectTutorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SubjectViews\SubjectDetailsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SubjectViews\SubjectsTutorPage.xaml">

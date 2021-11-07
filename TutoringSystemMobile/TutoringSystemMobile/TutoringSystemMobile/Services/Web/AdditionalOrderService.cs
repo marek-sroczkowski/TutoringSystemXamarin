@@ -1,7 +1,5 @@
 ﻿using Flurl.Http;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
@@ -61,8 +59,7 @@ namespace TutoringSystemMobile.Services.Web
                 .WithOAuthBearerToken(token)
                 .GetAsync();
 
-            var order = response.StatusCode == 200 ? await response.GetJsonAsync<OrderDetailsDto>() : new OrderDetailsDto();
-            return order;
+            return response.StatusCode == 200 ? await response.GetJsonAsync<OrderDetailsDto>() : new OrderDetailsDto();
         }
 
         public async Task<IEnumerable<OrderDto>> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters)

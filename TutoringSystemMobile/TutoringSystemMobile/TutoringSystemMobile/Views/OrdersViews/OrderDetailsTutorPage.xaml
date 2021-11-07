@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
-             x:Class="TutoringSystemMobile.Views.OrderDetailsPage"
+             x:Class="TutoringSystemMobile.Views.OrderDetailsTutorPage"
              Title="Szczegóły"
              Style="{StaticResource PageStyle}">
 
@@ -18,11 +18,13 @@
     <ContentPage.Content>
         <StackLayout Spacing="15" Padding="20,20,20,0">
 
+            <ActivityIndicator Color="Blue" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
             <Label Text="{Binding Name}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
 
             <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-            <Grid>
+            <Grid Padding="0,-10,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -43,9 +45,7 @@
                            VerticalOptions="Center"
                            Style="{StaticResource LabelStyle}" />
                 <Label Grid.Column="1" 
-                           Style="{StaticResource PropertyLabelStyle}" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="End" >
+                           Style="{StaticResource PropertyLabelStyle}" >
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="{Binding Cost}" />
@@ -62,10 +62,7 @@
                            Style="{StaticResource LabelStyle}" />
                 <Label Grid.Column="1"
                            Text="{Binding PaidStatus}"
-                           Style="{StaticResource PropertyLabelStyle}" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="End" >
-                </Label>
+                           Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="2">
@@ -75,9 +72,7 @@
                            Style="{StaticResource LabelStyle}" />
                 <Label Grid.Column="1" 
                            Text="{Binding ReceiptDate, StringFormat='{0:dd/MM/yyyy}'}" 
-                           Style="{StaticResource PropertyLabelStyle}" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="End" />
+                           Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="3">
@@ -87,9 +82,7 @@
                            Style="{StaticResource LabelStyle}" />
                 <Label Grid.Column="1" 
                            Text="{Binding Deadline, StringFormat='{0:dd/MM/yyyy}'}" 
-                           Style="{StaticResource PropertyLabelStyle}" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="End" />
+                           Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="4" Padding="0,0,0,10">
@@ -99,9 +92,7 @@
                            Style="{StaticResource LabelStyle}" />
                 <Label Grid.Column="1" 
                            Text="{Binding OrderStatus}" 
-                           Style="{StaticResource PropertyLabelStyle}" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="End" />
+                           Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <BoxView Style="{StaticResource HorizontalLineStyle}" />

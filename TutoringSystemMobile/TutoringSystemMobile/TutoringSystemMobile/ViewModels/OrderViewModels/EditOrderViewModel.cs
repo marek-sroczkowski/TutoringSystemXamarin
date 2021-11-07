@@ -71,7 +71,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             EditOrderCommand = new EditOrderCommand(this, orderService);
         }
 
-        public async void LoadOrderById(long orderId)
+        private async void LoadOrderById(long orderId)
         {
             var order = await orderService.GetAdditionalOrderByIdAsync(orderId);
 

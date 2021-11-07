@@ -45,11 +45,11 @@ namespace TutoringSystemMobile.Commands.OrderCommands
 
             if (updated)
             {
-                await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsPage)}?{nameof(OrderDetailsViewModel.Id)}={viewModel.Id}");
+                await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={viewModel.Id}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie");
+                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później");
             }
         }
     }
