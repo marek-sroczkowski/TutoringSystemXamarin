@@ -16,11 +16,18 @@ namespace TutoringSystemMobile.Services.Web
 {
     public class UserService : IUserService
     {
+        private readonly string baseUrl;
+
+        public UserService()
+        {
+            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "account";
+        }
+
         public async Task<bool> ActivateUserByTokenAsync(string activationToken)
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/activate";
-            var response = await url
+            var response = await baseUrl
+                .AppendPathSegment("activate")
                 .SetQueryParam("token", activationToken)
                 .WithOAuthBearerToken(token)
                 .AllowAnyHttpStatus()
@@ -42,8 +49,8 @@ namespace TutoringSystemMobile.Services.Web
         public async Task<Role> GetUserRole()
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/role";
-            var response = await url
+            var response = await baseUrl
+                .AppendPathSegment("role")
                 .WithOAuthBearerToken(token)
                 .GetAsync();
 
@@ -59,8 +66,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<RegisterErrorTypes> RegisterTutorAsync(RegisterTutorDto tutor)
         {
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/register/tutor";
-            var response = await url
+            var response = await baseUrl
+                .AppendPathSegments("register", "tutor")
                 .AllowAnyHttpStatus()
                 .PostJsonAsync(tutor);
 
@@ -72,8 +79,8 @@ namespace TutoringSystemMobile.Services.Web
         public async Task<bool> SendNewActivationTokenAsync()
         {
             string token = await SecureStorage.GetAsync("token");
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/newCode";
-            var response = await url
+            var response = await baseUrl
+                .AppendPathSegment("newCode")
                 .WithOAuthBearerToken(token)
                 .AllowAnyHttpStatus()
                 .PostAsync();
@@ -83,8 +90,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<LoginStatus> TryLoginAsync(LoginUserDto userModel)
         {
-            string url = AppSettingsManager.Settings["BaseApiUrl"] + "account/login";
-            var response = await url
+            var response = await baseUrl
+                .AppendPathSegment("login")
                 .PostJsonAsync(userModel);
 
             var loginStatus = await GetLoginResultAsync(response);
