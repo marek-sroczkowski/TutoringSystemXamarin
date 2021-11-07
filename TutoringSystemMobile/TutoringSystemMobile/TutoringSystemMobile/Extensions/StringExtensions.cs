@@ -17,5 +17,13 @@ namespace TutoringSystemMobile.Extensions
 
             return result;
         }
+
+        public static double ToDouble(this string number)
+        {
+            if (!double.TryParse(number, out double result))
+                return 0;
+
+            return result;
+        }
     }
 }

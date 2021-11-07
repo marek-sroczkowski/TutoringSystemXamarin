@@ -13,8 +13,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
     {
         private long id;
         private string name;
-        private DateTime deadline;
-        private double cost;
+        private DateTime? deadline;
+        private string cost;
         private bool isPaid;
         private AdditionalOrderStatus status;
         private string description;
@@ -52,8 +52,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         }
 
         public string Name { get => name; set => SetValue(ref name, value); }
-        public DateTime Deadline { get => deadline; set => SetValue(ref deadline, value); }
-        public double Cost { get => cost; set => SetValue(ref cost, value); }
+        public DateTime? Deadline { get => deadline; set => SetValue(ref deadline, value); }
+        public string Cost { get => cost; set => SetValue(ref cost, value); }
         public bool IsPaid { get => isPaid; set => SetValue(ref isPaid, value); }
         public AdditionalOrderStatus Status { get => status; set => SetValue(ref status, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
@@ -77,7 +77,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
             Name = order.Name;
             Deadline = order.Deadline;
-            Cost = order.Cost;
+            Cost = order.Cost.ToString();
             IsPaid = order.IsPaid;
             Status = order.Status;
             Description = order.Description;

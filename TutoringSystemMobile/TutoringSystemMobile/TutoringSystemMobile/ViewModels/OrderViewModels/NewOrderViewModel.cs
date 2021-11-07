@@ -10,13 +10,13 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
     {
         private string name;
         private DateTime? deadline = DateTime.Now;
-        private double? cost;
+        private string cost;
         private bool isPaid;
         private string description;
 
         public string Name { get => name; set => SetValue(ref name, value); }
         public DateTime? Deadline { get => deadline; set => SetValue(ref deadline, value); }
-        public double? Cost { get => cost; set => SetValue(ref cost, value); }
+        public string Cost { get => cost; set => SetValue(ref cost, value); }
         public bool IsPaid { get => isPaid; set => SetValue(ref isPaid, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
 

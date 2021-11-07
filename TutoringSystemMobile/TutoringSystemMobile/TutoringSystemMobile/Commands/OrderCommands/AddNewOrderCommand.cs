@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -31,15 +32,16 @@ namespace TutoringSystemMobile.Commands.OrderCommands
         public bool CanExecute(object parameter)
         {
             return !string.IsNullOrEmpty(viewModel.Name) &&
+                !string.IsNullOrEmpty(viewModel.Cost) &&
+                double.TryParse(viewModel.Cost, out _) &&
                 viewModel.Deadline.HasValue &&
-                viewModel.Cost.HasValue &&
                 !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)
         {
             viewModel.IsBusy = true;
-            long newOrderId = await orderService.AddAdditionalOrderAsync(new NewOrderDto(viewModel.Name, viewModel.Deadline.Value, viewModel.Description, viewModel.Cost.Value, viewModel.IsPaid));
+            long newOrderId = await orderService.AddAdditionalOrderAsync(new NewOrderDto(viewModel.Name, viewModel.Deadline.Value, viewModel.Description, viewModel.Cost.ToDouble(), viewModel.IsPaid));
             viewModel.IsBusy = false;
 
             if (newOrderId == -1)
