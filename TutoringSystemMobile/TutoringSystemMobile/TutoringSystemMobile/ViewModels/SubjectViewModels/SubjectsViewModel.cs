@@ -28,7 +28,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public Command<SubjectDto> SubjectTapped { get; }
         public Command PageAppearingCommand { get; }
 
-        public readonly ISubjectService subjectService;
+        private readonly ISubjectService subjectService;
 
         public SubjectsViewModel()
         {

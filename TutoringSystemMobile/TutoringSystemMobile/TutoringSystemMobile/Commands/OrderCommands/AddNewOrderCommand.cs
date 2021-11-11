@@ -33,7 +33,8 @@ namespace TutoringSystemMobile.Commands.OrderCommands
         {
             return !string.IsNullOrEmpty(viewModel.Name) &&
                 !string.IsNullOrEmpty(viewModel.Cost) &&
-                double.TryParse(viewModel.Cost, out _) &&
+                double.TryParse(viewModel.Cost, out double cost) &&
+                cost > 0 &&
                 viewModel.Deadline.HasValue &&
                 !viewModel.IsBusy;
         }

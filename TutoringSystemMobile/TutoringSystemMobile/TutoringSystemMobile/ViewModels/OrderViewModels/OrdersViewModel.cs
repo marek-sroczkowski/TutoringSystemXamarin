@@ -33,7 +33,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public Command<OrderDto> ChangeOrderStatusCommand { get; }
         public Command<OrderDto> ChangePaymentStatusCommand { get; }
 
-        public readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService;
 
         public OrdersViewModel()
         {
