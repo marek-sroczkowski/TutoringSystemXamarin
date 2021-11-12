@@ -5,7 +5,8 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface IContactService
     {
-        Task<ContactDetailsDto> GetContactByUserAsync();
+        Task<ContactDetailsDto> GetContactByLoggedInUserAsync();
+        Task<ContactDetailsDto> GetContactByIdAsync(long contactId);
         Task<bool> UpdateContactAsync(UpdatedContactDto updatedContact);
     }
 }

@@ -1,22 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Flurl.Http;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.ContactDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Web;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(ContactService))]
 namespace TutoringSystemMobile.Services.Web
 {
     public class ContactService : IContactService
     {
-        public Task<ContactDetailsDto> GetContactByUserAsync()
+        private readonly string baseUrl;
+
+        public ContactService()
         {
-            throw new NotImplementedException();
+            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "contact";
         }
 
-        public Task<bool> UpdateContactAsync(UpdatedContactDto updatedContact)
+        public async Task<ContactDetailsDto> GetContactByIdAsync(long contactId)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegment(contactId)
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<ContactDetailsDto>() : new ContactDetailsDto();
+        }
+
+        public async Task<ContactDetailsDto> GetContactByLoggedInUserAsync()
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<ContactDetailsDto>() : new ContactDetailsDto();
+        }
+
+        public async Task<bool> UpdateContactAsync(UpdatedContactDto updatedContact)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .PutJsonAsync(updatedContact);
+
+            return response.StatusCode == 204;
         }
     }
 }
