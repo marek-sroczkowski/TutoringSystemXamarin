@@ -9,6 +9,6 @@ namespace TutoringSystemMobile.Models.ContactDtos
         public string Email { get; set; }
         public string DiscordName { get; set; }
 
-        public ICollection<PhoneNumberDto> PhoneNumbers { get; set; }
+        public IEnumerable<PhoneNumberDto> PhoneNumbers { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using TutoringSystemMobile.Models.AccountDtos;
-
-namespace TutoringSystemMobile.Models.AddressDtos
+﻿namespace TutoringSystemMobile.Models.AddressDtos
 {
     public class AddressDetailsDto
     {
@@ -10,7 +8,6 @@ namespace TutoringSystemMobile.Models.AddressDtos
         public string City { get; set; }
         public string PostalCode { get; set; }
         public string Description { get; set; }
-
-        public UserDto User { get; set; }
+        public string Owner { get; set; }
     }
 }
