@@ -5,7 +5,8 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface IAddressService
     {
-        Task<AddressDetailsDto> GetAddressByUserAsync();
+        Task<AddressDetailsDto> GetAddressOfLoggedInUserAsync();
+        Task<AddressDetailsDto> GetAddressByIdAsync(long addressId);
         Task<bool> UpdateAddressAsync(UpdatedAddressDto updatedAddress);
     }
 }

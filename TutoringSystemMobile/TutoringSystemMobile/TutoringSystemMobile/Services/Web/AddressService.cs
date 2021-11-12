@@ -1,22 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Flurl.Http;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.AddressDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Web;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(AddressService))]
 namespace TutoringSystemMobile.Services.Web
 {
     public class AddressService : IAddressService
     {
-        public Task<AddressDetailsDto> GetAddressByUserAsync()
+        private readonly string baseUrl;
+
+        public AddressService()
         {
-            throw new NotImplementedException();
+            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "address";
         }
 
-        public Task<bool> UpdateAddressAsync(UpdatedAddressDto updatedAddress)
+        public async Task<AddressDetailsDto> GetAddressByIdAsync(long addressId)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegment(addressId)
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<AddressDetailsDto>() : new AddressDetailsDto();
+        }
+
+        public async Task<AddressDetailsDto> GetAddressOfLoggedInUserAsync()
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<AddressDetailsDto>() : new AddressDetailsDto();
+        }
+
+        public async Task<bool> UpdateAddressAsync(UpdatedAddressDto updatedAddress)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .PutJsonAsync(updatedAddress);
+
+            return response.StatusCode == 204;
         }
     }
 }
