@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.ContactDetailsPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.PhoneNumberDtos"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ContactViewModels"
+             Title="Kontakt"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:ContactDetailsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="15" Padding="20,20,20,20">
+
+            <Label Text="{Binding Owner}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
+
+            <BoxView Style="{StaticResource HorizontalLineStyle}" />
+
+            <Grid Padding="0,-15,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Grid Grid.Row="0">
+                <Label Grid.Column="0" 
+                       Text="Email" 
+                       VerticalOptions="Center"
+                       Margin="0,0,0,-20"
+                       Style="{StaticResource LabelStyle}" />
+                <Label Grid.Column="1"
+                       Margin="-70,0,0,-20"
+                       Text="{Binding Email}"
+                       Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,20,0,0">
+                <Label Grid.Column="0"
+                           Text="Discord" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"
+                           Margin="0,0,0,-20"
+                           Style="{StaticResource LabelStyle}" />
+                <Label Grid.Column="1"
+                           Margin="-70,0,0,-20"
+                           Text="{Binding DiscordName}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <BoxView Style="{StaticResource HorizontalLineStyle}" Margin="0,20,0,0" />
+
+            <Label Text="Książka telefoniczna" 
+                   Padding="0,10,0,0" 
+                   Style="{StaticResource ContentLabelStyle}"
+                   FontSize="16"
+                   FontAttributes="Bold"/>
+
+            <CollectionView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=PhoneNumbers}" 
+                            x:DataType="model:PhoneNumberDto"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,0,0,5">
+                            <BoxView Grid.Row="0" Style="{StaticResource PhoneListBoxView}"/>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="45" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0" Padding="10">
+
+                                    <Label Text="{Binding Owner}" 
+                                            LineBreakMode="WordWrap" 
+                                            Style="{StaticResource LabelStyle}"
+                                            FontSize="16" >
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding Owner}" />
+                                                <Span Text="   " />
+                                                <Span Text="{Binding Number}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+
+                                <Grid Grid.Column="1">
+                                    <ImageButton Source="icon_call.png"
+                                                     BackgroundColor="Transparent"
+                                                     Margin="0,0,5,0"
+                                                     Padding="2"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=CallToStudent}" 
+                                                     CommandParameter="{Binding .}" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
