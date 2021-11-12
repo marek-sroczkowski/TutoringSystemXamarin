@@ -1,38 +1,90 @@
-﻿using System;
+﻿using Flurl;
+using Flurl.Http;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.StudentDtos;
-using TutoringSystemMobile.Models.TutorDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Web;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(StudentService))]
 namespace TutoringSystemMobile.Services.Web
 {
     public class StudentService : IStudentService
     {
-        public Task<bool> AddTutorAsync(long tutorId)
+        private readonly string baseUrl;
+
+        public StudentService()
         {
-            throw new NotImplementedException();
+            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "student";
         }
 
-        public Task<StudentDetailsDto> GetStudentAsync(long studentId)
+        public async Task<AddStudentToTutorStatus> AddStudentToTutorAsync(NewExistingStudentDto student)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
+                .PostJsonAsync(student);
+
+            return await GetAddedStatusAsync(response);
         }
 
-        public Task<ICollection<TutorDto>> GetTutorsAsync()
+        public async Task<StudentDetailsDto> GetStudentByIdAsync(long studentId)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegment(studentId)
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<StudentDetailsDto>() : new StudentDetailsDto();
         }
 
-        public Task<bool> RemoveAllTutorsAsync()
+        public async Task<IEnumerable<StudentDto>> GetStudentsAsync()
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<StudentDto>>() : new List<StudentDto>();
         }
 
-        public Task<bool> RemoveTutorAsync(long tutorId)
+        public async Task<bool> RemoveAllStudentsAsync()
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegment("all")
+                .WithOAuthBearerToken(token)
+                .DeleteAsync();
+
+            return response.StatusCode == 204;
+        }
+
+        public async Task<bool> RemoveStudentAsync(long studentId)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegment(studentId)
+                .WithOAuthBearerToken(token)
+                .DeleteAsync();
+
+            return response.StatusCode == 204;
+        }
+
+        private async Task<AddStudentToTutorStatus> GetAddedStatusAsync(IFlurlResponse response)
+        {
+            var status = await response.GetStringAsync();
+
+            return (AddStudentToTutorStatus)Enum.Parse(typeof(AddStudentToTutorStatus), status.Trim('\"'));
         }
     }
 }
