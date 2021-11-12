@@ -59,9 +59,18 @@ namespace TutoringSystemMobile.Services.Web
             return userRole;
         }
 
-        public Task<bool> RegisterStudentAsync(RegisterStudentDto student)
+        public async Task<RegisterErrorTypes> RegisterStudentAsync(RegisterStudentDto student)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegments("register", "student")
+                .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
+                .PostJsonAsync(student);
+
+            var content = await response.GetJsonAsync<RegisterError>();
+
+            return content?.Errors;
         }
 
         public async Task<RegisterErrorTypes> RegisterTutorAsync(RegisterTutorDto tutor)
@@ -73,7 +82,7 @@ namespace TutoringSystemMobile.Services.Web
 
             var content = await response.GetJsonAsync<RegisterError>();
 
-            return content is null ? null : content.Errors;
+            return content?.Errors;
         }
 
         public async Task<bool> SendNewActivationTokenAsync()
