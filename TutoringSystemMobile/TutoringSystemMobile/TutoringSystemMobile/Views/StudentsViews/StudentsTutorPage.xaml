@@ -14,6 +14,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewStudentCommand}" />
+        <ToolbarItem IconImageSource="icon_remove.png" Command="{Binding RemoveAllStudentsCommand}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Behaviors>

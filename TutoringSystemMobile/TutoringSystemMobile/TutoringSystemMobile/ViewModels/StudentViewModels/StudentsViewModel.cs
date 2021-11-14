@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TutoringSystemMobile.Commands.StudentCommands;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -27,6 +29,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         public Command NewStudentCommand { get; }
         public Command<StudentDto> StudentTapped { get; }
         public Command PageAppearingCommand { get; }
+        public Command RemoveAllStudentsCommand { get; }
 
         public readonly IStudentService studentService;
 
@@ -38,6 +41,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             NewStudentCommand = new Command(OnNewStudentClick);
             StudentTapped = new Command<StudentDto>(OnStudentSelected);
             PageAppearingCommand = new Command(OnAppearing);
+            RemoveAllStudentsCommand = new Command(OnRemoveAllStudent);
         }
 
         private void OnAppearing()
@@ -54,6 +58,27 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             await Shell.Current.GoToAsync($"{nameof(StudentDetailsTutorPage)}?{nameof(StudentDetailsViewModel.Id)}={student.Id}");
         }
 
+        private async void OnRemoveAllStudent()
+        {
+            var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", "Czy na pewno chcesz usunąć wszystkich studentów?", "Tak", "Nie");
+            if (result)
+                await RemoveStudentsAsync();
+        }
+
+        private async Task RemoveStudentsAsync()
+        {
+            var removed = await studentService.RemoveAllStudentsAsync();
+            if (removed)
+            {
+                DependencyService.Get<IToast>()?.MakeToast("Wyczyszczono listę uczniów!");
+                Students.Clear();
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj później!");
+            }
+        }
+
         private async void OnNewStudentClick()
         {
             const string existingStudent = "Student posiadający już konto";
@@ -63,7 +88,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             {
                 await Shell.Current.GoToAsync($"{nameof(NewExistingStudentTutorPage)}");
             }
-            else
+            else if(result == newStudent)
             {
                 await Shell.Current.GoToAsync($"{nameof(CreatingNewStudentTutorPage)}");
             }
