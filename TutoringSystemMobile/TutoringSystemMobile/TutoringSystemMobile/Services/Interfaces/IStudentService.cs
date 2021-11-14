@@ -12,5 +12,6 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<IEnumerable<StudentDto>> GetStudentsAsync();
         Task<bool> RemoveAllStudentsAsync();
         Task<bool> RemoveStudentAsync(long studentId);
+        Task<bool> UpdateStudentAsync(UpdatedStudentDto student);
     }
 }

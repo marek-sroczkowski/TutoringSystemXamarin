@@ -80,6 +80,17 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 204;
         }
 
+        public async Task<bool> UpdateStudentAsync(UpdatedStudentDto student)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .PutJsonAsync(student);
+
+            return response.StatusCode == 204;
+        }
+
         private async Task<AddStudentToTutorStatus> GetAddedStatusAsync(IFlurlResponse response)
         {
             var status = await response.GetStringAsync();
