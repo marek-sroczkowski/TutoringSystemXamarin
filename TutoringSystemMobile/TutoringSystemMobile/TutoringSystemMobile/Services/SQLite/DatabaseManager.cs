@@ -44,7 +44,7 @@ namespace TutoringSystemMobile.Services.SQLite
 
         private void CreateDatabase()
         {
-            _connection.CreateTable<JwtToken>();
+            //_connection.CreateTable<JwtToken>();
         }
 
         public void Add<T>(T objectToAdd)
