@@ -17,6 +17,7 @@
     <PackageReference Include="Flurl" Version="3.0.2" />
     <PackageReference Include="Flurl.Http" Version="3.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.14" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
@@ -36,6 +37,9 @@
     </Compile>
     <Compile Update="Views\OrdersViews\OrderFilteringTutorPage.xaml.cs">
       <DependentUpon>OrderFilteringTutorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PhoneNumbersViews\NewPhoneNumberPopupPage.xaml.cs">
+      <DependentUpon>NewPhoneNumberPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\TutorsViews\TutorsStudentPage.xaml.cs">
       <DependentUpon>TutorsStudentPage.xaml</DependentUpon>
