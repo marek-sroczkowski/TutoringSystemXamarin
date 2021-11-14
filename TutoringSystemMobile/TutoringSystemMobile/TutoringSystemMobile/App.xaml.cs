@@ -17,8 +17,6 @@ namespace TutoringSystemMobile
         {
             InitializeComponent();
             flyoutItemService = DependencyService.Get<IFlyoutItemService>();
-
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 
