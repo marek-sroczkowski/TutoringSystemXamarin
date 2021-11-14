@@ -6,10 +6,10 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface IPhoneNumberService
     {
-        Task<bool> AddPhoneNumbersAsync(ICollection<NewPhoneNumberDto> phoneNumbers);
-        Task<bool> DeletePhoneNumberAsync(long phoneNumberId);
-        Task<PhoneNumberDetailsDto> GetPhoneNumberById(long phoneNumberId);
-        Task<ICollection<PhoneNumberDto>> GetPhoneNumbersByUserAsync();
-        Task<bool> UpdatePhoneNumberAsync(UpdatedPhoneNumberDto updatedPhoneNumber);
+        Task<bool> AddPhoneNumberAsync(long contactId, NewPhoneNumberDto phoneNumber);
+        Task<bool> DeletePhoneNumberAsync(long contactId, long phoneNumberId);
+        Task<PhoneNumberDetailsDto> GetPhoneNumberById(long contactId, long phoneNumberId);
+        Task<IEnumerable<PhoneNumberDto>> GetPhoneNumbersByContactIdAsync(long contactId);
+        Task<bool> UpdatePhoneNumberAsync(long contactId, UpdatedPhoneNumberDto updatedPhoneNumber);
     }
 }

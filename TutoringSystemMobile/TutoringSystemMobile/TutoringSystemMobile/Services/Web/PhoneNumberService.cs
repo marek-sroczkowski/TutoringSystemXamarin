@@ -1,37 +1,82 @@
-﻿using System;
+﻿using Flurl.Http;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Web;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(PhoneNumberService))]
 namespace TutoringSystemMobile.Services.Web
 {
     public class PhoneNumberService : IPhoneNumberService
     {
-        public Task<bool> AddPhoneNumbersAsync(ICollection<NewPhoneNumberDto> phoneNumbers)
+        private readonly string baseUrl;
+
+        public PhoneNumberService()
         {
-            throw new NotImplementedException();
+            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "contact";
         }
 
-        public Task<bool> DeletePhoneNumberAsync(long phoneNumberId)
+        public async Task<bool> AddPhoneNumberAsync(long contactId, NewPhoneNumberDto newPhoneNumber)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegments(contactId, "phoneNumber")
+                .WithOAuthBearerToken(token)
+                .PostJsonAsync(newPhoneNumber);
+
+            return response.StatusCode == 201;
         }
 
-        public Task<PhoneNumberDetailsDto> GetPhoneNumberById(long phoneNumberId)
+        public async Task<bool> DeletePhoneNumberAsync(long contactId, long phoneNumberId)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegments(contactId, "phoneNumber", phoneNumberId)
+                .WithOAuthBearerToken(token)
+                .DeleteAsync();
+
+            return response.StatusCode == 204;
         }
 
-        public Task<ICollection<PhoneNumberDto>> GetPhoneNumbersByUserAsync()
+        public async Task<PhoneNumberDetailsDto> GetPhoneNumberById(long contactId, long phoneNumberId)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegments(contactId, "phoneNumber", phoneNumberId)
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<PhoneNumberDetailsDto>() : new PhoneNumberDetailsDto();
         }
 
-        public Task<bool> UpdatePhoneNumberAsync(UpdatedPhoneNumberDto updatedPhoneNumber)
+        public async Task<IEnumerable<PhoneNumberDto>> GetPhoneNumbersByContactIdAsync(long contactId)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegments(contactId, "phoneNumber")
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<PhoneNumberDto>>() : new List<PhoneNumberDto>();
+        }
+
+        public async Task<bool> UpdatePhoneNumberAsync(long contactId, UpdatedPhoneNumberDto updatedPhoneNumber)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegments(contactId, "phoneNumber")
+                .WithOAuthBearerToken(token)
+                .PutJsonAsync(updatedPhoneNumber);
+
+            return response.StatusCode == 204;
         }
     }
 }
