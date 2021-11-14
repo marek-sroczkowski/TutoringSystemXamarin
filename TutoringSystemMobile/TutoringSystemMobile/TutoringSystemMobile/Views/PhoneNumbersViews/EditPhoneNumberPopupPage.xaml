@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.EditPhoneNumberPopupPage"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls">
+
+    <pages:PopupPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </pages:PopupPage.Behaviors>
+
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation DurationIn="400"
+                                   DurationOut="300"
+                                   EasingIn="SinOut"
+                                   EasingOut="SinIn"
+                                   HasBackgroundAnimation="True"
+                                   PositionIn="Center"
+                                   PositionOut="Center"
+                                   ScaleIn="1.2"
+                                   ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+
+    <StackLayout Margin="12"
+                 Padding="24"
+                 BackgroundColor="#191919"
+                 HorizontalOptions="Center"
+                 VerticalOptions="Center">
+
+        <Label Text="Edycja kontaktu telefonicznego"
+               Style="{StaticResource TitleLabelStyle}"
+               Padding="0,0,0,15"/>
+
+        <custom:TitledEntry Text="{Binding Owner}" 
+                            Placeholder="Osoba kontaktowa"
+                            IsTitleVisible="True"/>
+
+        <custom:TitledEntry Text="{Binding Number}" 
+                            Placeholder="Numer telefonu"
+                            IsTitleVisible="True"
+                            EntryKeyboard="Numeric"/>
+
+        <Button VerticalOptions="Center" 
+                Text="Zapisz" 
+                Margin="0,20,0,0"
+                Style="{StaticResource PrimaryBlueButtonStyle}"
+                Command="{Binding EditPhoneNumberCommand}" />
+    </StackLayout>
+    
+</pages:PopupPage>

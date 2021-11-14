@@ -2,6 +2,7 @@
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.StudentDetailsTutorPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:page="clr-namespace:TutoringSystemMobile.Views"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.StudentViewModels"
              Title="Szczegóły"
@@ -13,9 +14,16 @@
 
     <TabbedPage.ToolbarItems>
         <ToolbarItem IconImageSource="icon_edit.png" Command="{Binding EditStudentCommand}" />
+        <ToolbarItem IconImageSource="icon_remove.png" Command="{Binding RemoveStudentCommand}" />
     </TabbedPage.ToolbarItems>
 
     <ContentPage Title="Ogólne" Style="{StaticResource PageStyle}">
+
+        <ContentPage.Behaviors>
+            <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+        </ContentPage.Behaviors>
 
         <ContentPage.Content>
             <StackLayout Spacing="15" Padding="20,20,20,0">

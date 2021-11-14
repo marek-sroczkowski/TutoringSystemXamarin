@@ -26,6 +26,10 @@ namespace TutoringSystemMobile
             Routing.RegisterRoute(nameof(StudentDetailsTutorPage), typeof(StudentDetailsTutorPage));
             Routing.RegisterRoute(nameof(NewExistingStudentTutorPage), typeof(NewExistingStudentTutorPage));
             Routing.RegisterRoute(nameof(CreatingNewStudentTutorPage), typeof(CreatingNewStudentTutorPage));
+
+            Routing.RegisterRoute(nameof(EditStudentGeneralInformationTutorPage), typeof(EditStudentGeneralInformationTutorPage));
+            Routing.RegisterRoute(nameof(EditContactPage), typeof(EditContactPage));
+            Routing.RegisterRoute(nameof(EditAddressPage), typeof(EditAddressPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

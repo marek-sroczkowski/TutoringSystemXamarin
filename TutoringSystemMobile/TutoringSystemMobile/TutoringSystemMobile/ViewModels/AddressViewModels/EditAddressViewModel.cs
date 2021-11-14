@@ -1,12 +1,12 @@
 ﻿using System.Windows.Input;
-using TutoringSystemMobile.Commands.StudentCommands;
+using TutoringSystemMobile.Commands.AddressCommands;
 using TutoringSystemMobile.Services.Interfaces;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.AddressViewModels
 {
-    public class AddressDetailsViewModel : BaseViewModel
+    [QueryProperty(nameof(Id), nameof(Id))]
+    public class EditAddressViewModel : BaseViewModel
     {
         private long id;
         private string street;
@@ -14,34 +14,36 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
         private string city;
         private string postalCode;
         private string description;
-        private string owner;
 
-        public long Id { get => id; set => SetValue(ref id, value); }
+        public long Id
+        {
+            get => id;
+            set
+            {
+                id = value;
+                LoadAddressById(id);
+            }
+        }
         public string Street { get => street; set => SetValue(ref street, value); }
         public string HouseAndFlatNumber { get => houseAndFlatNumber; set => SetValue(ref houseAndFlatNumber, value); }
         public string City { get => city; set => SetValue(ref city, value); }
         public string PostalCode { get => postalCode; set => SetValue(ref postalCode, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
-        public string Owner { get => owner; set => SetValue(ref owner, value); }
 
-        public Command PageAppearingCommand { get; }
-        public ICommand NavigateToStudentCommand { get; }
+        public ICommand EditAddressCommand { get; }
 
         private readonly IAddressService addressService;
 
-        public AddressDetailsViewModel()
+        public EditAddressViewModel()
         {
             addressService = DependencyService.Get<IAddressService>();
-            PageAppearingCommand = new Command(OnAppearing);
-            NavigateToStudentCommand = new NavigateToStudentCommand(this);
+            EditAddressCommand = new EditAddressCommand(this, addressService);
         }
 
-        private async void OnAppearing()
+        private async void LoadAddressById(long addressId)
         {
             IsBusy = true;
 
-            await SecureStorage.SetAsync("currentPage", "address");
-            long addressId = long.Parse(await SecureStorage.GetAsync("addressId"));
             var address = await addressService.GetAddressByIdAsync(addressId);
 
             Street = address.Street;
@@ -49,7 +51,6 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
             City = address.City;
             PostalCode = address.PostalCode;
             Description = address.Description;
-            Owner = address.Owner;
 
             IsBusy = false;
         }

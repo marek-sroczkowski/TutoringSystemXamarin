@@ -64,11 +64,24 @@
 
             <BoxView Style="{StaticResource HorizontalLineStyle}" Margin="0,20,0,0" />
 
-            <Label Text="Książka telefoniczna" 
-                   Padding="0,10,0,0" 
-                   Style="{StaticResource ContentLabelStyle}"
-                   FontSize="16"
-                   FontAttributes="Bold"/>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Text="Książka telefoniczna" 
+                           VerticalOptions="Center"
+                           FontSize="17"
+                           FontAttributes="Bold"
+                           Style="{StaticResource ContentLabelStyle}"/>
+
+                <ImageButton Grid.Column="1" Source="icon_add2.png"
+                             BackgroundColor="Transparent"
+                             HeightRequest="70"
+                             WidthRequest="70"
+                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=AddPhoneNumberCommand}"/>
+            </Grid>
 
             <CollectionView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=PhoneNumbers}" 
                             x:DataType="model:PhoneNumberDto"
@@ -82,31 +95,53 @@
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="45" />
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="40" />
                                 </Grid.ColumnDefinitions>
 
                                 <Grid Grid.Column="0" Padding="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
 
-                                    <Label Text="{Binding Owner}" 
-                                            LineBreakMode="WordWrap" 
-                                            Style="{StaticResource LabelStyle}"
-                                            FontSize="16" >
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding Owner}" />
-                                                <Span Text="   " />
-                                                <Span Text="{Binding Number}" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
+                                    <Label Grid.Row="0"
+                                           Text="{Binding Owner}" 
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="16" />
+
+                                    <Label Grid.Row="1"
+                                           Text="{Binding Number}" 
+                                           Style="{StaticResource LabelStyle}"
+                                           FontSize="16" />
                                 </Grid>
 
                                 <Grid Grid.Column="1">
+                                    <ImageButton Source="icon_edit2.png"
+                                                     BackgroundColor="Transparent"
+                                                     Margin="0,0,5,0"
+                                                     Padding="2"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=EditPhoneNumberCommand}" 
+                                                     CommandParameter="{Binding .}" />
+                                </Grid>
+
+                                <Grid Grid.Column="2">
+                                    <ImageButton Source="icon_remove2.png"
+                                                     BackgroundColor="Transparent"
+                                                     Margin="0,0,5,0"
+                                                     Padding="2"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=RemovePhoneNumberCommand}" 
+                                                     CommandParameter="{Binding .}" />
+                                </Grid>
+
+                                <Grid Grid.Column="3">
                                     <ImageButton Source="icon_call.png"
                                                      BackgroundColor="Transparent"
                                                      Margin="0,0,5,0"
                                                      Padding="2"
-                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=CallToStudent}" 
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=CallToStudentCommand}" 
                                                      CommandParameter="{Binding .}" />
                                 </Grid>
                             </Grid>
