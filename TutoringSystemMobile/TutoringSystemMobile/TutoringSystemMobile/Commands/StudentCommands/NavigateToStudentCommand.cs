@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.ViewModels.AddressViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -25,10 +26,10 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(viewModel.Street) &&
-                !string.IsNullOrWhiteSpace(viewModel.HouseAndFlatNumber) &&
-                !string.IsNullOrWhiteSpace(viewModel.City) &&
-                !string.IsNullOrWhiteSpace(viewModel.PostalCode);
+            return !viewModel.Street.IsEmpty() &&
+                !viewModel.HouseAndFlatNumber.IsEmpty() &&
+                !viewModel.City.IsEmpty() &&
+                !viewModel.PostalCode.IsEmpty();
         }
 
         public async void Execute(object parameter)

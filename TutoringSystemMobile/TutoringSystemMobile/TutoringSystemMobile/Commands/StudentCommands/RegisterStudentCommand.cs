@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
@@ -33,13 +34,13 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
         public bool CanExecute(object parameter)
         {
-            viewModel.IsPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.Password)
+            viewModel.IsPasswordIncorrect = !viewModel.Password.IsEmpty()
                 && !Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$");
-            viewModel.IsConfirmPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.ConfirmPassword) &&
+            viewModel.IsConfirmPasswordIncorrect = !viewModel.ConfirmPassword.IsEmpty() &&
                 !viewModel.Password.Equals(viewModel.ConfirmPassword);
 
-            return !string.IsNullOrWhiteSpace(viewModel.Username) &&
-                !string.IsNullOrWhiteSpace(viewModel.FirstName) &&
+            return !viewModel.Username.IsEmpty() &&
+                !viewModel.FirstName.IsEmpty() &&
                 Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$") &&
                 viewModel.Password.Equals(viewModel.ConfirmPassword) &&
                 double.TryParse(viewModel.HourRate, out double hourRate) &&

@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -32,8 +33,8 @@ namespace TutoringSystemMobile.Commands.PhoneNumberCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(viewModel.Owner) &&
-                   !string.IsNullOrWhiteSpace(viewModel.Number) &&
+            return !viewModel.Owner.IsEmpty() &&
+                   !viewModel.Number.IsEmpty() &&
                    !viewModel.IsBusy;
         }
 

@@ -25,5 +25,12 @@ namespace TutoringSystemMobile.Extensions
 
             return result;
         }
+
+        public static bool IsEmpty(this string property)
+        {
+            return string.IsNullOrEmpty(property) ||
+                string.IsNullOrWhiteSpace(property) ||
+                property.Trim(' ').Equals("-");
+        }
     }
 }

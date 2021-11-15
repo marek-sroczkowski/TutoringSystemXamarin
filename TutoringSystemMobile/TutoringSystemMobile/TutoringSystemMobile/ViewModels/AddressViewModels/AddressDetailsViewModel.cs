@@ -17,10 +17,54 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
         private string owner;
 
         public long Id { get => id; set => SetValue(ref id, value); }
-        public string Street { get => street; set => SetValue(ref street, value); }
-        public string HouseAndFlatNumber { get => houseAndFlatNumber; set => SetValue(ref houseAndFlatNumber, value); }
-        public string City { get => city; set => SetValue(ref city, value); }
-        public string PostalCode { get => postalCode; set => SetValue(ref postalCode, value); }
+        public string Street
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(street))
+                    return street;
+                else
+                    return "- ";
+            }
+
+            set => SetValue(ref street, value);
+        }
+        public string HouseAndFlatNumber
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(houseAndFlatNumber))
+                    return houseAndFlatNumber;
+                else
+                    return "- ";
+            }
+
+            set => SetValue(ref houseAndFlatNumber, value);
+        }
+        public string City
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(city))
+                    return city;
+                else
+                    return "- ";
+            }
+
+            set => SetValue(ref city, value);
+        }
+        public string PostalCode
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(postalCode))
+                    return postalCode;
+                else
+                    return "- ";
+            }
+
+            set => SetValue(ref postalCode, value);
+        }
         public string Description { get => description; set => SetValue(ref description, value); }
         public string Owner { get => owner; set => SetValue(ref owner, value); }
 

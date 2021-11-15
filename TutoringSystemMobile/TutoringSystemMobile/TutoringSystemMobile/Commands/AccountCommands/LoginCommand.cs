@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
@@ -34,9 +35,9 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
         public bool CanExecute(object parameter)
         {
-            return !viewModel.IsBusy &&
-                !string.IsNullOrWhiteSpace(viewModel.Username) &&
-                !string.IsNullOrWhiteSpace(viewModel.Password);
+            return !viewModel.Username.IsEmpty() &&
+                !viewModel.Password.IsEmpty() &&
+                !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)

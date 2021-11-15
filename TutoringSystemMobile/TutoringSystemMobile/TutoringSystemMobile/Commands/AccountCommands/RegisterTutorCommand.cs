@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
@@ -33,16 +34,16 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
         public bool CanExecute(object parameter)
         {
-            viewModel.IsPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.Password) 
+            viewModel.IsPasswordIncorrect = !viewModel.Password.IsEmpty()
                 && !Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$");
-            viewModel.IsConfirmPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.ConfirmPassword) &&
+            viewModel.IsConfirmPasswordIncorrect = !viewModel.ConfirmPassword.IsEmpty() &&
                 !viewModel.Password.Equals(viewModel.ConfirmPassword);
-            viewModel.IsEmailIncorrect = !string.IsNullOrWhiteSpace(viewModel.Email) &&
+            viewModel.IsEmailIncorrect = !viewModel.Email.IsEmpty() &&
                 !IsValidEmail(viewModel.Email);
 
-            return !string.IsNullOrWhiteSpace(viewModel.Username) &&
-                !string.IsNullOrWhiteSpace(viewModel.FirstName) &&
-                !string.IsNullOrWhiteSpace(viewModel.Email) &&
+            return !viewModel.Username.IsEmpty() &&
+                !viewModel.FirstName.IsEmpty() &&
+                !viewModel.Email.IsEmpty() &&
                 Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$") &&
                 IsValidEmail(viewModel.Email) &&
                 viewModel.Password.Equals(viewModel.ConfirmPassword) &&

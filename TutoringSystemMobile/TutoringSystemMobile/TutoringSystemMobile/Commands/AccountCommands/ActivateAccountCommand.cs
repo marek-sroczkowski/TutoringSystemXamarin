@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.ViewModels.AccountViewModels;
@@ -32,7 +33,7 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(viewModel.ActivationToken) &&
+            return !viewModel.ActivationToken.IsEmpty() &&
                 viewModel.ActivationToken.Length == 6 &&
                 !viewModel.IsBusy;
         }

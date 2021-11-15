@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -29,7 +30,7 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(viewModel.FirstName) &&
+            return !viewModel.FirstName.IsEmpty() &&
                 double.TryParse(viewModel.HourRate, out double hourRate) &&
                 hourRate > 0 &&
                 !viewModel.IsBusy;

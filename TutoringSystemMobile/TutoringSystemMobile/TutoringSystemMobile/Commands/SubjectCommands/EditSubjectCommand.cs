@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.SubjectDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -30,9 +31,9 @@ namespace TutoringSystemMobile.Commands.SubjectCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(viewModel.Name) &&
-                !string.IsNullOrWhiteSpace(viewModel.SelectedCategory) &&
-                !string.IsNullOrWhiteSpace(viewModel.SelectedPlace) &&
+            return !viewModel.Name.IsEmpty() &&
+                !viewModel.SelectedCategory.IsEmpty() &&
+                !viewModel.SelectedPlace.IsEmpty() &&
                 !viewModel.IsBusy;
         }
 
