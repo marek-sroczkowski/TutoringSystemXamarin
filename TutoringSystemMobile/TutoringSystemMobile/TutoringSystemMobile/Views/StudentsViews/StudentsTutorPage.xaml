@@ -40,12 +40,28 @@
                             <Grid Grid.Row="0">
 
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="20" />
                                 </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="0" Padding="10">
+                                <Grid Grid.Column="0" Padding="10,10,0,10">
+                                    <Frame  CornerRadius="100" 
+                                            HeightRequest="80"
+                                            WidthRequest="80"
+                                            HorizontalOptions="Center"
+                                            Padding="0"
+                                            IsClippedToBounds="True">
+                                        <Image Source="default_student_picture.png" 
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>
+                                    </Frame>
+                                </Grid>
+
+                                <Grid Grid.Column="1" Padding="10">
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
@@ -59,16 +75,32 @@
                                                 <Span Text="{Binding FirstName} " />
                                                 <Span Text=" " />
                                                 <Span Text="{Binding LastName} " />
-                                                <Span Text=" " />
-                                                <Span Text="(" />
-                                                <Span Text="{Binding Username} " />
-                                                <Span Text=")" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label Grid.Row="1"
+                                        LineBreakMode="NoWrap"
+                                        Text="{Binding Username}"
+                                        Style="{StaticResource LabelStyle}"
+                                        FontAttributes="Bold"
+                                        FontSize="15">
+                                    </Label>
+
+                                    <Label Grid.Row="2"
+                                        Style="{StaticResource LabelStyle}"
+                                        FontAttributes="Bold"
+                                        FontSize="15">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding HourlRate} " />
+                                                <Span Text=" zł za godzinę" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
                                 </Grid>
 
-                                <Grid Grid.Column="1">
+                                <Grid Grid.Column="2">
                                     <Image Source="icon_get_details.png" />
                                 </Grid>
                             </Grid>
