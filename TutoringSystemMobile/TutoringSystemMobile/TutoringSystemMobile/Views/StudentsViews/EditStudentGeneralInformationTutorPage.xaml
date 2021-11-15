@@ -15,6 +15,14 @@
         <StackLayout Padding="15,20,15,0"
                      HorizontalOptions="Start">
 
+            <custom:TitledEntry Text="{Binding FirstName}" 
+                                Placeholder="Imię"
+                                IsTitleVisible="True"/>
+            
+            <custom:TitledEntry Text="{Binding LastName}" 
+                                Placeholder="Nazwisko"
+                                IsTitleVisible="True"/>
+
             <custom:TitledEntry Text="{Binding HourRate}" 
                                 Placeholder="Stawka godzinowa"
                                 IsTitleVisible="True"/>

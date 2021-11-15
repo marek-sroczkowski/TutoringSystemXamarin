@@ -11,6 +11,8 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         private long id;
         private string hourRate;
         private string note;
+        private string firstName;
+        private string lastName;
 
         public long Id
         {
@@ -23,6 +25,8 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         }
         public string HourRate { get => hourRate; set => SetValue(ref hourRate, value); }
         public string Note { get => note; set => SetValue(ref note, value); }
+        public string FirstName { get => firstName; set => SetValue(ref firstName, value); }
+        public string LastName { get => lastName; set => SetValue(ref lastName, value); }
 
         public ICommand EditStudentCommand { get; }
 
@@ -41,6 +45,8 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             var student = await studentService.GetStudentByIdAsync(studentId);
             HourRate = student.HourlRate.ToString();
             Note = student.Note;
+            FirstName = student.FirstName;
+            LastName = student.LastName;
 
             IsBusy = false;
         }

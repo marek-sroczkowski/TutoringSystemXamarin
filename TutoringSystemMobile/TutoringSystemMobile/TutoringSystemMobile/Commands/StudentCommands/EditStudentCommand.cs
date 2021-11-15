@@ -29,14 +29,15 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
         public bool CanExecute(object parameter)
         {
-            return double.TryParse(viewModel.HourRate, out double hourRate) &&
+            return !string.IsNullOrWhiteSpace(viewModel.FirstName) &&
+                double.TryParse(viewModel.HourRate, out double hourRate) &&
                 hourRate > 0;
         }
 
         public async void Execute(object parameter)
         {
             viewModel.IsBusy = true;
-            var updated = await studentService.UpdateStudentAsync(new UpdatedStudentDto(viewModel.Id, double.Parse(viewModel.HourRate), viewModel.Note));
+            var updated = await studentService.UpdateStudentAsync(new UpdatedStudentDto(viewModel.Id, double.Parse(viewModel.HourRate), viewModel.Note, viewModel.FirstName, viewModel.LastName));
             viewModel.IsBusy = false;
 
             if(updated)
