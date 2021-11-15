@@ -42,7 +42,7 @@ namespace TutoringSystemMobile.Commands.StudentCommands
             if(updated)
                 await Shell.Current.GoToAsync($"..");
             else
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
         }
     }
 }

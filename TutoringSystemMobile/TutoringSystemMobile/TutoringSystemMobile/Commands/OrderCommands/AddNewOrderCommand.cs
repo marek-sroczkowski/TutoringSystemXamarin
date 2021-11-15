@@ -47,11 +47,11 @@ namespace TutoringSystemMobile.Commands.OrderCommands
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Dodano zlecenie");
+                DependencyService.Get<IToast>()?.MakeLongToast("Dodano zlecenie");
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={newOrderId}");
             }
         }

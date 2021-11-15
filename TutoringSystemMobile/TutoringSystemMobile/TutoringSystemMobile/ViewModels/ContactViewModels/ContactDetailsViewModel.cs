@@ -84,12 +84,12 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             var removed = await phoneNumberService.DeletePhoneNumberAsync(Id, phone.Id);
             if(removed)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Usunięto");
+                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto");
                 PhoneNumbers.Remove(phone);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
             }
         }
 
@@ -125,15 +125,15 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             }
             catch (ArgumentNullException)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Niepoprawny numer!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Niepoprawny numer!");
             }
             catch (FeatureNotSupportedException)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Na Twoim urządzeniu ta opcja nie działa!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Na Twoim urządzeniu ta opcja nie działa!");
             }
             catch (Exception)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Nie można zadzownić! Sprawdź poprawność numeru!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Nie można zadzownić! Sprawdź poprawność numeru!");
             }
         }
     }

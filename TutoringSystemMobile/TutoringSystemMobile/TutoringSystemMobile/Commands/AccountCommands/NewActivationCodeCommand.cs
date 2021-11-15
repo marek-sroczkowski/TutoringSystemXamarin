@@ -34,9 +34,9 @@ namespace TutoringSystemMobile.Commands.AccountCommands
         public async void Execute(object parameter)
         {
             if (await userService.SendNewActivationTokenAsync())
-                DependencyService.Get<IToast>()?.MakeToast("Wysłano nowy kod aktywacyjny!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Wysłano nowy kod aktywacyjny!");
             else
-                DependencyService.Get<IToast>()?.MakeToast("Błąd wysyłania! Spróbuj ponownie");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd wysyłania! Spróbuj ponownie");
         }
     }
 }

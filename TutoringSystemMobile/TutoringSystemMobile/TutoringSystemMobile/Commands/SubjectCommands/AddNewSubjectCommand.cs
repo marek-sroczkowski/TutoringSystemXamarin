@@ -44,11 +44,11 @@ namespace TutoringSystemMobile.Commands.SubjectCommands
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Dodano przedmiot");
+                DependencyService.Get<IToast>()?.MakeLongToast("Dodano przedmiot");
                 await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}/{nameof(SubjectDetailsTutorPage)}?{nameof(SubjectDetailsViewModel.Id)}={newOrderId}");
             }
         }

@@ -2,6 +2,7 @@
 {
     public interface IToast
     {
-        void MakeToast(string message);
+        void MakeLongToast(string message);
+        void MakeShortToast(string message);
     }
 }

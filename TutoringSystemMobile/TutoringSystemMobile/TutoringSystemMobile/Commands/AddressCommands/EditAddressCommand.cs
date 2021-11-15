@@ -40,7 +40,7 @@ namespace TutoringSystemMobile.Commands.AddressCommands
             if (updated)
                 await Shell.Current.GoToAsync("..");
             else
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
 
             viewModel.IsBusy = false;
         }

@@ -2,13 +2,6 @@
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using TutoringSystemMobile.Services.Utils;
-using Android.Widget;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using TutoringSystemMobile.Droid;
-
-[assembly: Dependency(typeof(Toaster))]
 
 namespace TutoringSystemMobile.Droid
 {
@@ -35,14 +28,6 @@ namespace TutoringSystemMobile.Droid
         public override void OnBackPressed()
         {
             Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed);
-        }
-    }
-
-    public class Toaster : IToast
-    {
-        public void MakeToast(string message)
-        {
-            Toast.MakeText(Platform.AppContext, message, ToastLength.Long).Show();
         }
     }
 }

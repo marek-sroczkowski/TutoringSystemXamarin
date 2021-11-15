@@ -45,10 +45,10 @@ namespace TutoringSystemMobile.Commands.StudentCommands
             switch (status)
             {
                 case AddStudentToTutorStatus.InternalError:
-                    DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później!");
+                    DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
                     break;
                 case AddStudentToTutorStatus.Added:
-                    DependencyService.Get<IToast>()?.MakeToast("Dodano ucznia!");
+                    DependencyService.Get<IToast>()?.MakeLongToast("Dodano ucznia!");
                     await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
                     break;
                 case AddStudentToTutorStatus.IncorrectUsername:

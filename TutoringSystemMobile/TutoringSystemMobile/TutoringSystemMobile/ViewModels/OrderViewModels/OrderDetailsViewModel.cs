@@ -113,12 +113,12 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             var removed = await orderService.DeleteAdditionalOrderAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Usunięto zlecenie!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto zlecenie!");
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
             }
         }
     }

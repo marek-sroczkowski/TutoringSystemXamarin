@@ -141,12 +141,12 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             var removed = await subjectService.DeleteSubjectAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Usunięto przedmiot!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto przedmiot!");
                 await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
             }
         }
     }

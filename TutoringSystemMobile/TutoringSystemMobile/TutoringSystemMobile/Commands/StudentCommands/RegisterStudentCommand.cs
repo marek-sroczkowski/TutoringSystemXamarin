@@ -54,7 +54,7 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
             if (errors is null)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Rejestracja powiodła się!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Rejestracja powiodła się!");
                 await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
             }
             else

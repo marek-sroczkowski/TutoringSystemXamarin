@@ -77,9 +77,9 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu zlecenia", "Anuluj", null, "Oczekujące", "W realizacji", "Zrealizowane");
             var status = GetOrderStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
-                DependencyService.Get<IToast>()?.MakeToast("Zmieniono status zlecenia");
+                DependencyService.Get<IToast>()?.MakeLongToast("Zmieniono status zlecenia");
             else
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
         }
 
         private async void OnChangePaymentStatus(OrderDto order)
@@ -87,9 +87,9 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu płatności", "Anuluj", null, "Opłacone", "Nie opłacone");
             var status = GetPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))
-                DependencyService.Get<IToast>()?.MakeToast("Zmieniono status płatności");
+                DependencyService.Get<IToast>()?.MakeLongToast("Zmieniono status płatności");
             else
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
         }
 
         private AdditionalOrderStatus GetOrderStatus(string statusStringPl)

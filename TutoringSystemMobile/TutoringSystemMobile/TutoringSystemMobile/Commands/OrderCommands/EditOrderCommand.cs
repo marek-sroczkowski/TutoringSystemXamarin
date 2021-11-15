@@ -51,7 +51,7 @@ namespace TutoringSystemMobile.Commands.OrderCommands
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później");
             }
         }
     }

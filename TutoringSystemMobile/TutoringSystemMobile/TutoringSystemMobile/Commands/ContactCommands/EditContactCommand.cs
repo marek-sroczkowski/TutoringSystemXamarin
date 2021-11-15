@@ -43,13 +43,13 @@ namespace TutoringSystemMobile.Commands.ContactCommands
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Zaktualizowano");
+                DependencyService.Get<IToast>()?.MakeLongToast("Zaktualizowano");
                 await PopupNavigation.Instance.PopAsync();
                 reloadContactService.ReloadContact();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
             }
         }
     }

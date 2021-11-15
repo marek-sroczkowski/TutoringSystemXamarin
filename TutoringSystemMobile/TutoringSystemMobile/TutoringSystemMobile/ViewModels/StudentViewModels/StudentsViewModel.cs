@@ -70,12 +70,12 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             var removed = await studentService.RemoveAllStudentsAsync();
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Wyczyszczono listę uczniów!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Wyczyszczono listę uczniów!");
                 Students.Clear();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
             }
         }
 

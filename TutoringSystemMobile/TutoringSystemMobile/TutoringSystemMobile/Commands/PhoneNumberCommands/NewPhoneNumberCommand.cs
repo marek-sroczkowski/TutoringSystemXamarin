@@ -49,7 +49,7 @@ namespace TutoringSystemMobile.Commands.PhoneNumberCommands
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
             }
         }
     }

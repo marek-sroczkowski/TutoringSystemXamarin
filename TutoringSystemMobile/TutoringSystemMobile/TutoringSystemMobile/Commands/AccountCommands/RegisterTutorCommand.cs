@@ -56,7 +56,7 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
             if (errors is null)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Rejestracja powiodła się!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Rejestracja powiodła się!");
                 await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }
             else

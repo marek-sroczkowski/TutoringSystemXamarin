@@ -83,12 +83,12 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             var removed = await studentService.RemoveStudentAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeToast("Skreślono ucznia z listy!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Skreślono ucznia z listy!");
                 await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
             }
         }
 
