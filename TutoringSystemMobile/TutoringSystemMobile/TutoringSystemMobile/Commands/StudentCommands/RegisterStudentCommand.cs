@@ -33,17 +33,18 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
         public bool CanExecute(object parameter)
         {
-            viewModel.IsPasswordIncorrect = !string.IsNullOrEmpty(viewModel.Password)
+            viewModel.IsPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.Password)
                 && !Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$");
-            viewModel.IsConfirmPasswordIncorrect = !string.IsNullOrEmpty(viewModel.ConfirmPassword) &&
+            viewModel.IsConfirmPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.ConfirmPassword) &&
                 !viewModel.Password.Equals(viewModel.ConfirmPassword);
 
-            return !string.IsNullOrEmpty(viewModel.Username) &&
-                !string.IsNullOrEmpty(viewModel.FirstName) &&
+            return !string.IsNullOrWhiteSpace(viewModel.Username) &&
+                !string.IsNullOrWhiteSpace(viewModel.FirstName) &&
                 Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$") &&
                 viewModel.Password.Equals(viewModel.ConfirmPassword) &&
                 double.TryParse(viewModel.HourRate, out double hourRate) &&
-                hourRate > 0;
+                hourRate > 0 &&
+                !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)

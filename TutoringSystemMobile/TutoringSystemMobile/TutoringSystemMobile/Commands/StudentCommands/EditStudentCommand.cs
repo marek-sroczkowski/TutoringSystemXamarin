@@ -31,7 +31,8 @@ namespace TutoringSystemMobile.Commands.StudentCommands
         {
             return !string.IsNullOrWhiteSpace(viewModel.FirstName) &&
                 double.TryParse(viewModel.HourRate, out double hourRate) &&
-                hourRate > 0;
+                hourRate > 0 &&
+                !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)

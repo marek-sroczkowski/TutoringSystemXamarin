@@ -32,8 +32,9 @@ namespace TutoringSystemMobile.Commands.PhoneNumberCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.Owner) &&
-                !string.IsNullOrEmpty(viewModel.Number);
+            return !string.IsNullOrWhiteSpace(viewModel.Owner) &&
+                !string.IsNullOrWhiteSpace(viewModel.Number) &&
+                !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)

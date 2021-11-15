@@ -32,13 +32,18 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.ActivationToken) &&
-                viewModel.ActivationToken.Length == 6;
+            return !string.IsNullOrWhiteSpace(viewModel.ActivationToken) &&
+                viewModel.ActivationToken.Length == 6 &&
+                !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)
         {
-            if (await userService.ActivateUserByTokenAsync(viewModel.ActivationToken))
+            viewModel.IsBusy = true;
+            var activated = await userService.ActivateUserByTokenAsync(viewModel.ActivationToken);
+            viewModel.IsBusy = false;
+
+            if (activated)
             {
                 flyoutItemService.EnableTutorFlyoutItems();
                 await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());

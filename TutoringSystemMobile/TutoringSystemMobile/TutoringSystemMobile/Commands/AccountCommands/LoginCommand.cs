@@ -35,8 +35,8 @@ namespace TutoringSystemMobile.Commands.AccountCommands
         public bool CanExecute(object parameter)
         {
             return !viewModel.IsBusy &&
-                !string.IsNullOrEmpty(viewModel.Username) &&
-                !string.IsNullOrEmpty(viewModel.Password);
+                !string.IsNullOrWhiteSpace(viewModel.Username) &&
+                !string.IsNullOrWhiteSpace(viewModel.Password);
         }
 
         public async void Execute(object parameter)

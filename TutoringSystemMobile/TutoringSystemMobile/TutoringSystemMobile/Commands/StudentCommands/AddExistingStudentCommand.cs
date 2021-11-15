@@ -31,9 +31,10 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.Username) &&
+            return !string.IsNullOrWhiteSpace(viewModel.Username) &&
                 double.TryParse(viewModel.HourRate, out double hourRate) &&
-                hourRate > 0;
+                hourRate > 0 &&
+                !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)

@@ -25,10 +25,10 @@ namespace TutoringSystemMobile.Commands.StudentCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.Street) &&
-                !string.IsNullOrEmpty(viewModel.HouseAndFlatNumber) &&
-                !string.IsNullOrEmpty(viewModel.City) &&
-                !string.IsNullOrEmpty(viewModel.PostalCode);
+            return !string.IsNullOrWhiteSpace(viewModel.Street) &&
+                !string.IsNullOrWhiteSpace(viewModel.HouseAndFlatNumber) &&
+                !string.IsNullOrWhiteSpace(viewModel.City) &&
+                !string.IsNullOrWhiteSpace(viewModel.PostalCode);
         }
 
         public async void Execute(object parameter)

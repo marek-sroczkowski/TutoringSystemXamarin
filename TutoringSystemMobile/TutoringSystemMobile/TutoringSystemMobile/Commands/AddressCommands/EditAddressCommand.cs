@@ -29,20 +29,19 @@ namespace TutoringSystemMobile.Commands.AddressCommands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)
         {
             viewModel.IsBusy = true;
-
             var updated = await addressService.UpdateAddressAsync(new UpdatedAddressDto(viewModel.Id, viewModel.Street, viewModel.HouseAndFlatNumber, viewModel.City, viewModel.PostalCode, viewModel.Description));
+            viewModel.IsBusy = false;
+            
             if (updated)
                 await Shell.Current.GoToAsync("..");
             else
                 DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
-
-            viewModel.IsBusy = false;
         }
     }
 }

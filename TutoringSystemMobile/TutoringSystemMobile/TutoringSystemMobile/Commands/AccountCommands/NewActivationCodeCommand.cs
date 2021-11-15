@@ -28,12 +28,16 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)
         {
-            if (await userService.SendNewActivationTokenAsync())
+            viewModel.IsBusy = true;
+            var sent = await userService.SendNewActivationTokenAsync();
+            viewModel.IsBusy = false;
+
+            if (sent)
                 DependencyService.Get<IToast>()?.MakeLongToast("Wysłano nowy kod aktywacyjny!");
             else
                 DependencyService.Get<IToast>()?.MakeLongToast("Błąd wysyłania! Spróbuj ponownie");

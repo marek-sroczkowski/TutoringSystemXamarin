@@ -32,7 +32,7 @@ namespace TutoringSystemMobile.Commands.ContactCommands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)

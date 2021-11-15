@@ -31,8 +31,8 @@ namespace TutoringSystemMobile.Commands.OrderCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.Name) &&
-                !string.IsNullOrEmpty(viewModel.Cost) &&
+            return !string.IsNullOrWhiteSpace(viewModel.Name) &&
+                !string.IsNullOrWhiteSpace(viewModel.Cost) &&
                 double.TryParse(viewModel.Cost, out double cost) &&
                 cost > 0 &&
                 viewModel.Deadline.HasValue &&

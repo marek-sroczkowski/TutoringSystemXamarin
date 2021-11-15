@@ -30,9 +30,9 @@ namespace TutoringSystemMobile.Commands.SubjectCommands
 
         public bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(viewModel.Name) &&
-                !string.IsNullOrEmpty(viewModel.SelectedCategory) &&
-                !string.IsNullOrEmpty(viewModel.SelectedPlace) &&
+            return !string.IsNullOrWhiteSpace(viewModel.Name) &&
+                !string.IsNullOrWhiteSpace(viewModel.SelectedCategory) &&
+                !string.IsNullOrWhiteSpace(viewModel.SelectedPlace) &&
                 !viewModel.IsBusy;
         }
 

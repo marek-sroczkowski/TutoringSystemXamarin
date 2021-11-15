@@ -33,19 +33,20 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
         public bool CanExecute(object parameter)
         {
-            viewModel.IsPasswordIncorrect = !string.IsNullOrEmpty(viewModel.Password) 
+            viewModel.IsPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.Password) 
                 && !Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$");
-            viewModel.IsConfirmPasswordIncorrect = !string.IsNullOrEmpty(viewModel.ConfirmPassword) &&
+            viewModel.IsConfirmPasswordIncorrect = !string.IsNullOrWhiteSpace(viewModel.ConfirmPassword) &&
                 !viewModel.Password.Equals(viewModel.ConfirmPassword);
-            viewModel.IsEmailIncorrect = !string.IsNullOrEmpty(viewModel.Email) &&
+            viewModel.IsEmailIncorrect = !string.IsNullOrWhiteSpace(viewModel.Email) &&
                 !IsValidEmail(viewModel.Email);
 
-            return !string.IsNullOrEmpty(viewModel.Username) &&
-                !string.IsNullOrEmpty(viewModel.FirstName) &&
-                !string.IsNullOrEmpty(viewModel.Email) &&
+            return !string.IsNullOrWhiteSpace(viewModel.Username) &&
+                !string.IsNullOrWhiteSpace(viewModel.FirstName) &&
+                !string.IsNullOrWhiteSpace(viewModel.Email) &&
                 Regex.IsMatch(viewModel.Password, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$") &&
                 IsValidEmail(viewModel.Email) &&
-                viewModel.Password.Equals(viewModel.ConfirmPassword);
+                viewModel.Password.Equals(viewModel.ConfirmPassword) &&
+                !viewModel.IsBusy;
         }
 
         public async void Execute(object parameter)
