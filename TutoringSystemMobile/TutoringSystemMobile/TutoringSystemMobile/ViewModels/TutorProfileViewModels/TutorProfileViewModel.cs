@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Rg.Plugins.Popup.Services;
+using System;
+using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.TutorProfileViewModels
@@ -58,19 +62,21 @@ namespace TutoringSystemMobile.ViewModels.TutorProfileViewModels
 
         }
 
-        private void OnDarkMode()
+        private async void OnDarkMode()
         {
-
+            await PopupNavigation.Instance.PushAsync(new AppThemePopupPage());
         }
 
-        private void OnRateApp()
+        private async void OnRateApp()
         {
-
+            await Launcher.OpenAsync($"http://play.google.com/store/apps/details?id=com.facebook.orca&gl=PL");
         }
 
-        private void OnLogout()
+        private async void OnLogout()
         {
-
+            SecureStorage.Remove("token");
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
     }
 }

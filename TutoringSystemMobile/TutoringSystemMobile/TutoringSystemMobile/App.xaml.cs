@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Services;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
@@ -16,11 +16,36 @@ namespace TutoringSystemMobile
         public App()
         {
             InitializeComponent();
+            TheTheme.SetTheme();
             flyoutItemService = DependencyService.Get<IFlyoutItemService>();
             MainPage = new AppShell();
         }
 
         protected override async void OnStart()
+        {
+            await NavigateByLoginStatus();
+        }
+
+        protected override void OnSleep()
+        {
+            RequestedThemeChanged -= App_RequestedThemeChanged;
+        }
+
+        protected override void OnResume()
+        {
+            TheTheme.SetTheme();
+            RequestedThemeChanged += App_RequestedThemeChanged;
+        }
+
+        private void App_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                TheTheme.SetTheme();
+            });
+        }
+
+        private async Task NavigateByLoginStatus()
         {
             var accountStatus = await GetAccountStatus();
 
@@ -36,26 +61,18 @@ namespace TutoringSystemMobile
                     break;
                 case AccountStatus.InactiveAccount:
                 case AccountStatus.LoggedOut:
+                default:
                     await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
                     break;
             }
-        }
-
-        protected override void OnSleep()
-        {
-        }
-
-        protected override void OnResume()
-        {
-        }
+}
 
         private async Task<AccountStatus> GetAccountStatus()
         {
             var accountStatus = await SecureStorage.GetAsync(nameof(AccountStatus));
-            if (string.IsNullOrEmpty(accountStatus))
-                return AccountStatus.LoggedOut;
-
-            return (AccountStatus)Enum.Parse(typeof(AccountStatus), accountStatus);
+            return string.IsNullOrEmpty(accountStatus)
+                ? AccountStatus.LoggedOut
+                : (AccountStatus)Enum.Parse(typeof(AccountStatus), accountStatus);
         }
     }
 }

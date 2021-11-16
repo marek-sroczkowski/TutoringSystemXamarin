@@ -18,8 +18,6 @@
                    FontAttributes="Bold"
                    Style="{StaticResource LabelStyle}"/>
 
-            <BoxView Style="{StaticResource HorizontalLineStyle}" />
-
             <Grid HeightRequest="50">
 
                 <Grid.ColumnDefinitions>
@@ -141,8 +139,6 @@
                    FontAttributes="Bold"
                    Margin="0,20,0,0"/>
 
-            <BoxView Style="{StaticResource HorizontalLineStyle}" />
-
             <Grid HeightRequest="50">
 
                 <Grid.ColumnDefinitions>
@@ -210,8 +206,6 @@
                    FontAttributes="Bold"
                    Margin="0,20,0,0"/>
 
-            <BoxView Style="{StaticResource HorizontalLineStyle}" />
-
             <Grid HeightRequest="50">
 
                 <Grid.ColumnDefinitions>
@@ -274,7 +268,8 @@
                 </Grid.GestureRecognizers>
             </Grid>
 
-            <Grid HeightRequest="50">
+            <Grid HeightRequest="50"
+                  BackgroundColor="{Binding TabBackgroundColor}">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -296,12 +291,10 @@
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
 
-
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
-                                Command="{Binding LogoutCommand}">
-                    </TapGestureRecognizer>
+                                Command="{Binding LogoutCommand}"/>
                 </Grid.GestureRecognizers>
             </Grid>
         </StackLayout>

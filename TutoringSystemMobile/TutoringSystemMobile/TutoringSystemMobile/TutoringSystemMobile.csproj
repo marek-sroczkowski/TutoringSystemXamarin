@@ -45,6 +45,9 @@
     <Compile Update="Views\PhoneNumbersViews\NewPhoneNumberPopupPage.xaml.cs">
       <DependentUpon>NewPhoneNumberPopupPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\TutorProfileViews\AppThemePopupPage.xaml.cs">
+      <DependentUpon>AppThemePopupPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TutorsViews\TutorsStudentPage.xaml.cs">
       <DependentUpon>TutorsStudentPage.xaml</DependentUpon>
     </Compile>
@@ -70,6 +73,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\AddressViews\EditAddressPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\TutorProfileViews\AppThemePopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ContactViews\ContactDetailsPage.xaml">
