@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TutoringSystemMobile.App">
+             x:Class="TutoringSystemMobile.App"
+             xmlns:controls="clr-namespace:TutoringSystemMobile.CustomControls">
     <!--
         Define global resources and styles here, that apply to all pages in your app.
     -->
@@ -80,6 +81,15 @@
                 <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=WhiteSmoke}" />
             </Style>
 
+            <Style x:Key="ProfileMenuItemStyle" 
+                   TargetType="Label">
+                <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=WhiteSmoke}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="17" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Padding" Value="10,0,0,0" />
+            </Style>
+
             <Style x:Key="TitleLabelStyle" 
                    TargetType="Label">
                 <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White}" />
@@ -130,6 +140,18 @@
 
             <Style x:Key="TabbedPageStyle" TargetType="TabbedPage">
                 <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light=#2196F3, Dark=Black}" />
+            </Style>
+
+            <Style x:Key="MenuItemIconStyle" TargetType="controls:IconView">
+                <Setter Property="HeightRequest" Value="35" />
+                <Setter Property="WidthRequest" Value="35" />
+                <Setter Property="Foreground" Value="{AppThemeBinding Light=#0066cc, Dark=White}" />
+            </Style>
+
+            <Style x:Key="MenuDetailsIconStyle" TargetType="controls:IconView">
+                <Setter Property="HeightRequest" Value="20" />
+                <Setter Property="WidthRequest" Value="20" />
+                <Setter Property="Foreground" Value="{AppThemeBinding Light=#0066cc, Dark=White}" />
             </Style>
         </ResourceDictionary>        
     </Application.Resources>
