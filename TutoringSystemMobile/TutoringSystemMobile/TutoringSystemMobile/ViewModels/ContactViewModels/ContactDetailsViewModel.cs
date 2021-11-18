@@ -95,7 +95,7 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
 
         private async void OnAddNewPhone()
         {
-            await PopupNavigation.Instance.PushAsync(new NewPhoneNumberPopupPage());
+            await PopupNavigation.Instance.PushAsync(new NewPhoneNumberPopupPage(Id));
         }
 
         private async void OnAppearing()
@@ -103,8 +103,8 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             IsBusy = true;
 
             await SecureStorage.SetAsync("currentPage", "contact");
-            long contactId = long.Parse(await SecureStorage.GetAsync("contactId"));
-            var contact = await contactService.GetContactByIdAsync(contactId);
+            Id = long.Parse(await SecureStorage.GetAsync("contactId"));
+            var contact = await contactService.GetContactByIdAsync(Id);
 
             Email = contact.Email;
             DiscordName = contact.DiscordName;

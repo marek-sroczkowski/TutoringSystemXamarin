@@ -1,13 +1,15 @@
-﻿using Xamarin.Forms.Xaml;
+﻿using TutoringSystemMobile.ViewModels.PhoneNumberViewModels;
+using Xamarin.Forms.Xaml;
 
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NewPhoneNumberPopupPage
     {
-        public NewPhoneNumberPopupPage()
+        public NewPhoneNumberPopupPage(long contactId)
         {
             InitializeComponent();
+            BindingContext = new NewPhoneNumberViewModel(contactId);
         }
     }
 }

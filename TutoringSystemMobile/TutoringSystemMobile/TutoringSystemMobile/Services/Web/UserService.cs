@@ -124,5 +124,27 @@ namespace TutoringSystemMobile.Services.Web
 
             return (Role)Enum.Parse(typeof(Role), role.Trim('\"'));
         }
+
+        public async Task<bool> UpdateGeneralUserInfoAsync(UpdatedUserDto updatedUser)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
+                .PutJsonAsync(updatedUser);
+
+            return response.StatusCode == 204;
+        }
+
+        public async Task<ShortUserDto> GetGeneralUserInfoAsync()
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<ShortUserDto>() : new ShortUserDto();
+        }
     }
 }

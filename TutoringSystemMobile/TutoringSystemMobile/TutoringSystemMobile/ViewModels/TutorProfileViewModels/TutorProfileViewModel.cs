@@ -1,6 +1,9 @@
 ﻿using Rg.Plugins.Popup.Services;
-using System;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.ViewModels.AddressViewModels;
+using TutoringSystemMobile.ViewModels.PhoneNumberViewModels;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -32,19 +35,32 @@ namespace TutoringSystemMobile.ViewModels.TutorProfileViewModels
             LogoutCommand = new Command(OnLogout);
         }
 
-        private void OnEditGeneralInformations()
+        private async void OnEditGeneralInformations()
         {
-
+            await Shell.Current.GoToAsync($"{nameof(EditGeneralUserInfoPage)}");
         }
 
-        private void OnEditAddress()
+        private async void OnEditAddress()
         {
-
+            var address = await DependencyService.Get<IAddressService>().GetAddressOfLoggedInUserAsync();
+            await Shell.Current.GoToAsync($"{nameof(EditAddressPage)}?{nameof(EditAddressViewModel.Id)}={address.Id}");
         }
 
-        private void OnEditContact()
+        private async void OnEditContact()
         {
-
+            const string contactLabel = "Ogólne dane kontaktowe";
+            const string phonesLabel = "Numery telefonów";
+            var result = await Shell.Current.DisplayActionSheet("Jakie informacje chcesz zaktualizować?", "Anuluj", null, contactLabel, phonesLabel);
+            if (result == contactLabel)
+            {
+                var contact = await DependencyService.Get<IContactService>().GetContactByLoggedInUserAsync();
+                await PopupNavigation.Instance.PushAsync(new EditContactPopupPage(contact.Id));
+            }
+            else if (result == phonesLabel)
+            {
+                var contact = await DependencyService.Get<IContactService>().GetContactByLoggedInUserAsync();
+                await Shell.Current.GoToAsync($"{nameof(EditPhonesPage)}?{nameof(EditPhonesViewModel.ContactId)}={contact.Id}");
+            }
         }
 
         private void OnEditProfilePicture()

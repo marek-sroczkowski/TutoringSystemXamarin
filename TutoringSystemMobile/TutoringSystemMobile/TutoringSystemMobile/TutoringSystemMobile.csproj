@@ -30,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ContactViews\EditContactPopupPage.xaml.cs">
+      <DependentUpon>EditContactPopupPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\OrdersViews\EditOrderTutorPage.xaml.cs">
       <DependentUpon>EditOrderTutorPage.xaml</DependentUpon>
     </Compile>
@@ -75,13 +78,16 @@
     <EmbeddedResource Update="Views\AddressViews\EditAddressPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\PhoneNumbersViews\EditPhonesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\TutorProfileViews\AppThemePopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ContactViews\ContactDetailsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ContactViews\EditContactPage.xaml">
+    <EmbeddedResource Update="Views\ContactViews\EditContactPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\PhoneNumbersViews\EditPhoneNumberPopupPage.xaml">
@@ -151,6 +157,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SubjectViews\SubjectsTutorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\TutorProfileViews\EditGeneralUserInfoPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\TutorProfileViews\ProfileTutorPage.xaml">

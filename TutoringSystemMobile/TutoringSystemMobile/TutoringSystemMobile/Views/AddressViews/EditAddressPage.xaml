@@ -4,7 +4,7 @@
              x:Class="TutoringSystemMobile.Views.EditAddressPage"
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.AddressViewModels"
-             Title="Edycja"
+             Title="Edycja adresu"
              Style="{StaticResource PageStyle}">
 
     <ContentPage.BindingContext>

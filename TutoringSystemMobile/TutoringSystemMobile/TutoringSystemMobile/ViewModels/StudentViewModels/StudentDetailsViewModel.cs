@@ -105,7 +105,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
                     await Shell.Current.GoToAsync($"{nameof(EditAddressPage)}?{nameof(EditAddressViewModel.Id)}={selectedStudent.Address.Id}");
                     break;
                 case "contact":
-                    await PopupNavigation.Instance.PushAsync(new EditContactPage());
+                    await PopupNavigation.Instance.PushAsync(new EditContactPopupPage(selectedStudent.Contact.Id));
                     break;
             }
         }

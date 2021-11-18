@@ -8,10 +8,6 @@
                  xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
                  xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.PhoneNumberViewModels">
 
-    <pages:PopupPage.BindingContext>
-        <viewModel:NewPhoneNumberViewModel />
-    </pages:PopupPage.BindingContext>
-
     <pages:PopupPage.Behaviors>
         <xct:EventToCommandBehavior
                 EventName="Appearing"

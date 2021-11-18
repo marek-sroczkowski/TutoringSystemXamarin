@@ -1,11 +1,12 @@
-﻿using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EditContactPage
+    public partial class EditGeneralUserInfoPage : ContentPage
     {
-        public EditContactPage()
+        public EditGeneralUserInfoPage()
         {
             InitializeComponent();
         }

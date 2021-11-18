@@ -16,5 +16,7 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<bool> ActivateUserByTokenAsync(string activationToken);
         Task<bool> SendNewActivationTokenAsync();
         Task<Role> GetUserRole();
+        Task<bool> UpdateGeneralUserInfoAsync(UpdatedUserDto updatedUser);
+        Task<ShortUserDto> GetGeneralUserInfoAsync();
     }
 }

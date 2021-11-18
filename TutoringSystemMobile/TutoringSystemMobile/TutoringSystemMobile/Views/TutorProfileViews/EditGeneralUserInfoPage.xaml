@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.EditGeneralUserInfoPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.TutorProfileViewModels"
+             Title="Edycja podstawowych informacji"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:EditGeneralUserInfoViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Content>
+        <StackLayout Padding="15,20,15,0"
+                     HorizontalOptions="Start">
+
+            <custom:TitledEntry Text="{Binding FirstName}" 
+                                Placeholder="Imię"
+                                IsTitleVisible="True"/>
+
+            <custom:TitledEntry Text="{Binding LastName}" 
+                                Placeholder="Nazwisko"
+                                IsTitleVisible="True" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"  
+                               IsVisible="{Binding IsBusy}"
+                               Color="Blue"/>
+
+            <Button VerticalOptions="Center" 
+                    Text="Zapisz" 
+                    Margin="0,20,0,0"
+                    Style="{StaticResource PrimaryBlueButtonStyle}"
+                    Command="{Binding EditUserCommand}" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

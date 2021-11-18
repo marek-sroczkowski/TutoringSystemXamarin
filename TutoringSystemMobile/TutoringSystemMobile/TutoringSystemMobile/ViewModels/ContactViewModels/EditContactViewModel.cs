@@ -1,12 +1,10 @@
 ﻿using System.Windows.Input;
 using TutoringSystemMobile.Commands.ContactCommands;
 using TutoringSystemMobile.Services.Interfaces;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.ContactViewModels
 {
-    [QueryProperty(nameof(Id), nameof(Id))]
     public class EditContactViewModel : BaseViewModel
     {
         private long id;
@@ -20,8 +18,9 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
 
         private readonly IContactService contactService;
 
-        public EditContactViewModel()
+        public EditContactViewModel(long contactId)
         {
+            Id = contactId;
             contactService = DependencyService.Get<IContactService>();
             PageAppearingCommand = new Command(OnAppearing);
             EditContactCommand = new EditContactCommand(this, contactService);
@@ -31,7 +30,6 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         {
             IsBusy = true;
 
-            Id = long.Parse(await SecureStorage.GetAsync("contactId"));
             var contact = await contactService.GetContactByIdAsync(Id);
             DiscordName = contact.DiscordName;
 
