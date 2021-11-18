@@ -102,7 +102,7 @@
         <ShellContent Route="SubjectsTutorPage" ContentTemplate="{DataTemplate local:SubjectsTutorPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Konto" Icon="icon_account.png" IsVisible="{Binding IsTutor}">
-        <ShellContent Route="ProfileTutorPage" ContentTemplate="{DataTemplate local:ProfileTutorPage}" />
+        <ShellContent Route="MyProfilePage" ContentTemplate="{DataTemplate local:MyProfilePage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Start" Icon="icon_home.png" IsVisible="{Binding IsStudent}">
@@ -115,7 +115,7 @@
         <ShellContent Route="TutorsStudentPage" ContentTemplate="{DataTemplate local:TutorsStudentPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Konto" Icon="icon_account.png" IsVisible="{Binding IsStudent}">
-        <ShellContent Route="ProfileStudentPage" ContentTemplate="{DataTemplate local:ProfileStudentPage}" />
+        <ShellContent Route="MyProfilePage" ContentTemplate="{DataTemplate local:MyProfilePage}" />
     </FlyoutItem>
 
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->

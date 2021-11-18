@@ -3,7 +3,7 @@ using TutoringSystemMobile.Commands.AccountCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
 
-namespace TutoringSystemMobile.ViewModels.TutorProfileViewModels
+namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 {
     public class EditGeneralUserInfoViewModel : BaseViewModel
     {

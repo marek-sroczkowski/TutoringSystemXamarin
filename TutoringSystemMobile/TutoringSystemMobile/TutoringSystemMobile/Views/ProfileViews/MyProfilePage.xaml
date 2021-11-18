@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TutoringSystemMobile.Views.ProfileTutorPage"
-             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.TutorProfileViewModels"
+             x:Class="TutoringSystemMobile.Views.MyProfilePage"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ProfileViewModels"
              xmlns:controls="clr-namespace:TutoringSystemMobile.CustomControls"
              Title="Moje konto"
              Style="{StaticResource PageStyle}">
 
     <ContentPage.BindingContext>
-        <viewModel:TutorProfileViewModel />
+        <viewModel:MyProfileViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>

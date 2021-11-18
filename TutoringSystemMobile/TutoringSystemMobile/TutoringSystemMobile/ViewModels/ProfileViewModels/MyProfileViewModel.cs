@@ -1,5 +1,4 @@
 ﻿using Rg.Plugins.Popup.Services;
-using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.ViewModels.AddressViewModels;
@@ -8,9 +7,9 @@ using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace TutoringSystemMobile.ViewModels.TutorProfileViewModels
+namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 {
-    public class TutorProfileViewModel : BaseViewModel
+    public class MyProfileViewModel : BaseViewModel
     {
         public Command EditGeneralInformationsCommand { get; }
         public Command EditAddressCommand { get; }
@@ -22,7 +21,7 @@ namespace TutoringSystemMobile.ViewModels.TutorProfileViewModels
         public Command RateAppCommand { get; }
         public Command LogoutCommand { get; }
 
-        public TutorProfileViewModel()
+        public MyProfileViewModel()
         {
             EditGeneralInformationsCommand = new Command(OnEditGeneralInformations);
             EditAddressCommand = new Command(OnEditAddress);

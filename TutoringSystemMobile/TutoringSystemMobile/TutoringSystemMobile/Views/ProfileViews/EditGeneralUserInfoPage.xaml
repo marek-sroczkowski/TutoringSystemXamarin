@@ -4,7 +4,7 @@
              x:Class="TutoringSystemMobile.Views.EditGeneralUserInfoPage"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
-             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.TutorProfileViewModels"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ProfileViewModels"
              Title="Edycja podstawowych informacji"
              Style="{StaticResource PageStyle}">
 

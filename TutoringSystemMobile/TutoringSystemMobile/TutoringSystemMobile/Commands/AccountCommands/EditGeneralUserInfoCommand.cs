@@ -5,7 +5,7 @@ using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
-using TutoringSystemMobile.ViewModels.TutorProfileViewModels;
+using TutoringSystemMobile.ViewModels.ProfileViewModels;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Commands.AccountCommands

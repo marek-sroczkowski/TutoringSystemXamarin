@@ -1,7 +1,7 @@
 ﻿using TutoringSystemMobile.Helpers;
 using Xamarin.Forms;
 
-namespace TutoringSystemMobile.ViewModels.TutorProfileViewModels
+namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 {
     public class AppThemeViewModel : BaseViewModel
     {
