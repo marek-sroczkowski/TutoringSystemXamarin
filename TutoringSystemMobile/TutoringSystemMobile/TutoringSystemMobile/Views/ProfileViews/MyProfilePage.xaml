@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.MyProfilePage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ProfileViewModels"
              xmlns:controls="clr-namespace:TutoringSystemMobile.CustomControls"
              Title="Moje konto"
@@ -10,6 +11,12 @@
     <ContentPage.BindingContext>
         <viewModel:MyProfileViewModel />
     </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
 
     <ContentPage.Content>
         <ScrollView>
@@ -170,7 +177,7 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid HeightRequest="50">
+                <Grid HeightRequest="50" IsVisible="{Binding IsDeactiveAccoutTabVisible}">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />

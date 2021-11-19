@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.AddressViewModels;
 using TutoringSystemMobile.ViewModels.PhoneNumberViewModels;
 using TutoringSystemMobile.Views;
@@ -11,6 +12,11 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 {
     public class MyProfileViewModel : BaseViewModel
     {
+        private bool isDeactiveAccoutTabVisible;
+
+        public bool IsDeactiveAccoutTabVisible { get => isDeactiveAccoutTabVisible; set => SetValue(ref isDeactiveAccoutTabVisible, value); }
+
+        public Command PageAppearingCommand { get; }
         public Command EditGeneralInformationsCommand { get; }
         public Command EditAddressCommand { get; }
         public Command EditContactCommand { get; }
@@ -23,6 +29,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         public MyProfileViewModel()
         {
+            PageAppearingCommand = new Command(OnAppearing);
             EditGeneralInformationsCommand = new Command(OnEditGeneralInformations);
             EditAddressCommand = new Command(OnEditAddress);
             EditContactCommand = new Command(OnEditContact);
@@ -32,6 +39,14 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             DarkModeCommand = new Command(OnDarkMode);
             RateAppCommand = new Command(OnRateApp);
             LogoutCommand = new Command(OnLogout);
+        }
+
+        private async void OnAppearing()
+        {
+            IsBusy = true;
+            var role = await DependencyService.Get<IUserService>().GetUserRole();
+            IsDeactiveAccoutTabVisible = role == Role.Tutor;
+            IsBusy = false;
         }
 
         private async void OnEditGeneralInformations()
@@ -72,9 +87,17 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         }
 
-        private void OnDeactivateAccount()
+        private async void OnDeactivateAccount()
         {
-
+            var result = await Shell.Current.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz usunąć swoje konto?", "Tak", "Nie");
+            if (result)
+            {
+                var removed = await DependencyService.Get<IUserService>().DeactivateUserAsync();
+                if (removed)
+                    OnLogout();
+                else
+                    DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+            }
         }
 
         private async void OnDarkMode()

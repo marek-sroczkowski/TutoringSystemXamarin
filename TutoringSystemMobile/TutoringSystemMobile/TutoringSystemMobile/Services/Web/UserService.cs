@@ -41,9 +41,15 @@ namespace TutoringSystemMobile.Services.Web
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeactivateUserAsync()
+        public async Task<bool> DeactivateUserAsync()
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
+                .DeleteAsync();
+
+            return response.StatusCode == 204;
         }
 
         public async Task<Role> GetUserRole()
