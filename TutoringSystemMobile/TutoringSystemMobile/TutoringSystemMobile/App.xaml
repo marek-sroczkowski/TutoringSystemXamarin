@@ -76,6 +76,28 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="PrimaryRedButtonStyle"
+                TargetType="Button">
+                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="CornerRadius" Value="25"></Setter>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Red" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#33FF0000" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
             <Style x:Key="LabelStyle" 
                    TargetType="Label">
                 <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=WhiteSmoke}" />

@@ -62,9 +62,9 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             }
         }
 
-        private void OnEditProfilePicture()
+        private async void OnEditProfilePicture()
         {
-
+            await Shell.Current.GoToAsync($"{nameof(ProfilePicturePage)}");
         }
 
         private void OnChangePassword()
