@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using TutoringSystemMobile.Commands.AccountCommands;
+using TutoringSystemMobile.Commands.ProfileCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
 
