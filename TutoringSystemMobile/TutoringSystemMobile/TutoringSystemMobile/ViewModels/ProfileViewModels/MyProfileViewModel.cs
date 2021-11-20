@@ -82,9 +82,9 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             await Shell.Current.GoToAsync($"{nameof(ProfilePicturePage)}");
         }
 
-        private void OnChangePassword()
+        private async void OnChangePassword()
         {
-
+            await PopupNavigation.Instance.PushAsync(new ChangePasswordPopupPage());
         }
 
         private async void OnDeactivateAccount()

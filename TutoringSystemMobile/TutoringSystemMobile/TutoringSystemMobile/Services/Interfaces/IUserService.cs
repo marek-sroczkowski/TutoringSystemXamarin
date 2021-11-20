@@ -12,7 +12,7 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<RegisterErrorTypes> RegisterStudentAsync(RegisterStudentDto student);
         Task<RegisterErrorTypes> RegisterTutorAsync(RegisterTutorDto tutor);
         Task<bool> DeactivateUserAsync();
-        Task<ICollection<WrongPasswordStatus>> ChangePasswordAsync(PasswordDto passwordModel);
+        Task<IEnumerable<WrongPasswordStatus>> ChangePasswordAsync(PasswordDto passwordModel);
         Task<bool> ActivateUserByTokenAsync(string activationToken);
         Task<bool> SendNewActivationTokenAsync();
         Task<Role> GetUserRole();

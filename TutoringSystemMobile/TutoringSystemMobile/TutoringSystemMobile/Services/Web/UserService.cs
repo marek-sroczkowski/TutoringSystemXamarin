@@ -36,9 +36,16 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200;
         }
 
-        public Task<ICollection<WrongPasswordStatus>> ChangePasswordAsync(PasswordDto passwordModel)
+        public async Task<IEnumerable<WrongPasswordStatus>> ChangePasswordAsync(PasswordDto passwordModel)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegment("password")
+                .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
+                .PatchJsonAsync(passwordModel);
+
+            return response.StatusCode == 400 ? await response.GetJsonAsync<IEnumerable<WrongPasswordStatus>>() : null;
         }
 
         public async Task<bool> DeactivateUserAsync()

@@ -29,7 +29,7 @@
                 SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <SwipeView>
+                    <!--<SwipeView>-->
 
                         <!--<SwipeView.LeftItems>
                             <SwipeItems>
@@ -117,7 +117,7 @@
                                 </TapGestureRecognizer>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
-                    </SwipeView>
+                    <!--</SwipeView>-->
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
