@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.StudentsTutorPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:model="clr-namespace:TutoringSystemMobile.Models.StudentDtos"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.StudentViewModels"
              Title="Studenci"
@@ -15,6 +16,12 @@
         <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewStudentCommand}" />
         <ToolbarItem IconImageSource="icon_remove.png" Command="{Binding RemoveAllStudentsCommand}" />
     </ContentPage.ToolbarItems>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
 
     <RefreshView x:DataType="viewModel:StudentsViewModel" Command="{Binding LoadStudentsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Blue">
         <CollectionView ItemsSource="{Binding Students}"
