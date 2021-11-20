@@ -89,69 +89,91 @@
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
     <FlyoutItem Title="Start" 
-                Icon="{AppThemeBinding Dark=icon_home_white.png, Light=icon_home.png}" 
                 IsVisible="{Binding IsTutor}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_home_white.png, Light=icon_home.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="StartTutorPage" ContentTemplate="{DataTemplate local:StartTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Rezerwacje" 
-                Icon="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" 
                 IsVisible="{Binding IsTutor}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="ReservationTutorPage" ContentTemplate="{DataTemplate local:ReservationTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Dodatkowe zlecenia" 
-                Icon="{AppThemeBinding Dark=icon_orders_white.png, Light=icon_orders.png}" 
                 IsVisible="{Binding IsTutor}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_orders_white.png, Light=icon_orders.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="OrdersTutorPage" ContentTemplate="{DataTemplate local:OrdersTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Statystyki" 
-                Icon="{AppThemeBinding Dark=icon_report_white.png, Light=icon_report.png}" 
                 IsVisible="{Binding IsTutor}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_report_white.png, Light=icon_report.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="ReportTutorPage" ContentTemplate="{DataTemplate local:ReportTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Studenci" 
-                Icon="{AppThemeBinding Dark=icon_students_white.png, Light=icon_students.png}" 
                 IsVisible="{Binding IsTutor}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_students_white.png, Light=icon_students.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="StudentsTutorPage" ContentTemplate="{DataTemplate local:StudentsTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Przedmioty" 
-                Icon="{AppThemeBinding Dark=icon_subjects_white.png, Light=icon_subjects.png}" 
                 IsVisible="{Binding IsTutor}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_subjects_white.png, Light=icon_subjects.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="SubjectsTutorPage" ContentTemplate="{DataTemplate local:SubjectsTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Konto" 
-                Icon="{AppThemeBinding Dark=icon_account_white.png, Light=icon_account.png}" 
                 IsVisible="{Binding IsTutor}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_account_white.png, Light=icon_account.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="MyProfilePage" ContentTemplate="{DataTemplate local:MyProfilePage}" />
     </FlyoutItem>
 
     
     <FlyoutItem Title="Start" 
-                Icon="{AppThemeBinding Dark=icon_home_white.png, Light=icon_home.png}" 
                 IsVisible="{Binding IsStudent}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_home_white.png, Light=icon_home.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="StartStudentPage" ContentTemplate="{DataTemplate local:StartStudentPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Rezerwacje" 
-                Icon="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" 
                 IsVisible="{Binding IsStudent}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="ReservationStudentPage" ContentTemplate="{DataTemplate local:ReservationStudentPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Korepetytorzy" 
-                Icon="{AppThemeBinding Dark=icon_tutors_white.png, Light=icon_tutors.png}"
                 IsVisible="{Binding IsStudent}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_tutors_white.png, Light=icon_tutors.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="TutorsStudentPage" ContentTemplate="{DataTemplate local:TutorsStudentPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Konto" 
-                Icon="{AppThemeBinding Dark=icon_account_white.png, Light=icon_account.png}" 
                 IsVisible="{Binding IsStudent}">
+        <FlyoutItem.Icon>
+            <FileImageSource File="{AppThemeBinding Dark=icon_account_white.png, Light=icon_account.png}" />
+        </FlyoutItem.Icon>
         <ShellContent Route="MyProfilePage" ContentTemplate="{DataTemplate local:MyProfilePage}" />
     </FlyoutItem>
 
