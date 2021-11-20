@@ -151,6 +151,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
                 {
                     ProfileImage = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(base64)));
                     HasUserPhoto = true;
+                    MessagingCenter.Send(this, "photoChanged");
                 }
                 else
                 {

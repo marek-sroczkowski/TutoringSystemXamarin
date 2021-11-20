@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       
        xmlns:local="clr-namespace:TutoringSystemMobile.Views"
        xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels"
        Title="TutoringSystemMobile"
-       x:Class="TutoringSystemMobile.AppShell">
+       x:Class="TutoringSystemMobile.AppShell"
+       xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin" 
+       FlyoutBackgroundColor="{AppThemeBinding Dark=#0e0e0e, Light=#fbfbfb}">
 
     <Shell.BindingContext>
         <viewModel:AppShellViewModel />
@@ -39,19 +42,21 @@
             <Style Class="FlyoutItemLabelStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="White"></Setter>
             </Style>
+            
             <Style Class="FlyoutItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{x:OnPlatform UWP=Transparent, iOS=White}" />
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=#0e0e0e, Light=#fbfbfb}" />
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{AppThemeBinding Dark=White, Light={StaticResource Primary}}" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=#44a1a1a1, Light={StaticResource Primary}}" />
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="White" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -68,7 +73,7 @@
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{AppThemeBinding Dark=White, Light={StaticResource Primary}}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -83,43 +88,78 @@
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
-    <FlyoutItem Title="Start" Icon="icon_home.png" IsVisible="{Binding IsTutor}">
+    <FlyoutItem Title="Start" 
+                Icon="{AppThemeBinding Dark=icon_home_white.png, Light=icon_home.png}" 
+                IsVisible="{Binding IsTutor}">
         <ShellContent Route="StartTutorPage" ContentTemplate="{DataTemplate local:StartTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Rezerwacje" Icon="icon_reservations.png" IsVisible="{Binding IsTutor}">
+    
+    <FlyoutItem Title="Rezerwacje" 
+                Icon="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" 
+                IsVisible="{Binding IsTutor}">
         <ShellContent Route="ReservationTutorPage" ContentTemplate="{DataTemplate local:ReservationTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Dodatkowe zlecenia" Icon="icon_orders.png" IsVisible="{Binding IsTutor}">
+    
+    <FlyoutItem Title="Dodatkowe zlecenia" 
+                Icon="{AppThemeBinding Dark=icon_orders_white.png, Light=icon_orders.png}" 
+                IsVisible="{Binding IsTutor}">
         <ShellContent Route="OrdersTutorPage" ContentTemplate="{DataTemplate local:OrdersTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Statystyki" Icon="icon_report.png" IsVisible="{Binding IsTutor}">
+    
+    <FlyoutItem Title="Statystyki" 
+                Icon="{AppThemeBinding Dark=icon_report_white.png, Light=icon_report.png}" 
+                IsVisible="{Binding IsTutor}">
         <ShellContent Route="ReportTutorPage" ContentTemplate="{DataTemplate local:ReportTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Studenci" Icon="icon_students.png" IsVisible="{Binding IsTutor}">
+    
+    <FlyoutItem Title="Studenci" 
+                Icon="{AppThemeBinding Dark=icon_students_white.png, Light=icon_students.png}" 
+                IsVisible="{Binding IsTutor}">
         <ShellContent Route="StudentsTutorPage" ContentTemplate="{DataTemplate local:StudentsTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Przedmioty" Icon="icon_subjects.png" IsVisible="{Binding IsTutor}">
+    
+    <FlyoutItem Title="Przedmioty" 
+                Icon="{AppThemeBinding Dark=icon_subjects_white.png, Light=icon_subjects.png}" 
+                IsVisible="{Binding IsTutor}">
         <ShellContent Route="SubjectsTutorPage" ContentTemplate="{DataTemplate local:SubjectsTutorPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Konto" Icon="icon_account.png" IsVisible="{Binding IsTutor}">
+    
+    <FlyoutItem Title="Konto" 
+                Icon="{AppThemeBinding Dark=icon_account_white.png, Light=icon_account.png}" 
+                IsVisible="{Binding IsTutor}">
         <ShellContent Route="MyProfilePage" ContentTemplate="{DataTemplate local:MyProfilePage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Start" Icon="icon_home.png" IsVisible="{Binding IsStudent}">
+    
+    <FlyoutItem Title="Start" 
+                Icon="{AppThemeBinding Dark=icon_home_white.png, Light=icon_home.png}" 
+                IsVisible="{Binding IsStudent}">
         <ShellContent Route="StartStudentPage" ContentTemplate="{DataTemplate local:StartStudentPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Rezerwacje" Icon="icon_reservations.png" IsVisible="{Binding IsStudent}">
+    
+    <FlyoutItem Title="Rezerwacje" 
+                Icon="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" 
+                IsVisible="{Binding IsStudent}">
         <ShellContent Route="ReservationStudentPage" ContentTemplate="{DataTemplate local:ReservationStudentPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Korepetytorzy" Icon="icon_tutors.png" IsVisible="{Binding IsStudent}">
+    
+    <FlyoutItem Title="Korepetytorzy" 
+                Icon="{AppThemeBinding Dark=icon_tutors_white.png, Light=icon_tutors.png}"
+                IsVisible="{Binding IsStudent}">
         <ShellContent Route="TutorsStudentPage" ContentTemplate="{DataTemplate local:TutorsStudentPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Konto" Icon="icon_account.png" IsVisible="{Binding IsStudent}">
+    
+    <FlyoutItem Title="Konto" 
+                Icon="{AppThemeBinding Dark=icon_account_white.png, Light=icon_account.png}" 
+                IsVisible="{Binding IsStudent}">
         <ShellContent Route="MyProfilePage" ContentTemplate="{DataTemplate local:MyProfilePage}" />
     </FlyoutItem>
 
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
-    <MenuItem Text="Wyloguj się" IconImageSource="icon_logout.png" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
+    <MenuItem Text="Wyloguj się" 
+              IconImageSource="{AppThemeBinding Dark=icon_logout_white.png, Light=icon_logout.png}" 
+              StyleClass="MenuItemLayoutStyle" 
+              Clicked="OnMenuItemClicked">
     </MenuItem>
 
     <!--
@@ -136,6 +176,29 @@
     <TabBar>
         <ShellContent Route="AccountActivationPage" ContentTemplate="{DataTemplate local:AccountActivationPage}" />
     </TabBar>
+
+
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="50,*" 
+                  Padding="10"
+                  Margin="0,0,0,5"
+                  BackgroundColor="{AppThemeBinding Dark=#1f1f1f, Light=#f3f3f3}">
+                <Grid Grid.Column="0">
+                    <controls:CircleImage Source="{Binding ProfileImage}" 
+                                      Aspect="AspectFit" 
+                                      WidthRequest="50" 
+                                      HeightRequest="50"
+                                      FillColor="WhiteSmoke"/>
+                </Grid>
+                <Grid Grid.Column="1" 
+                      VerticalOptions="Center">
+                    <Label Text="{Binding User}"
+                           Style="{StaticResource ProfileMenuItemStyle}"/>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
 
 
     <!-- Optional Templates 

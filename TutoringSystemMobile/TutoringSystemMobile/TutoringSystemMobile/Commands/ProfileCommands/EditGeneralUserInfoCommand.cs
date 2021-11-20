@@ -43,6 +43,7 @@ namespace TutoringSystemMobile.Commands.ProfileCommands
             if (updated)
             {
                 DependencyService.Get<IToast>()?.MakeLongToast("Zaktulizowane dane");
+                MessagingCenter.Send(this, "nameChanged");
                 await Shell.Current.GoToAsync("..");
             }
             else

@@ -16,7 +16,6 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         public bool IsDeactiveAccoutTabVisible { get => isDeactiveAccoutTabVisible; set => SetValue(ref isDeactiveAccoutTabVisible, value); }
 
-        public Command PageAppearingCommand { get; }
         public Command EditGeneralInformationsCommand { get; }
         public Command EditAddressCommand { get; }
         public Command EditContactCommand { get; }
@@ -29,7 +28,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         public MyProfileViewModel()
         {
-            PageAppearingCommand = new Command(OnAppearing);
+            OnAppearing();
             EditGeneralInformationsCommand = new Command(OnEditGeneralInformations);
             EditAddressCommand = new Command(OnEditAddress);
             EditContactCommand = new Command(OnEditContact);

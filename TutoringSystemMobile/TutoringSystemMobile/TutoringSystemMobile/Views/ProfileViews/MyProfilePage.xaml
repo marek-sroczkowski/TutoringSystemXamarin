@@ -12,12 +12,6 @@
         <viewModel:MyProfileViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.Behaviors>
-        <xct:EventToCommandBehavior
-                EventName="Appearing"
-                Command="{Binding PageAppearingCommand}" />
-    </ContentPage.Behaviors>
-
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="20,10,20,10">
@@ -284,7 +278,7 @@
                     </Grid.ColumnDefinitions>
 
                     <controls:IconView Grid.Column="0" 
-                                   Source="icon_logout2.png"
+                                   Source="icon_logout.png"
                                    HeightRequest="30"
                                    WidthRequest="30"
                                    Style="{StaticResource MenuItemIconStyle}" />
