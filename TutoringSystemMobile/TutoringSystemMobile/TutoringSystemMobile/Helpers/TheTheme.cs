@@ -19,6 +19,16 @@ namespace TutoringSystemMobile.Helpers
                     Application.Current.UserAppTheme = OSAppTheme.Unspecified;
                     break;
             }
+
+            var e = DependencyService.Get<IEnvironment>();
+            if (Application.Current.RequestedTheme == OSAppTheme.Dark)
+            {
+                e?.SetStatusBarColor(Color.Black, false);
+            }
+            else
+            {
+                e?.SetStatusBarColor(Color.FromHex("2196F3"), true);
+            }
         }
     }
 }
