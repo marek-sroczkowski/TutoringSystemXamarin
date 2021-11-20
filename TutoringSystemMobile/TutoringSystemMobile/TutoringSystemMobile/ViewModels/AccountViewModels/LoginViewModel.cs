@@ -11,17 +11,8 @@ namespace TutoringSystemMobile.ViewModels.AccountViewModels
         private string username;
         private string password;
 
-        public string Username
-        {
-            get => username;
-            set => SetValue(ref username, value);
-        }
-
-        public string Password
-        {
-            get => password;
-            set => SetValue(ref password, value);
-        }
+        public string Username { get => username; set => SetValue(ref username, value); }
+        public string Password { get => password; set => SetValue(ref password, value); }
 
         public ICommand LoginCommand { get; }
         public Command RegisterTutorCommand { get; }
