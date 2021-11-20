@@ -175,6 +175,14 @@
                 <Setter Property="WidthRequest" Value="20" />
                 <Setter Property="Foreground" Value="{AppThemeBinding Light=#0066cc, Dark=White}" />
             </Style>
+
+            <Style x:Key="CenterPopupStyle" TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=#191919, Light=White}" />
+                <Setter Property="Margin" Value="12" />
+                <Setter Property="Padding" Value="24" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
         </ResourceDictionary>        
     </Application.Resources>
 </Application>
