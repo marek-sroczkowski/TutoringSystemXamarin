@@ -11,5 +11,19 @@ namespace TutoringSystemMobile.Models.Parameters
         public DateTime? ReceiptEndDate { get; set; }
         public DateTime? DeadlineStart { get; set; }
         public DateTime? DeadlineEnd { get; set; }
+
+        public AdditionalOrderParameters()
+        {
+        }
+
+        public AdditionalOrderParameters(bool? isPaid, AdditionalOrderStatus? status, DateTime? receiptStartDate, DateTime? receiptEndDate, DateTime? deadlineStart, DateTime? deadlineEnd)
+        {
+            IsPaid = isPaid;
+            Status = status;
+            ReceiptStartDate = receiptStartDate;
+            ReceiptEndDate = receiptEndDate;
+            DeadlineStart = deadlineStart;
+            DeadlineEnd = deadlineEnd;
+        }
     }
 }

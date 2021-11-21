@@ -1,9 +1,11 @@
 ﻿using Flurl.Http;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.Pagination;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -62,7 +64,7 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200 ? await response.GetJsonAsync<OrderDetailsDto>() : new OrderDetailsDto();
         }
 
-        public async Task<IEnumerable<OrderDto>> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters)
+        public async Task<OrdersCollectionDto> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters)
         {
             string token = await SecureStorage.GetAsync("token");
             var response = await baseUrl
@@ -71,7 +73,15 @@ namespace TutoringSystemMobile.Services.Web
                 .WithOAuthBearerToken(token)
                 .GetAsync();
 
-            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<OrderDto>>() : new List<OrderDto>();
+            IEnumerable<OrderDto> orders = response.StatusCode == 200 ?
+                await response.GetJsonAsync<IEnumerable<OrderDto>>() :
+                new List<OrderDto>();
+
+            var pagination = response.StatusCode == 200 ?
+                JsonConvert.DeserializeObject<PaginationMetadataDto>(response.Headers.FirstOrDefault("X-Pagination")) :
+                new PaginationMetadataDto();
+
+            return new OrdersCollectionDto { Orders = orders, Pagination = pagination };
         }
 
         public async Task<bool> ChangeOrderStatusAsync(long orderId, AdditionalOrderStatus status)

@@ -1,8 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.OrderCommands;
+﻿using Rg.Plugins.Popup.Services;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
@@ -12,49 +14,104 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 {
     public class OrdersViewModel : BaseViewModel
     {
-        private OrderDto selectedOrder;
+        private int currentPage;
+        private bool hasNext;
+        private int itemTreshold = 5;
+        private bool isRefreshing;
+
+        private bool isPaid = true;
+        private bool isNotPaid = true;
+        private bool isInProgress = true;
+        private bool isPending = true;
+        private bool isRealized = true;
+        private DateTime? receiptStartDate = DateTime.Now.AddMonths(-1);
+        private DateTime? receiptEndDate = DateTime.Now;
+        private DateTime? deadlineStart = DateTime.Now.AddDays(-14);
+        private DateTime? deadlineEnd = DateTime.Now.AddMonths(1);
+
         public ObservableCollection<OrderDto> Orders { get; }
 
-        public OrderDto SelectedOrder
-        {
-            get => selectedOrder;
-            set
-            {
-                SetValue(ref selectedOrder, value);
-                OnOrderSelected(value);
-            }
-        }
+        public int ItemTreshold { get => itemTreshold; set => SetValue(ref itemTreshold, value); }
+        public int CurrentPage { get => currentPage; set => SetValue(ref currentPage, value); }
+        public bool HasNext { get => hasNext; set => SetValue(ref hasNext, value); }
+        public bool IsRefreshing { get => isRefreshing; set => SetValue(ref isRefreshing, value); }
 
-        public ICommand LoadOrdersCommand { get; }
+        public bool IsPaid { get => isPaid; set => SetValue(ref isPaid, value); }
+        public bool IsNotPaid { get => isNotPaid; set => SetValue(ref isNotPaid, value); }
+        public bool IsInProgress { get => isInProgress; set => isInProgress = value; }
+        public bool IsPending { get => isPending; set => isPending = value; }
+        public bool IsRealized { get => isRealized; set => isRealized = value; }
+        public DateTime? ReceiptStartDate { get => receiptStartDate; set => SetValue(ref receiptStartDate, value); }
+        public DateTime? ReceiptEndDate { get => receiptEndDate; set => SetValue(ref receiptEndDate, value); }
+        public DateTime? DeadlineStart { get => deadlineStart; set => SetValue(ref deadlineStart, value); }
+        public DateTime? DeadlineEnd { get => deadlineEnd; set => SetValue(ref deadlineEnd, value); }
+
+
+        public Command LoadOrdersCommand { get; }
+        public Command ItemTresholdReachedCommand { get; }
         public Command NewOrderFormCommand { get; }
-        public Command FilterOrdersCommand { get; }
-        public Command<OrderDto> OrderTapped { get; }
+        public Command OpenFilteringPopupCommand { get; }
+        public Command<OrderDto> OrderTappedCommand { get; }
         public Command PageAppearingCommand { get; }
         public Command<OrderDto> ChangeOrderStatusCommand { get; }
         public Command<OrderDto> ChangePaymentStatusCommand { get; }
+        public Command FilterOrdersCommand { get; }
 
         private readonly IAdditionalOrderService orderService;
 
         public OrdersViewModel()
         {
-            Orders = new ObservableCollection<OrderDto>();
             orderService = DependencyService.Get<IAdditionalOrderService>();
-            LoadOrdersCommand = new LoadOrdersCommand(this, orderService);
-            NewOrderFormCommand = new Command(OnNewOrderClick);
-            FilterOrdersCommand = new Command(OnFilteringOrdersClick);
-            OrderTapped = new Command<OrderDto>(OnOrderSelected);
-            PageAppearingCommand = new Command(OnAppearing);
-            ChangeOrderStatusCommand = new Command<OrderDto>(OnChangeOrderStatus);
-            ChangePaymentStatusCommand = new Command<OrderDto>(OnChangePaymentStatus);
+            Orders = new ObservableCollection<OrderDto>();
+            LoadOrdersCommand = new Command(async () => await LoadOrders());
+            ItemTresholdReachedCommand = new Command(async () => await OrdersTresholdReached());
+            NewOrderFormCommand = new Command(async () => await OnNewOrderClick());
+            OpenFilteringPopupCommand = new Command(async () => await OnFilteringOrdersClick());
+            OrderTappedCommand = new Command<OrderDto>(async (order) => await OnOrderSelected(order));
+            PageAppearingCommand = new Command(async () => await OnAppearing());
+            ChangeOrderStatusCommand = new Command<OrderDto>(async (order) => await OnChangeOrderStatus(order));
+            ChangePaymentStatusCommand = new Command<OrderDto>(async (order) => await OnChangePaymentStatus(order));
         }
 
-        private void OnAppearing()
+        private async Task LoadOrders()
         {
+            if (IsBusy)
+                return;
+
             IsBusy = true;
-            selectedOrder = null;
+            IsRefreshing = true;
+
+            Orders.Clear();
+            var ordersCollection = await orderService.GetAdditionalOrdersAsync(new AdditionalOrderParameters { PageSize = 20 });
+            CurrentPage = ordersCollection.Pagination.CurrentPage;
+            HasNext = ordersCollection.Pagination.HasNext;
+            foreach (var order in ordersCollection.Orders)
+                Orders.Add(order);
+
+            IsRefreshing = false;
+            IsBusy = false;
         }
 
-        private async void OnOrderSelected(OrderDto order)
+        private async Task OrdersTresholdReached()
+        {
+            if (IsBusy || !HasNext)
+                return;
+
+            IsBusy = true;
+            var ordersCollection = await orderService.GetAdditionalOrdersAsync(new AdditionalOrderParameters { PageNumber = ++CurrentPage, PageSize = 10 });
+            HasNext = ordersCollection.Pagination.HasNext;
+            foreach (var order in ordersCollection.Orders)
+                Orders.Add(order);
+
+            IsBusy = false;
+        }
+
+        private async Task OnAppearing()
+        {
+            await LoadOrders();
+        }
+
+        private async Task OnOrderSelected(OrderDto order)
         {
             if (order == null)
                 return;
@@ -62,18 +119,21 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             await Shell.Current.GoToAsync($"{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={order.Id}");
         }
 
-        private async void OnNewOrderClick()
+        private async Task OnNewOrderClick()
         {
             await Shell.Current.GoToAsync($"{nameof(NewOrderTutotPage)}");
         }
 
-        private async void OnFilteringOrdersClick()
+        private async Task OnFilteringOrdersClick()
         {
-            await Shell.Current.GoToAsync($"{nameof(OrderFilteringTutorPage)}");
+            await PopupNavigation.Instance.PushAsync(new OrderFilteringTutorPopupPage());
         }
 
-        private async void OnChangeOrderStatus(OrderDto order)
+        private async Task OnChangeOrderStatus(OrderDto order)
         {
+            if (order is null)
+                return;
+
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu zlecenia", "Anuluj", null, "Oczekujące", "W realizacji", "Zrealizowane");
             var status = GetOrderStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
@@ -82,8 +142,11 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
                 DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
         }
 
-        private async void OnChangePaymentStatus(OrderDto order)
+        private async Task OnChangePaymentStatus(OrderDto order)
         {
+            if (order is null)
+                return;
+
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu płatności", "Anuluj", null, "Opłacone", "Nie opłacone");
             var status = GetPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))

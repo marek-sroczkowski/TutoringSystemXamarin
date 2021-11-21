@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
@@ -8,7 +7,7 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface IAdditionalOrderService
     {
-        Task<IEnumerable<OrderDto>> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters);
+        Task<OrdersCollectionDto> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters);
         Task<OrderDetailsDto> GetAdditionalOrderByIdAsync(long orderId);
         Task<long> AddAdditionalOrderAsync(NewOrderDto newOrder);
         Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder);

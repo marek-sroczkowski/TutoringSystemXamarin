@@ -16,7 +16,6 @@ namespace TutoringSystemMobile
 
             Routing.RegisterRoute(nameof(OrderDetailsTutorPage), typeof(OrderDetailsTutorPage));
             Routing.RegisterRoute(nameof(NewOrderTutotPage), typeof(NewOrderTutotPage));
-            Routing.RegisterRoute(nameof(OrderFilteringTutorPage), typeof(OrderFilteringTutorPage));
             Routing.RegisterRoute(nameof(EditOrderTutorPage), typeof(EditOrderTutorPage));
 
             Routing.RegisterRoute(nameof(SubjectDetailsTutorPage), typeof(SubjectDetailsTutorPage));

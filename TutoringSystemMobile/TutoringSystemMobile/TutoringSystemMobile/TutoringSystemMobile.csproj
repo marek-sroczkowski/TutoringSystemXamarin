@@ -45,8 +45,8 @@
     <Compile Update="Views\OrdersViews\OrderDetailsTutorPage.xaml.cs">
       <DependentUpon>OrderDetailsTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\OrdersViews\OrderFilteringTutorPage.xaml.cs">
-      <DependentUpon>OrderFilteringTutorPage.xaml</DependentUpon>
+    <Compile Update="Views\OrdersViews\OrderFilteringTutorPopupPage.xaml.cs">
+      <DependentUpon>OrderFilteringTutorPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\PhoneNumbersViews\NewPhoneNumberPopupPage.xaml.cs">
       <DependentUpon>NewPhoneNumberPopupPage.xaml</DependentUpon>
@@ -111,7 +111,7 @@
     <EmbeddedResource Update="Views\OrdersViews\OrderDetailsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\OrderFilteringTutorPage.xaml">
+    <EmbeddedResource Update="Views\OrdersViews\OrderFilteringTutorPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\OrdersViews\OrdersTutorPage.xaml">

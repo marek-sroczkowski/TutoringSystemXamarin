@@ -14,7 +14,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding FilterOrdersCommand}" />
+        <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding OpenFilteringPopupCommand}" />
         <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewOrderFormCommand}" />
     </ContentPage.ToolbarItems>
 
@@ -24,17 +24,23 @@
                 Command="{Binding PageAppearingCommand}" />
     </ContentPage.Behaviors>
 
-    <RefreshView x:DataType="viewModel:OrdersViewModel" Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Blue">
+    <RefreshView x:DataType="viewModel:OrdersViewModel" Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsRefreshing}" RefreshColor="Blue">
         <CollectionView ItemsSource="{Binding Orders}"
-                SelectionMode="None">
+                        SelectionMode="None"
+                RemainingItemsThresholdReachedCommand="{Binding ItemTresholdReachedCommand}"
+                RemainingItemsThreshold="{Binding ItemTreshold}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!--<SwipeView>-->
+                    <SwipeView BackgroundColor="{AppThemeBinding Dark=Black, Light=#f3f3f3}">
 
-                        <!--<SwipeView.LeftItems>
+                        <SwipeView.LeftItems>
                             <SwipeItems>
                                 <SwipeItemView>
-                                    <Button Text="Status" CornerRadius="10" Margin="5" BackgroundColor="#6633ff" Command="{Binding ChangeOrderStatusCommand}" CommandParameter="{Binding .}"/>
+                                    <Button Text="Status" 
+                                            CornerRadius="10" Margin="5" 
+                                            BackgroundColor="#6633ff" 
+                                            Command="{Binding Path=BindingContext.ChangeOrderStatusCommand, Source={x:Reference OrdersPage}}" 
+                                            CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}" />
                                 </SwipeItemView>
                             </SwipeItems>
                         </SwipeView.LeftItems>
@@ -42,10 +48,15 @@
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItemView>
-                                    <Button Text="Płatność" CornerRadius="10" Margin="5" BackgroundColor="#32CD32" Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=ChangePaymentStatusCommand}" CommandParameter="{Binding .}" />
+                                    <Button Text="Płatność" 
+                                            CornerRadius="10" 
+                                            Margin="5" 
+                                            BackgroundColor="#32CD32" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=ChangePaymentStatusCommand}" 
+                                            CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}" />
                                 </SwipeItemView>
                             </SwipeItems>
-                        </SwipeView.RightItems>-->
+                        </SwipeView.RightItems>
                         
                         <StackLayout Padding="3" x:DataType="model:OrderDto">
                             <Grid>
@@ -112,12 +123,12 @@
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=OrderTapped}"		
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=OrderTappedCommand}"		
                                 CommandParameter="{Binding .}">
                                 </TapGestureRecognizer>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
-                    <!--</SwipeView>-->
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
