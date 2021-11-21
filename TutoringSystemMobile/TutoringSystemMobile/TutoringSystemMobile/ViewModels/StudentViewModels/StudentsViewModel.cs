@@ -12,18 +12,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 {
     public class StudentsViewModel : BaseViewModel
     {
-        private StudentDto selectedStudent;
         public ObservableCollection<StudentDto> Students { get; }
-
-        public StudentDto SelectedStudent
-        {
-            get => selectedStudent;
-            set
-            {
-                SetValue(ref selectedStudent, value);
-                OnStudentSelected(value);
-            }
-        }
 
         public ICommand LoadStudentsCommand { get; }
         public Command NewStudentCommand { get; }
@@ -38,19 +27,18 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             Students = new ObservableCollection<StudentDto>();
             studentService = DependencyService.Get<IStudentService>();
             LoadStudentsCommand = new LoadStudentsCommand(this, studentService);
-            NewStudentCommand = new Command(OnNewStudentClick);
-            StudentTapped = new Command<StudentDto>(OnStudentSelected);
+            NewStudentCommand = new Command(async () => await OnNewStudentClick());
+            StudentTapped = new Command<StudentDto>(async (student) => await OnStudentSelected(student));
             PageAppearingCommand = new Command(OnAppearing);
-            RemoveAllStudentsCommand = new Command(OnRemoveAllStudent);
+            RemoveAllStudentsCommand = new Command(async () => await OnRemoveAllStudent());
         }
 
         private void OnAppearing()
         {
             IsBusy = true;
-            selectedStudent = null;
         }
 
-        private async void OnStudentSelected(StudentDto student)
+        private async Task OnStudentSelected(StudentDto student)
         {
             if (student == null)
                 return;
@@ -58,7 +46,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             await Shell.Current.GoToAsync($"{nameof(StudentDetailsTutorPage)}?{nameof(StudentDetailsViewModel.Id)}={student.Id}");
         }
 
-        private async void OnRemoveAllStudent()
+        private async Task OnRemoveAllStudent()
         {
             var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", "Czy na pewno chcesz usunąć wszystkich studentów?", "Tak", "Nie");
             if (result)
@@ -79,7 +67,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             }
         }
 
-        private async void OnNewStudentClick()
+        private async Task OnNewStudentClick()
         {
             const string existingStudent = "Student posiadający już konto";
             const string newStudent = "Student nie posiadający konta";

@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -62,24 +63,24 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             contactService = DependencyService.Get<IContactService>();
             phoneNumberService = DependencyService.Get<IPhoneNumberService>();
 
-            PageAppearingCommand = new Command(OnAppearing);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
             CallToStudentCommand = new Command<PhoneNumberDto>(OnSelectNumberToCall);
-            AddPhoneNumberCommand = new Command(OnAddNewPhone);
-            RemovePhoneNumberCommand = new Command<PhoneNumberDto>(OnRemovePhone);
-            EditPhoneNumberCommand = new Command<PhoneNumberDto>(OnEditPhone);
+            AddPhoneNumberCommand = new Command(async () => await OnAddNewPhone());
+            RemovePhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnRemovePhone(phone));
+            EditPhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnEditPhone(phone));
 
-            MessagingCenter.Subscribe<ReloadContactService>(this, message: "reload", (sender) =>
+            MessagingCenter.Subscribe<ReloadContactService>(this, message: "reload", async (sender) =>
             {
-                OnAppearing();
+                await OnAppearing();
             });
         }
 
-        private async void OnEditPhone(PhoneNumberDto phone)
+        private async Task OnEditPhone(PhoneNumberDto phone)
         {
             await PopupNavigation.Instance.PushAsync(new EditPhoneNumberPopupPage(phone.Id));
         }
 
-        private async void OnRemovePhone(PhoneNumberDto phone)
+        private async Task OnRemovePhone(PhoneNumberDto phone)
         {
             var removed = await phoneNumberService.DeletePhoneNumberAsync(Id, phone.Id);
             if(removed)
@@ -93,12 +94,12 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             }
         }
 
-        private async void OnAddNewPhone()
+        private async Task OnAddNewPhone()
         {
             await PopupNavigation.Instance.PushAsync(new NewPhoneNumberPopupPage(Id));
         }
 
-        private async void OnAppearing()
+        private async Task OnAppearing()
         {
             IsBusy = true;
 

@@ -31,12 +31,12 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         public ProfilePictureViewModel()
         {
-            PageAppearingCommand = new Command(OnAppearing);
-            RemoveImageCommand = new Command(OnRemoveImage);
-            SetImageCommand = new Command(OnSetImage);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
+            RemoveImageCommand = new Command(async () => await OnRemoveImage());
+            SetImageCommand = new Command(async () => await OnSetImage());
         }
 
-        private async void OnSetImage(object obj)
+        private async Task OnSetImage()
         {
             const string fromGallery = "Galeria";
             const string fromCamera = "Aparat";
@@ -51,7 +51,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             }
         }
 
-        private async void OnRemoveImage(object obj)
+        private async Task OnRemoveImage()
         {
             var removed = await DependencyService.Get<IImageService>().RemoveProfileImageAsync();
             if (removed)
@@ -66,7 +66,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             }
         }
 
-        private async void OnAppearing()
+        private async Task OnAppearing()
         {
             IsBusy = true;
             var image = await DependencyService.Get<IImageService>()?.GetProfileImageAsync();

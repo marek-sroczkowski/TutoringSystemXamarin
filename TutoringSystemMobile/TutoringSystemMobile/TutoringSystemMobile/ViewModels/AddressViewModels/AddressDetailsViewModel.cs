@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using TutoringSystemMobile.Commands.StudentCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Essentials;
@@ -76,11 +77,11 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
         public AddressDetailsViewModel()
         {
             addressService = DependencyService.Get<IAddressService>();
-            PageAppearingCommand = new Command(OnAppearing);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
             NavigateToStudentCommand = new NavigateToStudentCommand(this);
         }
 
-        private async void OnAppearing()
+        private async Task OnAppearing()
         {
             IsBusy = true;
 

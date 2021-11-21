@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using TutoringSystemMobile.Commands.ProfileCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
@@ -20,11 +21,11 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         public EditGeneralUserInfoViewModel()
         {
-            PageAppearingCommand = new Command(OnAppearing);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
             EditUserCommand = new EditGeneralUserInfoCommand(this, DependencyService.Get<IUserService>());
         }
 
-        private async void OnAppearing()
+        private async Task OnAppearing()
         {
             var user = await DependencyService.Get<IUserService>()?.GetGeneralUserInfoAsync();
             Id = user.Id;

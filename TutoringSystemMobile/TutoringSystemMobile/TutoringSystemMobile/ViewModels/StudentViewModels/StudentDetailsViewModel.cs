@@ -4,7 +4,6 @@ using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.AddressViewModels;
-using TutoringSystemMobile.ViewModels.ContactViewModels;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -45,9 +44,9 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         public StudentDetailsViewModel()
         {
             studentService = DependencyService.Get<IStudentService>();
-            PageAppearingCommand = new Command(OnAppearing);
-            EditStudentCommand = new Command(OnEditStudent);
-            RemoveStudentCommand = new Command(OnRemoveStudent);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
+            EditStudentCommand = new Command(async () => await OnEditStudent());
+            RemoveStudentCommand = new Command(async () => await OnRemoveStudent());
         }
 
         private async void LoadStudentById(long studentId)
@@ -66,12 +65,12 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             IsBusy = false;
         }
 
-        private async void OnAppearing()
+        private async Task OnAppearing()
         {
             await SecureStorage.SetAsync("currentPage", "generalInformation");
         }
 
-        private async void OnRemoveStudent(object obj)
+        private async Task OnRemoveStudent()
         {
             var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", $"Czy na pewno chcesz usunąć  {Username} z listy swoich uczniów?", "Tak", "Nie");
             if (result)
@@ -92,7 +91,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             }
         }
 
-        private async void OnEditStudent()
+        private async Task OnEditStudent()
         {
             string currentPage = await SecureStorage.GetAsync("currentPage");
 

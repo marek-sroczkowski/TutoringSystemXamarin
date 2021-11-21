@@ -1,10 +1,10 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
@@ -40,9 +40,9 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
             contactService = DependencyService.Get<IContactService>();
             phoneNumberService = DependencyService.Get<IPhoneNumberService>();
 
-            AddPhoneNumberCommand = new Command(OnAddNewPhone);
-            RemovePhoneNumberCommand = new Command<PhoneNumberDto>(OnRemovePhone);
-            EditPhoneNumberCommand = new Command<PhoneNumberDto>(OnEditPhone);
+            AddPhoneNumberCommand = new Command(async () => await OnAddNewPhone());
+            RemovePhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnRemovePhone(phone));
+            EditPhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnEditPhone(phone));
 
             MessagingCenter.Subscribe<ReloadContactService>(this, message: "reload", (sender) =>
             {
@@ -50,12 +50,12 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
             });
         }
 
-        private async void OnEditPhone(PhoneNumberDto phone)
+        private async Task OnEditPhone(PhoneNumberDto phone)
         {
             await PopupNavigation.Instance.PushAsync(new EditPhoneNumberPopupPage(phone.Id));
         }
 
-        private async void OnRemovePhone(PhoneNumberDto phone)
+        private async Task OnRemovePhone(PhoneNumberDto phone)
         {
             var removed = await phoneNumberService.DeletePhoneNumberAsync(ContactId, phone.Id);
             if (removed)
@@ -69,7 +69,7 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
             }
         }
 
-        private async void OnAddNewPhone()
+        private async Task OnAddNewPhone()
         {
             await PopupNavigation.Instance.PushAsync(new NewPhoneNumberPopupPage(ContactId));
         }

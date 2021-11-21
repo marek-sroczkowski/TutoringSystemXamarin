@@ -50,8 +50,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public OrderDetailsViewModel()
         {
             orderService = DependencyService.Get<IAdditionalOrderService>();
-            EditOrderCommand = new Command(OnRedirectToOrderEditPage);
-            RemoveOrderCommand = new Command(OnRemoveRequest);
+            EditOrderCommand = new Command(async () => await OnRedirectToOrderEditPage());
+            RemoveOrderCommand = new Command(async () => await OnRemoveRequest());
         }
 
         private async void LoadOrderById(long orderId)
@@ -96,12 +96,12 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             }
         }
 
-        private async void OnRedirectToOrderEditPage()
+        private async Task OnRedirectToOrderEditPage()
         {
             await Shell.Current.GoToAsync($"{nameof(EditOrderTutorPage)}?{nameof(EditOrderViewModel.Id)}={Id}");
         }
 
-        private async void OnRemoveRequest()
+        private async Task OnRemoveRequest()
         {
             var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", "Czy na pewno chcesz usunąć to zlecenie?", "Tak", "Nie");
             if (result)

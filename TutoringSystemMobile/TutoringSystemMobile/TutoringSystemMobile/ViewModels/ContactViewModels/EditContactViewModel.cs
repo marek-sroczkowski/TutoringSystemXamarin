@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using TutoringSystemMobile.Commands.ContactCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
@@ -22,11 +23,11 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         {
             Id = contactId;
             contactService = DependencyService.Get<IContactService>();
-            PageAppearingCommand = new Command(OnAppearing);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
             EditContactCommand = new EditContactCommand(this, contactService);
         }
 
-        private async void OnAppearing()
+        private async Task OnAppearing()
         {
             IsBusy = true;
 

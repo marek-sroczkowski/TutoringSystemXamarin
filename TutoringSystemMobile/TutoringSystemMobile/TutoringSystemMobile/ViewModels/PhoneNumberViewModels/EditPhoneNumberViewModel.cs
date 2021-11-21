@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using TutoringSystemMobile.Commands.PhoneNumberCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Essentials;
@@ -27,11 +28,11 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
         {
             PhoneNumberId = phoneNumberId;
             phoneNumberService = DependencyService.Get<IPhoneNumberService>();
-            PageAppearingCommand = new Command(OnAppearing);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
             EditPhoneNumberCommand = new EditPhoneNumberCommand(this, phoneNumberService);
         }
 
-        private async void OnAppearing()
+        private async Task OnAppearing()
         {
             IsBusy = true;
 

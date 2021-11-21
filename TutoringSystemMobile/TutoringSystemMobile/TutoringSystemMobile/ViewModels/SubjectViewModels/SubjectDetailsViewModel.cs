@@ -43,8 +43,8 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public SubjectDetailsViewModel()
         {
             subjectService = DependencyService.Get<ISubjectService>();
-            EditSubjectCommand = new Command(OnRedirectToSubjectEditPage);
-            RemoveSubjectCommand = new Command(OnRemoveRequest);
+            EditSubjectCommand = new Command(async () => await OnRedirectToSubjectEditPage());
+            RemoveSubjectCommand = new Command(async () => await OnRemoveRequest());
         }
 
         private async void LoadSubjectById(long subjectId)
@@ -124,12 +124,12 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             }
         }
 
-        private async void OnRedirectToSubjectEditPage()
+        private async Task OnRedirectToSubjectEditPage()
         {
             await Shell.Current.GoToAsync($"{nameof(EditSubjectTutorPage)}?{nameof(EditSubjectViewModel.Id)}={Id}");
         }
 
-        private async void OnRemoveRequest()
+        private async Task OnRemoveRequest()
         {
             var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", "Czy na pewno chcesz usunąć ten przedmiot?", "Tak", "Nie");
             if (result)

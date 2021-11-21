@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using TutoringSystemMobile.Commands.AccountCommands;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
@@ -20,10 +21,10 @@ namespace TutoringSystemMobile.ViewModels.AccountViewModels
         public LoginViewModel()
         {
             LoginCommand = new LoginCommand(this, DependencyService.Get<IUserService>(), DependencyService.Get<IFlyoutItemService>());
-            RegisterTutorCommand = new Command(OnRegisterFormClick);
+            RegisterTutorCommand = new Command(async () => await OnRegisterFormClick());
         }
 
-        public async void OnRegisterFormClick()
+        public async Task OnRegisterFormClick()
         {
             if (!IsBusy)
                 await Shell.Current.GoToAsync($"{nameof(RegisterTutorPage)}");

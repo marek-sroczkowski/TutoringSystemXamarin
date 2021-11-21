@@ -1,4 +1,5 @@
 ﻿using Rg.Plugins.Popup.Services;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -29,15 +30,15 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
         public MyProfileViewModel()
         {
             OnAppearing();
-            EditGeneralInformationsCommand = new Command(OnEditGeneralInformations);
-            EditAddressCommand = new Command(OnEditAddress);
-            EditContactCommand = new Command(OnEditContact);
-            EditProfilePictureCommand = new Command(OnEditProfilePicture);
-            ChangePasswordCommand = new Command(OnChangePassword);
-            DeactivateAccountCommand = new Command(OnDeactivateAccount);
-            DarkModeCommand = new Command(OnDarkMode);
-            RateAppCommand = new Command(OnRateApp);
-            LogoutCommand = new Command(OnLogout);
+            EditGeneralInformationsCommand = new Command(async () => await OnEditGeneralInformations());
+            EditAddressCommand = new Command(async () => await OnEditAddress());
+            EditContactCommand = new Command(async () => await OnEditContact());
+            EditProfilePictureCommand = new Command(async () => await OnEditProfilePicture());
+            ChangePasswordCommand = new Command(async () => await OnChangePassword());
+            DeactivateAccountCommand = new Command(async () => await OnDeactivateAccount());
+            DarkModeCommand = new Command(async () => await OnDarkMode());
+            RateAppCommand = new Command(async () => await OnRateApp());
+            LogoutCommand = new Command(async () => await OnLogout());
         }
 
         private async void OnAppearing()
@@ -48,18 +49,18 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             IsBusy = false;
         }
 
-        private async void OnEditGeneralInformations()
+        private async Task OnEditGeneralInformations()
         {
             await Shell.Current.GoToAsync($"{nameof(EditGeneralUserInfoPage)}");
         }
 
-        private async void OnEditAddress()
+        private async Task OnEditAddress()
         {
             var address = await DependencyService.Get<IAddressService>().GetAddressOfLoggedInUserAsync();
             await Shell.Current.GoToAsync($"{nameof(EditAddressPage)}?{nameof(EditAddressViewModel.Id)}={address.Id}");
         }
 
-        private async void OnEditContact()
+        private async Task OnEditContact()
         {
             const string contactLabel = "Ogólne dane kontaktowe";
             const string phonesLabel = "Numery telefonów";
@@ -76,17 +77,17 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             }
         }
 
-        private async void OnEditProfilePicture()
+        private async Task OnEditProfilePicture()
         {
             await Shell.Current.GoToAsync($"{nameof(ProfilePicturePage)}");
         }
 
-        private async void OnChangePassword()
+        private async Task OnChangePassword()
         {
             await PopupNavigation.Instance.PushAsync(new ChangePasswordPopupPage());
         }
 
-        private async void OnDeactivateAccount()
+        private async Task OnDeactivateAccount()
         {
             var result = await Shell.Current.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz usunąć swoje konto?", "Tak", "Nie");
             if (result)
@@ -99,17 +100,17 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             }
         }
 
-        private async void OnDarkMode()
+        private async Task OnDarkMode()
         {
             await PopupNavigation.Instance.PushAsync(new AppThemePopupPage());
         }
 
-        private async void OnRateApp()
+        private async Task OnRateApp()
         {
             await Launcher.OpenAsync($"http://play.google.com/store/apps/details?id=com.facebook.orca&gl=PL");
         }
 
-        private async void OnLogout()
+        private async Task OnLogout()
         {
             SecureStorage.Remove("token");
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
