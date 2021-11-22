@@ -24,10 +24,10 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         private bool isInProgress = true;
         private bool isPending = true;
         private bool isRealized = true;
-        private DateTime? receiptStartDate = DateTime.Now.AddMonths(-1);
-        private DateTime? receiptEndDate = DateTime.Now;
-        private DateTime? deadlineStart = DateTime.Now.AddDays(-14);
-        private DateTime? deadlineEnd = DateTime.Now.AddMonths(1);
+        private DateTime receiptStartDate = DateTime.Now.AddMonths(-1);
+        private DateTime receiptEndDate = DateTime.Now;
+        private DateTime deadlineStart = DateTime.Now.AddDays(-14);
+        private DateTime deadlineEnd = DateTime.Now.AddMonths(1);
 
         public ObservableCollection<OrderDto> Orders { get; }
 
@@ -36,15 +36,69 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public bool HasNext { get => hasNext; set => SetValue(ref hasNext, value); }
         public bool IsRefreshing { get => isRefreshing; set => SetValue(ref isRefreshing, value); }
 
-        public bool IsPaid { get => isPaid; set => SetValue(ref isPaid, value); }
-        public bool IsNotPaid { get => isNotPaid; set => SetValue(ref isNotPaid, value); }
-        public bool IsInProgress { get => isInProgress; set => isInProgress = value; }
-        public bool IsPending { get => isPending; set => isPending = value; }
-        public bool IsRealized { get => isRealized; set => isRealized = value; }
-        public DateTime? ReceiptStartDate { get => receiptStartDate; set => SetValue(ref receiptStartDate, value); }
-        public DateTime? ReceiptEndDate { get => receiptEndDate; set => SetValue(ref receiptEndDate, value); }
-        public DateTime? DeadlineStart { get => deadlineStart; set => SetValue(ref deadlineStart, value); }
-        public DateTime? DeadlineEnd { get => deadlineEnd; set => SetValue(ref deadlineEnd, value); }
+        public bool IsPaid
+        {
+            get => isPaid;
+            set
+            {
+                if (!value && !IsNotPaid)
+                    IsNotPaid = true;
+                SetValue(ref isPaid, value);
+            }
+        }
+        public bool IsNotPaid
+        {
+            get => isNotPaid;
+            set
+            {
+                if (!value && !IsPaid)
+                    IsPaid = true;
+                SetValue(ref isNotPaid, value);
+            }
+        }
+        public bool IsInProgress
+        {
+            get => isInProgress;
+            set
+            {
+                if (!value && !IsPending && !IsRealized)
+                {
+                    DependencyService.Get<IToast>()?.MakeShortToast("Musi być wybrany minimum 1 status!");
+                    IsPending = true;
+                }
+                SetValue(ref isInProgress, value);
+            }
+        }
+        public bool IsPending
+        {
+            get => isPending;
+            set
+            {
+                if (!value && !IsInProgress && !IsRealized)
+                {
+                    DependencyService.Get<IToast>()?.MakeShortToast("Musi być wybrany minimum 1 status!");
+                    IsInProgress = true;
+                }
+                SetValue(ref isPending, value);
+            }
+        }
+        public bool IsRealized
+        {
+            get => isRealized;
+            set
+            {
+                if (!value && !IsInProgress && !IsPending)
+                {
+                    DependencyService.Get<IToast>()?.MakeShortToast("Musi być wybrany minimum 1 status!");
+                    IsInProgress = true;
+                }
+                SetValue(ref isRealized, value);
+            }
+        }
+        public DateTime ReceiptStartDate { get => receiptStartDate; set => SetValue(ref receiptStartDate, value); }
+        public DateTime ReceiptEndDate { get => receiptEndDate; set => SetValue(ref receiptEndDate, value); }
+        public DateTime DeadlineStart { get => deadlineStart; set => SetValue(ref deadlineStart, value); }
+        public DateTime DeadlineEnd { get => deadlineEnd; set => SetValue(ref deadlineEnd, value); }
 
 
         public Command LoadOrdersCommand { get; }
@@ -71,6 +125,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             PageAppearingCommand = new Command(async () => await OnAppearing());
             ChangeOrderStatusCommand = new Command<OrderDto>(async (order) => await OnChangeOrderStatus(order));
             ChangePaymentStatusCommand = new Command<OrderDto>(async (order) => await OnChangePaymentStatus(order));
+            FilterOrdersCommand = new Command(async () => await OnFilterOrders());
         }
 
         private async Task LoadOrders()
@@ -82,7 +137,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             IsRefreshing = true;
 
             Orders.Clear();
-            var ordersCollection = await orderService.GetAdditionalOrdersAsync(new AdditionalOrderParameters { PageSize = 20 });
+            var ordersCollection = await orderService.GetAdditionalOrdersAsync(new
+                AdditionalOrderParameters(IsPaid, IsNotPaid, IsInProgress, IsPending, isRealized, ReceiptStartDate, ReceiptEndDate, DeadlineStart, DeadlineEnd, 20, 1));
             CurrentPage = ordersCollection.Pagination.CurrentPage;
             HasNext = ordersCollection.Pagination.HasNext;
             foreach (var order in ordersCollection.Orders)
@@ -98,12 +154,19 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
                 return;
 
             IsBusy = true;
-            var ordersCollection = await orderService.GetAdditionalOrdersAsync(new AdditionalOrderParameters { PageNumber = ++CurrentPage, PageSize = 10 });
+            var ordersCollection = await orderService.GetAdditionalOrdersAsync(new
+                AdditionalOrderParameters(IsPaid, IsNotPaid, IsInProgress, IsPending, isRealized, ReceiptStartDate, ReceiptEndDate, DeadlineStart, DeadlineEnd, 20, ++CurrentPage));
             HasNext = ordersCollection.Pagination.HasNext;
             foreach (var order in ordersCollection.Orders)
                 Orders.Add(order);
 
             IsBusy = false;
+        }
+
+        private async Task OnFilterOrders()
+        {
+            await LoadOrders();
+            await PopupNavigation.Instance.PopAsync();
         }
 
         private async Task OnAppearing()
@@ -126,7 +189,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         private async Task OnFilteringOrdersClick()
         {
-            await PopupNavigation.Instance.PushAsync(new OrderFilteringTutorPopupPage());
+            await PopupNavigation.Instance.PushAsync(new OrderFilteringTutorPopupPage(this));
         }
 
         private async Task OnChangeOrderStatus(OrderDto order)
@@ -137,9 +200,14 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu zlecenia", "Anuluj", null, "Oczekujące", "W realizacji", "Zrealizowane");
             var status = GetOrderStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
+            {
+                await LoadOrders();
                 DependencyService.Get<IToast>()?.MakeLongToast("Zmieniono status zlecenia");
+            }
             else
+            {
                 DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+            }
         }
 
         private async Task OnChangePaymentStatus(OrderDto order)
@@ -150,9 +218,14 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu płatności", "Anuluj", null, "Opłacone", "Nie opłacone");
             var status = GetPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))
+            {
+                await LoadOrders();
                 DependencyService.Get<IToast>()?.MakeLongToast("Zmieniono status płatności");
+            }
             else
+            {
                 DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+            }
         }
 
         private AdditionalOrderStatus GetOrderStatus(string statusStringPl)
