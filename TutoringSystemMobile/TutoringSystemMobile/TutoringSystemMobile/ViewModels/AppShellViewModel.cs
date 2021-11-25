@@ -6,7 +6,6 @@ using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.ProfileViewModels;
-using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -64,8 +63,7 @@ namespace TutoringSystemMobile.ViewModels
 
         private async Task LoadUserAsync()
         {
-            var loggedUser = await DependencyService.Get<IUserService>()?.GetGeneralUserInfoAsync();
-            User = $"{loggedUser.FirstName} {loggedUser.LastName}";
+            User = await SecureStorage.GetAsync("userName");
         }
 
         private async Task LoadPictureAsync()

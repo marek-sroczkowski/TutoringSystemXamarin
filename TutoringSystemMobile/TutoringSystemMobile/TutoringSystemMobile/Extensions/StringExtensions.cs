@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using TutoringSystemMobile.Models.Enums;
+using Xamarin.Essentials;
 
 namespace TutoringSystemMobile.Extensions
 {
@@ -31,6 +35,13 @@ namespace TutoringSystemMobile.Extensions
             return string.IsNullOrEmpty(property) ||
                 string.IsNullOrWhiteSpace(property) ||
                 property.Trim(' ').Equals("-");
+        }
+
+        public static AccountStatus GetAccountStatus(this string status)
+        {
+            return string.IsNullOrEmpty(status)
+                ? AccountStatus.LoggedOut
+                : (AccountStatus)Enum.Parse(typeof(AccountStatus), status);
         }
     }
 }

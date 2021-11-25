@@ -1,5 +1,6 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -44,8 +45,9 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
         private async void OnAppearing()
         {
             IsBusy = true;
-            var role = await DependencyService.Get<IUserService>().GetUserRole();
-            IsDeactiveAccoutTabVisible = role == Role.Tutor;
+            var roleString = await SecureStorage.GetAsync($"{nameof(AccountStatus)}");
+            var role = roleString.GetAccountStatus();
+            IsDeactiveAccoutTabVisible = role == AccountStatus.LoggedAsTutor;
             IsBusy = false;
         }
 
@@ -94,7 +96,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             {
                 var removed = await DependencyService.Get<IUserService>().DeactivateUserAsync();
                 if (removed)
-                    OnLogout();
+                    await OnLogout();
                 else
                     DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
             }

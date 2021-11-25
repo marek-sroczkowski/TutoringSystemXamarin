@@ -46,10 +46,10 @@ namespace TutoringSystemMobile.Commands.AccountCommands
             var loginResult = await userService.TryLoginAsync(new LoginUserDto(viewModel.Username, viewModel.Password));
             viewModel.IsBusy = false;
 
-            switch (loginResult)
+            switch (loginResult.LoginStatus)
             {
                 case LoginStatus.LoggedInCorrectly:
-                    await LoggedInCorrectly();
+                    await LoggedInCorrectly(loginResult.User);
                     break;
                 case LoginStatus.InactiveAccount:
                     await InactiveAccount();
@@ -60,13 +60,11 @@ namespace TutoringSystemMobile.Commands.AccountCommands
             }
         }
 
-        private async Task LoggedInCorrectly()
+        private async Task LoggedInCorrectly(UserDto user)
         {
-            viewModel.IsBusy = true;
-            var role = await userService.GetUserRole();
-            viewModel.IsBusy = false;
+            await SecureStorage.SetAsync("userName", $"{user.FirstName} {user.LastName}");
 
-            switch (role)
+            switch (user.Role)
             {
                 case Role.Tutor:
                     await LoggedAsTutor();

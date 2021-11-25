@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
@@ -47,9 +47,10 @@ namespace TutoringSystemMobile
 
         private async Task NavigateByLoginStatus()
         {
-            var accountStatus = await GetAccountStatus();
+            var statusString = await SecureStorage.GetAsync(nameof(AccountStatus));
+            var status = statusString.GetAccountStatus();
 
-            switch (accountStatus)
+            switch (status)
             {
                 case AccountStatus.LoggedAsTutor:
                     flyoutItemService.EnableTutorFlyoutItems();
@@ -65,14 +66,6 @@ namespace TutoringSystemMobile
                     await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
                     break;
             }
-}
-
-        private async Task<AccountStatus> GetAccountStatus()
-        {
-            var accountStatus = await SecureStorage.GetAsync(nameof(AccountStatus));
-            return string.IsNullOrEmpty(accountStatus)
-                ? AccountStatus.LoggedOut
-                : (AccountStatus)Enum.Parse(typeof(AccountStatus), accountStatus);
         }
     }
 }
