@@ -24,11 +24,12 @@
     <StackLayout 
         VerticalOptions="EndAndExpand" 
         HorizontalOptions="FillAndExpand">
-        <Frame CornerRadius="20" 
-               HorizontalOptions="FillAndExpand" 
-               HeightRequest="200" 
-               BackgroundColor="{AppThemeBinding Light=White, Dark=#191919}" >
+        <Frame x:Name="BottomPopup"
+               Style="{StaticResource BottomPopupStyle}" >
             <StackLayout>
+                
+                <BoxView Style="{StaticResource BoxViewBottomPopupStyle}" />
+                
                 <Grid ColumnSpacing="10" 
                       HeightRequest="35" 
                       ColumnDefinitions="*,Auto">
@@ -84,6 +85,10 @@
                        Text="Wybierz Automatycznie, jeśli chcesz, żeby aplikacja korzystała z systemowych ustawień trybu ciemnego"
                        Style="{StaticResource LabelStyle}"/>
             </StackLayout>
+
+            <Frame.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
+            </Frame.GestureRecognizers>
         </Frame>
     </StackLayout>
 </pages:PopupPage>
