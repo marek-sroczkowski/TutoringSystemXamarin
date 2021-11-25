@@ -27,7 +27,7 @@ namespace TutoringSystemMobile.Models.Parameters
             DeadlineEnd = DateTime.Now.AddMonths(1);
         }
 
-        public AdditionalOrderParameters(bool isPaid, bool isNotPaid, bool isInProgress, bool isPending, bool isRealized, DateTime receiptStartDate, DateTime receiptEndDate, DateTime deadlineStart, DateTime deadlineEnd, int pageSize, int currentPage) : base(currentPage, pageSize)
+        public AdditionalOrderParameters(bool isPaid, bool isNotPaid, bool isInProgress, bool isPending, bool isRealized, DateTime receiptStartDate, DateTime receiptEndDate, DateTime deadlineStart, DateTime deadlineEnd, int pageSize, int currentPage, string sortBy) : base(currentPage, pageSize, sortBy)
         {
             IsPaid = isPaid;
             IsNotPaid = isNotPaid;

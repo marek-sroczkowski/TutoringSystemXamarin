@@ -7,9 +7,9 @@ using Xamarin.Forms.Xaml;
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class OrderFilteringTutorPopupPage
+    public partial class OrderSortingTutorPopupPage
     {
-        public OrderFilteringTutorPopupPage(OrdersViewModel viewModel)
+        public OrderSortingTutorPopupPage(OrdersViewModel viewModel)
         {
             InitializeComponent();
             BindingContext = viewModel;

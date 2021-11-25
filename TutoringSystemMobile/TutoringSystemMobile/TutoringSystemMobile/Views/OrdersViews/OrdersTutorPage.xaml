@@ -14,6 +14,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_sorting.png" Command="{Binding OpenSortingPopupCommand}" />
         <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding OpenFilteringPopupCommand}" />
         <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewOrderFormCommand}" />
     </ContentPage.ToolbarItems>

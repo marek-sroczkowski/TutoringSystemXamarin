@@ -12,14 +12,17 @@
             set => pageSize = (value > maxPageSize) ? maxPageSize : value;
         }
 
+        public string OrderBy { get; set; }
+
         public QueryStringParameters()
         {
         }
 
-        protected QueryStringParameters(int pageNumber, int pageSize)
+        protected QueryStringParameters(int pageNumber, int pageSize, string orderBy)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
+            OrderBy = orderBy;
         }
     }
 }

@@ -189,6 +189,21 @@
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
             </Style>
+
+            <Style x:Key="BottomPopupStyle" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=White, Dark=#262626}" />
+                <Setter Property="Margin" Value="0,0,0,-10" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="CornerRadius" Value="20" />
+            </Style>
+
+            <Style x:Key="BoxViewBottomPopupStyle" TargetType="BoxView">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=WhiteSmoke, Light=#535353}" />
+                <Setter Property="HeightRequest" Value="3" />
+                <Setter Property="WidthRequest" Value="90" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+            </Style>
         </ResourceDictionary>        
     </Application.Resources>
 </Application>

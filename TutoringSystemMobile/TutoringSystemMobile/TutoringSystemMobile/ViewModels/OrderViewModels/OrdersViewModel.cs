@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.Helpers;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -28,6 +29,15 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         private DateTime receiptEndDate = DateTime.Now;
         private DateTime deadlineStart = DateTime.Now.AddDays(-14);
         private DateTime deadlineEnd = DateTime.Now.AddMonths(1);
+        private string sortBy;
+        private bool isSortingByNameAsc;
+        private bool isSortingByNameDesc;
+        private bool isSortingByPriceAsc;
+        private bool isSortingByPriceDesc;
+        private bool isSortingByDeadlineAsc;
+        private bool isSortingByDeadlineDesc;
+        private bool isSortingByCreatedDateAsc;
+        private bool isSortingByCreatedDateDesc = true;
 
         public ObservableCollection<OrderDto> Orders { get; }
 
@@ -100,16 +110,102 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public DateTime DeadlineStart { get => deadlineStart; set => SetValue(ref deadlineStart, value); }
         public DateTime DeadlineEnd { get => deadlineEnd; set => SetValue(ref deadlineEnd, value); }
 
+        public string SortBy { get => sortBy; set => SetValue(ref sortBy, value); }
+
+        public bool IsSortingByNameAsc
+        {
+            get => isSortingByNameAsc;
+            set
+            {
+                OnSortByNameAsc();
+                SetValue(ref isSortingByNameAsc, value);
+            }
+        }
+        public bool IsSortingByNameDesc
+        {
+            get => isSortingByNameDesc;
+            set
+            {
+                OnSortByNameDesc();
+                SetValue(ref isSortingByNameDesc, value);
+            }
+        }
+        public bool IsSortingByPriceAsc
+        {
+            get => isSortingByPriceAsc;
+            set
+            {
+                OnSortByPriceAsc();
+                SetValue(ref isSortingByPriceAsc, value);
+            }
+        }
+        public bool IsSortingByPriceDesc
+        {
+            get => isSortingByPriceDesc;
+            set
+            {
+                OnSortByPriceDesc();
+                SetValue(ref isSortingByPriceDesc, value);
+            }
+        }
+        public bool IsSortingByDeadlineAsc
+        {
+            get => isSortingByDeadlineAsc;
+            set
+            {
+                OnSortByDeadlineAsc();
+                SetValue(ref isSortingByDeadlineAsc, value);
+            }
+        }
+        public bool IsSortingByDeadlineDesc
+        {
+            get => isSortingByDeadlineDesc;
+            set
+            {
+                OnSortByDeadlineDesc();
+                SetValue(ref isSortingByDeadlineDesc, value);
+            }
+        }
+        public bool IsSortingByCreatedDateAsc
+        {
+            get => isSortingByCreatedDateAsc;
+            set
+            {
+                OnSortByCreatedDateAsc();
+                SetValue(ref isSortingByCreatedDateAsc, value);
+            }
+        }
+        public bool IsSortingByCreatedDateDesc
+        {
+            get => isSortingByCreatedDateDesc;
+            set
+            {
+                OnSortByCreatedDateDesc();
+                SetValue(ref isSortingByCreatedDateDesc, value);
+            }
+        }
+
 
         public Command LoadOrdersCommand { get; }
         public Command ItemTresholdReachedCommand { get; }
         public Command NewOrderFormCommand { get; }
         public Command OpenFilteringPopupCommand { get; }
+        public Command OpenSortingPopupCommand { get; }
         public Command<OrderDto> OrderTappedCommand { get; }
         public Command PageAppearingCommand { get; }
         public Command<OrderDto> ChangeOrderStatusCommand { get; }
         public Command<OrderDto> ChangePaymentStatusCommand { get; }
         public Command FilterOrdersCommand { get; }
+        public Command SortingOrdersCommand { get; }
+
+        public Command SortByNameAscCommand { get; }
+        public Command SortByNameDescCommand { get; }
+        public Command SortByPriceAscCommand { get; }
+        public Command SortByPriceDescCommand { get; }
+        public Command SortByDeadlineAscCommand { get; }
+        public Command SortByDeadlineDescCommand { get; }
+        public Command SortByCreatedDateAscCommand { get; }
+        public Command SortByCreatedDateDescCommand { get; }
 
         private readonly IAdditionalOrderService orderService;
 
@@ -117,15 +213,29 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         {
             orderService = DependencyService.Get<IAdditionalOrderService>();
             Orders = new ObservableCollection<OrderDto>();
+
             LoadOrdersCommand = new Command(async () => await LoadOrders());
             ItemTresholdReachedCommand = new Command(async () => await OrdersTresholdReached());
             NewOrderFormCommand = new Command(async () => await OnNewOrderClick());
-            OpenFilteringPopupCommand = new Command(async () => await OnFilteringOrdersClick());
+            OpenFilteringPopupCommand = new Command(async () => await OnOpenFilteringPopup());
+            OpenSortingPopupCommand = new Command(async () => await OnOpenSortingPopup());
             OrderTappedCommand = new Command<OrderDto>(async (order) => await OnOrderSelected(order));
             PageAppearingCommand = new Command(async () => await OnAppearing());
             ChangeOrderStatusCommand = new Command<OrderDto>(async (order) => await OnChangeOrderStatus(order));
             ChangePaymentStatusCommand = new Command<OrderDto>(async (order) => await OnChangePaymentStatus(order));
             FilterOrdersCommand = new Command(async () => await OnFilterOrders());
+            SortingOrdersCommand = new Command(async () => await OnSortingOrders());
+
+            SortByNameAscCommand = new Command(OnSortByNameAsc);
+            SortByNameDescCommand = new Command(OnSortByNameDesc);
+            SortByPriceAscCommand = new Command(OnSortByPriceAsc);
+            SortByPriceDescCommand = new Command(OnSortByPriceDesc);
+            SortByDeadlineAscCommand = new Command(OnSortByDeadlineAsc);
+            SortByDeadlineDescCommand = new Command(OnSortByDeadlineDesc);
+            SortByCreatedDateAscCommand = new Command(OnSortByCreatedDateAsc);
+            SortByCreatedDateDescCommand = new Command(OnSortByCreatedDateDesc);
+
+            SortBy = $"{nameof(OrderDetailsDto.ReceiptDate)} desc";
         }
 
         private async Task LoadOrders()
@@ -138,7 +248,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
             Orders.Clear();
             var ordersCollection = await orderService.GetAdditionalOrdersAsync(new
-                AdditionalOrderParameters(IsPaid, IsNotPaid, IsInProgress, IsPending, isRealized, ReceiptStartDate, ReceiptEndDate, DeadlineStart, DeadlineEnd, 20, 1));
+                AdditionalOrderParameters(IsPaid, IsNotPaid, IsInProgress, IsPending, isRealized, ReceiptStartDate, ReceiptEndDate, DeadlineStart, DeadlineEnd, 20, 1, SortBy));
             CurrentPage = ordersCollection.Pagination.CurrentPage;
             HasNext = ordersCollection.Pagination.HasNext;
             foreach (var order in ordersCollection.Orders)
@@ -155,7 +265,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
             IsBusy = true;
             var ordersCollection = await orderService.GetAdditionalOrdersAsync(new
-                AdditionalOrderParameters(IsPaid, IsNotPaid, IsInProgress, IsPending, isRealized, ReceiptStartDate, ReceiptEndDate, DeadlineStart, DeadlineEnd, 20, ++CurrentPage));
+                AdditionalOrderParameters(IsPaid, IsNotPaid, IsInProgress, IsPending, isRealized, ReceiptStartDate, ReceiptEndDate, DeadlineStart, DeadlineEnd, 20, ++CurrentPage, SortBy));
             HasNext = ordersCollection.Pagination.HasNext;
             foreach (var order in ordersCollection.Orders)
                 Orders.Add(order);
@@ -165,6 +275,13 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         private async Task OnFilterOrders()
         {
+            await LoadOrders();
+            await PopupNavigation.Instance.PopAsync();
+        }
+
+        private async Task OnSortingOrders()
+        {
+            SetSortingParams();
             await LoadOrders();
             await PopupNavigation.Instance.PopAsync();
         }
@@ -187,9 +304,14 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             await Shell.Current.GoToAsync($"{nameof(NewOrderTutotPage)}");
         }
 
-        private async Task OnFilteringOrdersClick()
+        private async Task OnOpenFilteringPopup()
         {
             await PopupNavigation.Instance.PushAsync(new OrderFilteringTutorPopupPage(this));
+        }
+
+        private async Task OnOpenSortingPopup()
+        {
+            await PopupNavigation.Instance.PushAsync(new OrderSortingTutorPopupPage(this));
         }
 
         private async Task OnChangeOrderStatus(OrderDto order)
@@ -254,6 +376,88 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
                 default:
                     return false;
             }
+        }
+
+        private void SetSortingParams()
+        {
+            if (IsSortingByNameAsc)
+                SortBy = $"{nameof(OrderDetailsDto.Name)}";
+            else if (IsSortingByNameDesc)
+                SortBy = $"{nameof(OrderDetailsDto.Name)} desc";
+            else if (IsSortingByPriceAsc)
+                SortBy = $"{nameof(OrderDetailsDto.Cost)}";
+            else if (IsSortingByPriceDesc)
+                SortBy = $"{nameof(OrderDetailsDto.Cost)} desc";
+            else if (IsSortingByDeadlineAsc)
+                SortBy = $"{nameof(OrderDetailsDto.Deadline)}";
+            else if (IsSortingByDeadlineDesc)
+                SortBy = $"{nameof(OrderDetailsDto.Deadline)} desc";
+            else if (IsSortingByCreatedDateAsc)
+                SortBy = $"{nameof(OrderDetailsDto.ReceiptDate)}";
+            else if (IsSortingByCreatedDateDesc)
+                SortBy = $"{nameof(OrderDetailsDto.ReceiptDate)} desc";
+        }
+
+        private async void OnSortByCreatedDateDesc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(false, false, false, false, false, false, false, true));
+        }
+
+        private async void OnSortByCreatedDateAsc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(false, false, false, false, false, false, true, false));
+        }
+
+        private async void OnSortByDeadlineDesc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(false, false, false, false, false, true, false, false));
+        }
+
+        private async void OnSortByDeadlineAsc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(false, false, false, false, true, false, false, false));
+        }
+
+        private async void OnSortByPriceDesc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(false, false, false, true, false, false, false, false));
+        }
+
+        private async void OnSortByPriceAsc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(false, false, true, false, false, false, false, false));
+        }
+
+        private async void OnSortByNameDesc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(false, true, false, false, false, false, false, false));
+        }
+
+        private async void OnSortByNameAsc()
+        {
+            await SortOrdersAsync(new OrderSortingRadioButtonsActivity(true, false, false, false, false, false, false, false));
+        }
+
+        private async Task SortOrdersAsync(OrderSortingRadioButtonsActivity buttonsActivity)
+        {
+            if (IsBusy || PopupNavigation.Instance.PopupStack.Count == 0)
+                return;
+
+            IsBusy = true;
+            IsSortingByNameAsc = buttonsActivity.IsSortingByNameAsc;
+            IsSortingByNameDesc = buttonsActivity.IsSortingByNameDesc;
+            IsSortingByPriceAsc = buttonsActivity.IsSortingByPriceAsc;
+            IsSortingByPriceDesc = buttonsActivity.IsSortingByPriceDesc;
+            IsSortingByDeadlineAsc = buttonsActivity.IsSortingByDeadlineAsc;
+            IsSortingByDeadlineDesc = buttonsActivity.IsSortingByDeadlineDesc;
+            IsSortingByCreatedDateAsc = buttonsActivity.IsSortingByCreatedDateAsc;
+            IsSortingByCreatedDateDesc = buttonsActivity.IsSortingByCreatedDateDesc;
+            IsBusy = false;
+
+            SetSortingParams();
+            await LoadOrders();
+
+            await PopupNavigation.Instance.PopAsync();
         }
     }
 }
