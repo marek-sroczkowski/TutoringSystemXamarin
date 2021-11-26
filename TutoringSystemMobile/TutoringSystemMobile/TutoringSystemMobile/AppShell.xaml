@@ -117,7 +117,7 @@
         <FlyoutItem.Icon>
             <FileImageSource File="{AppThemeBinding Dark=icon_report_white.png, Light=icon_report.png}" />
         </FlyoutItem.Icon>
-        <ShellContent Route="ReportTutorPage" ContentTemplate="{DataTemplate local:ReportTutorPage}" />
+        <ShellContent Route="MainReportTutorPage" ContentTemplate="{DataTemplate local:MainReportTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Studenci" 
