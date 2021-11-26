@@ -2,9 +2,9 @@
 
 namespace TutoringSystemMobile.Models.ReportDtos
 {
-    public class TutorReportDto
+    public class GeneralReportDto
     {
-        public IEnumerable<StudentSummaryDto> StudentSummary { get; set; }
+        public IEnumerable<StudentReportDto> StudentSummary { get; set; }
         public double TutoringProfit{ get; set; }
         public double OrderProfit { get; set; }
         public double TotalProfit { get; set; }

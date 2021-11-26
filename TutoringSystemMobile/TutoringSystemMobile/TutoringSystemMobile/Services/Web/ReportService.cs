@@ -1,38 +1,89 @@
-﻿using System;
+﻿using Flurl;
+using Flurl.Http;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReportDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Web;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(ReportService))]
 namespace TutoringSystemMobile.Services.Web
 {
     public class ReportService : IReportService
     {
-        public Task<PlaceReportDto> GetPlaceReportAsync(ReportPlaceParameters parameters)
+        private readonly string baseUrl;
+
+        public ReportService()
         {
-            throw new NotImplementedException();
+            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "report";
         }
 
-        public Task<TutorReportDto> GetReportByTutorAsync(ReportParameters parameters)
+        public async Task<GeneralReportDto> GetGeneralReportAsync(ReportParameters parameters)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegment("summary")
+                .SetQueryParams(parameters)
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<GeneralReportDto>() : new GeneralReportDto();
         }
 
-        public Task<StudentSummaryDto> GetStudentSummaryAsync(long studentId, ReportParameters parameters)
+        public async Task<IEnumerable<StudentReportDto>> GetStudentsReportAsync(ReportParameters parameters)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegments("summary", "students")
+                .SetQueryParams(parameters)
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<StudentReportDto>>() : new List<StudentReportDto>();
         }
 
-        public Task<SubjectCategoryReportDto> GetSubjectCategoryReportAsync(ReportSubjectCategoryParameters parameters)
+        public async Task<IEnumerable<SubjectCategoryReportDto>> GetSubjectCategoryReportAsync(ReportParameters parameters)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegments("summary", "subjects", "categories")
+                .SetQueryParams(parameters)
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<SubjectCategoryReportDto>>() : new List<SubjectCategoryReportDto>();
         }
 
-        public Task<SubjectReportDto> GetSubjectReportAsync(long subjectId, ReportParameters parameters)
+        public async Task<IEnumerable<SubjectReportDto>> GetSubjectReportAsync(ReportParameters parameters)
         {
-            throw new NotImplementedException();
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegments("summary", "subjects")
+                .SetQueryParams(parameters)
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<SubjectReportDto>>() : new List<SubjectReportDto>();
+        }
+
+        public async Task<IEnumerable<PlaceReportDto>> GetPlaceReportAsync(ReportParameters parameters)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegments("summary", "places")
+                .SetQueryParams(parameters)
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<PlaceReportDto>>() : new List<PlaceReportDto>();
         }
     }
 }
