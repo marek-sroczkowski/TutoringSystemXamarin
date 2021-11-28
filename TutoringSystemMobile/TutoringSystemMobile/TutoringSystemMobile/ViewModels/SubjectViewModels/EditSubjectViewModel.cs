@@ -68,6 +68,9 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                     case "Muzyka":
                         Category = SubjectCategory.Music;
                         break;
+                    case "Geografia":
+                        Category = SubjectCategory.Geography;
+                        break;
                 }
             }
         }
@@ -115,7 +118,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         {
             subjectService = DependencyService.Get<ISubjectService>();
             EditSubjectCommand = new EditSubjectCommand(this, subjectService);
-            Categories = new List<string> { "Inna", "Matematyka", "Informatyka", "Język obcy", "Język polski", "Fizyka", "Biologia", "Chemia", "Muzyka" };
+            Categories = new List<string> { "Inna", "Matematyka", "Informatyka", "Język obcy", "Język polski", "Fizyka", "Biologia", "Chemia", "Muzyka", "Geografia" };
             Places = new List<string> { "Dowolne", "U nauczyciela", "U ucznia", "Online", "U nauczyciela / ucznia", "U nauczyciela / online", "U ucznia / online" };
         }
 
@@ -161,6 +164,9 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                     break;
                 case SubjectCategory.Music:
                     SelectedCategory = "Muzyka";
+                    break;
+                case SubjectCategory.Geography:
+                    SelectedCategory = "Geografia";
                     break;
             }
         }

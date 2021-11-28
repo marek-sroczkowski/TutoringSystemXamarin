@@ -59,6 +59,9 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                     case "Muzyka":
                         Category = SubjectCategory.Music;
                         break;
+                    case "Geografia":
+                        Category = SubjectCategory.Geography;
+                        break;
                 }
             }
         }
@@ -107,7 +110,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public NewSubjectViewModel()
         {
             AddNewSubjectCommand = new AddNewSubjectCommand(this, DependencyService.Get<ISubjectService>());
-            Categories = new List<string> { "Inna", "Matematyka", "Informatyka", "Język obcy", "Język polski", "Fizyka", "Biologia", "Chemia", "Muzyka" };
+            Categories = new List<string> { "Inna", "Matematyka", "Informatyka", "Język obcy", "Język polski", "Fizyka", "Biologia", "Chemia", "Muzyka", "Geografia" };
             Places = new List<string> { "Dowolne", "U nauczyciela", "U ucznia", "Online", "U nauczyciela / ucznia", "U nauczyciela / online", "U ucznia / online" };
             IsCategoryLabelVisible = false;
             IsPlaceLabelVisible = false;
