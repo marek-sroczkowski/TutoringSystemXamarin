@@ -104,7 +104,7 @@
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
-                                NumberOfTapsRequired="1"
+                                NumberOfTapsRequired="1"                           
                                 Command="{Binding StudentsReportCommand}">
                         </TapGestureRecognizer>
                     </Grid.GestureRecognizers>

@@ -1,11 +1,7 @@
-﻿using TutoringSystemMobile.Models.SubjectDtos;
-
-namespace TutoringSystemMobile.Models.ReportDtos
+﻿namespace TutoringSystemMobile.Models.ReportDtos
 {
-    public class SubjectReportDto
+    public class SubjectReportDto : BaseReportDto
     {
-        public SubjectDto Subject { get; set; }
-        public double TotalHours { get; set; }
-        public double TotalProfit { get; set; }
+        public string SubjectName { get; set; }
     }
 }

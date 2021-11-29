@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Rg.Plugins.Popup.Services;
+using System;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Models.Parameters;
+using TutoringSystemMobile.Models.ReportDtos;
+using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.ReportViewModels
@@ -31,7 +34,14 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
 
         public MainReportViewModel()
         {
-            SetReportDateIntervals();
+            MessagingCenter.Subscribe<ReportFilteringViewModel>(this, "filterByDates", async (sender) =>
+            {
+                StartDate = sender.StartDate;
+                EndDate = sender.EndDate;
+                await OnAppearing();
+            });
+
+            OpenFilteringPopupCommand = new Command(async () => await OnOpenFiltering());
             PageAppearingCommand = new Command(async () => await OnAppearing());
             StudentsReportCommand = new Command(async () => await OnStudentsReport());
             SubjectsReportCommand = new Command(async () => await OnSubjectsReport());
@@ -39,38 +49,42 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             PlacesReportCommand = new Command(async () => await OnPlacesReport());
         }
 
+        private async Task OnOpenFiltering()
+        {
+            await PopupNavigation.Instance.PushAsync(new ReportFilteringPopupPage(new ReportFilteringDto(StartDate, EndDate, isIncludeZeroProfitVisible: false)));
+        }
+
         private async Task OnPlacesReport()
         {
-            await Shell.Current.GoToAsync($"{nameof(PlacesReportTutorPage)}");
+            await Shell.Current.GoToAsync($"{nameof(PlacesReportTutorPage)}?{nameof(StudentsReportViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(StudentsReportViewModel.EndDate)}={EndDate.ToShortDateString()}");
         }
 
         private async Task OnSubjectCategoriesReport()
         {
-            await Shell.Current.GoToAsync($"{nameof(SubjectCategoriesReportTutorPage)}");
+            await Shell.Current.GoToAsync($"{nameof(SubjectCategoriesReportTutorPage)}?{nameof(StudentsReportViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(StudentsReportViewModel.EndDate)}={EndDate.ToShortDateString()}");
         }
 
         private async Task OnSubjectsReport()
         {
-            await Shell.Current.GoToAsync($"{nameof(SubjectCategoriesReportTutorPage)}");
+            await Shell.Current.GoToAsync($"{nameof(SubjectsReportTutorPage)}?{nameof(StudentsReportViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(StudentsReportViewModel.EndDate)}={EndDate.ToShortDateString()}");
         }
 
         private async Task OnStudentsReport()
         {
-            await Shell.Current.GoToAsync($"{nameof(StudentsReportTutorPage)}");
-        }
-
-        private async void SetReportDateIntervals()
-        {
-            await SecureStorage.SetAsync("reportStartDate", new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToShortDateString());
-            await SecureStorage.SetAsync("reportEndDate", DateTime.Now.ToShortDateString());
+            await Shell.Current.GoToAsync($"{nameof(StudentsReportTutorPage)}?{nameof(StudentsReportViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(StudentsReportViewModel.EndDate)}={EndDate.ToShortDateString()}");
         }
 
         private async Task OnAppearing()
         {
-            TutoringProfit = $"1200 zł";
-            OrderProfit = $"400 zł";
-            TotalProfit = $"1600 zł";
-            TotalHours = $"22h";
+            IsBusy = true;
+
+            var generalSummary = await DependencyService.Get<IReportService>().GetGeneralReportAsync(new ReportParameters(StartDate, EndDate, $"{nameof(BaseReportDto.TotalProfit)} desc"));
+            TutoringProfit = $"{generalSummary.TutoringProfit} zł";
+            OrderProfit = $"{generalSummary.OrderProfit} zł";
+            TotalProfit = $"{generalSummary.TotalProfit} zł";
+            TotalHours = $"{generalSummary.TotalHours}h";
+
+            IsBusy = false;
         }
     }
 }
