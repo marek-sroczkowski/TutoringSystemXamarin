@@ -9,10 +9,11 @@
              Style="{StaticResource PageStyle}">
 
     <ContentPage.BindingContext>
-        <viewModel:SubjectCategoriesViewModel />
+        <viewModel:SubjectCategoriesReportViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_chart.png" Command="{Binding OpenStudentsChartCommand}" />
         <ToolbarItem IconImageSource="icon_sorting.png" Command="{Binding OpenSortingPopupCommand}" />
         <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding OpenFilteringPopupCommand}" />
     </ContentPage.ToolbarItems>
@@ -23,7 +24,7 @@
                 Command="{Binding PageAppearingCommand}" />
     </ContentPage.Behaviors>
 
-    <RefreshView x:DataType="viewModel:SubjectCategoriesViewModel" Command="{Binding LoadReportCommand}" IsRefreshing="{Binding IsRefreshing}" RefreshColor="Blue">
+    <RefreshView x:DataType="viewModel:SubjectCategoriesReportViewModel" Command="{Binding LoadReportCommand}" IsRefreshing="{Binding IsRefreshing}" RefreshColor="Blue">
         <CollectionView ItemsSource="{Binding SubjectCategoriesReports}"
                 SelectionMode="None">
             <CollectionView.ItemTemplate>

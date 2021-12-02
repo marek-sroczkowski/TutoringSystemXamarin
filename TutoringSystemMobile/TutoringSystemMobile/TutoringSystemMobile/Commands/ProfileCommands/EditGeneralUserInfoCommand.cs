@@ -6,6 +6,7 @@ using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.ProfileViewModels;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Commands.ProfileCommands
@@ -43,6 +44,7 @@ namespace TutoringSystemMobile.Commands.ProfileCommands
             if (updated)
             {
                 DependencyService.Get<IToast>()?.MakeLongToast("Zaktulizowane dane");
+                await SecureStorage.SetAsync("userName", $"{viewModel.FirstName} {viewModel.LastName}");
                 MessagingCenter.Send(this, "nameChanged");
                 await Shell.Current.GoToAsync("..");
             }

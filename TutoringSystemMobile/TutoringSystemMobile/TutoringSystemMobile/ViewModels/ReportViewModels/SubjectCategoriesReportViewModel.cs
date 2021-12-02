@@ -13,7 +13,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
 {
     [QueryProperty(nameof(StartDate), nameof(StartDate))]
     [QueryProperty(nameof(EndDate), nameof(EndDate))]
-    public class SubjectCategoriesViewModel : BaseViewModel
+    public class SubjectCategoriesReportViewModel : BaseViewModel
     {
         private DateTime startDate;
         private DateTime endDate;
@@ -32,12 +32,13 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         public Command LoadReportCommand { get; }
         public Command OpenFilteringPopupCommand { get; }
         public Command OpenSortingPopupCommand { get; }
+        public Command OpenStudentsChartCommand { get; }
         public Command PageAppearingCommand { get; }
 
         private readonly IReportService reportService;
 
 
-        public SubjectCategoriesViewModel()
+        public SubjectCategoriesReportViewModel()
         {
             MessagingCenter.Subscribe<ReportFilteringViewModel>(this, "filterByDates", async (sender) =>
             {
@@ -58,6 +59,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             LoadReportCommand = new Command(async () => await OnLoadReport());
             OpenFilteringPopupCommand = new Command(async () => await OnOpenFilteringPopup());
             OpenSortingPopupCommand = new Command(async () => await OnOpenSortingPopup());
+            OpenStudentsChartCommand = new Command(async () => await OnOpenStudentsChart());
             PageAppearingCommand = new Command(OnAppearing);
         }
 
@@ -74,6 +76,11 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         private async Task OnOpenSortingPopup()
         {
             await PopupNavigation.Instance.PushAsync(new ReportSortingPopupPage(SortBy));
+        }
+
+        private async Task OnOpenStudentsChart()
+        {
+            await Shell.Current.GoToAsync($"{nameof(SubjectCategoriesChartPage)}?{nameof(SubjectCategoriesChartViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(SubjectCategoriesChartViewModel.EndDate)}={EndDate.ToShortDateString()}&{nameof(SubjectCategoriesChartViewModel.IsIncludeZeroProfit)}={IsIncludeZeroProfit}");
         }
 
         private async Task OnLoadReport()

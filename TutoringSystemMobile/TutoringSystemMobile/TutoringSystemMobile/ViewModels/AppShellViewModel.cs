@@ -64,15 +64,16 @@ namespace TutoringSystemMobile.ViewModels
         private async Task LoadUserAsync()
         {
             User = await SecureStorage.GetAsync("userName");
+            var user = await DependencyService.Get<IUserService>().GetGeneralUserInfoAsync();
+            User = $"{user.FirstName} {user.LastName}";
         }
 
         private async Task LoadPictureAsync()
         {
             var picture = await DependencyService.Get<IImageService>()?.GetProfileImageAsync();
-            if (picture.ProfilePictureBase64 != null)
-                ProfileImage = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(picture.ProfilePictureBase64)));
-            else
-                ProfileImage = "default_user_picture.png";
+            ProfileImage = picture.ProfilePictureBase64 != null ?
+                ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(picture.ProfilePictureBase64))) :
+                "default_user_picture.png";
         }
     }
 }

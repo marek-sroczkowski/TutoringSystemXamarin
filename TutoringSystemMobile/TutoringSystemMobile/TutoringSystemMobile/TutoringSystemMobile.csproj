@@ -21,6 +21,8 @@
     <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="4.0.11" />
     <PackageReference Include="Flurl" Version="3.0.2" />
     <PackageReference Include="Flurl.Http" Version="3.2.0" />
+    <PackageReference Include="Microcharts" Version="0.9.5.9" />
+    <PackageReference Include="Microcharts.Forms" Version="0.9.5.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.14" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
@@ -60,8 +62,14 @@
     <Compile Update="Views\ReportViews\MainReportTutorPage.xaml.cs">
       <DependentUpon>MainReportTutorPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ReportViews\StudentsChartPage.xaml.cs">
+      <DependentUpon>StudentsChartPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ReportViews\SubjectCategoriesReportTutorPage.xaml.cs">
       <DependentUpon>SubjectCategoriesReportTutorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ReportViews\SubjectsChartPage.xaml.cs">
+      <DependentUpon>SubjectsChartPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\TutorsViews\TutorsStudentPage.xaml.cs">
       <DependentUpon>TutorsStudentPage.xaml</DependentUpon>
@@ -138,6 +146,9 @@
     <EmbeddedResource Update="Views\ReportViews\MainReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\ReportViews\PlacesChartPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\ReportViews\PlacesReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -147,10 +158,19 @@
     <EmbeddedResource Update="Views\ReportViews\ReportSortingPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\ReportViews\StudentsChartPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\ReportViews\StudentsReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\ReportViews\SubjectCategoriesChartPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\ReportViews\SubjectCategoriesReportTutorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ReportViews\SubjectsChartPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ReportViews\SubjectsReportTutorPage.xaml">

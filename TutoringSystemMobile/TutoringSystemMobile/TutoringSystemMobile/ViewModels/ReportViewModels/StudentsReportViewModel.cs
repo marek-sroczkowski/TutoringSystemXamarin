@@ -32,10 +32,10 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         public Command LoadReportCommand { get; }
         public Command OpenFilteringPopupCommand { get; }
         public Command OpenSortingPopupCommand { get; }
+        public Command OpenStudentsChartCommand { get; }
         public Command PageAppearingCommand { get; }
 
         private readonly IReportService reportService;
-
 
         public StudentsReportViewModel()
         {
@@ -58,6 +58,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             LoadReportCommand = new Command(async () => await OnLoadReport());
             OpenFilteringPopupCommand = new Command(async () => await OnOpenFilteringPopup());
             OpenSortingPopupCommand = new Command(async () => await OnOpenSortingPopup());
+            OpenStudentsChartCommand = new Command(async () => await OnOpenStudentsChart());
             PageAppearingCommand = new Command(OnAppearing);
         }
 
@@ -74,6 +75,11 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         private async Task OnOpenSortingPopup()
         {
             await PopupNavigation.Instance.PushAsync(new ReportSortingPopupPage(SortBy));
+        }
+
+        private async Task OnOpenStudentsChart()
+        {
+            await Shell.Current.GoToAsync($"{nameof(StudentsChartPage)}?{nameof(StudentsChartViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(StudentsChartViewModel.EndDate)}={EndDate.ToShortDateString()}&{nameof(StudentsChartViewModel.IsIncludeZeroProfit)}={IsIncludeZeroProfit}");
         }
 
         private async Task OnLoadReport()
