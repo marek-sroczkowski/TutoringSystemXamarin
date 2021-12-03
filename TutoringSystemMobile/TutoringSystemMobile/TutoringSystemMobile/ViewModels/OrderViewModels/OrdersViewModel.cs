@@ -320,6 +320,9 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
                 return;
 
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu zlecenia", "Anuluj", null, "Oczekujące", "W realizacji", "Zrealizowane");
+            if (result is null || result == "Anuluj")
+                return;
+
             var status = GetOrderStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
             {
@@ -338,6 +341,9 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
                 return;
 
             var result = await Shell.Current.DisplayActionSheet("Zmiana statusu płatności", "Anuluj", null, "Opłacone", "Nie opłacone");
+            if (result is null || result == "Anuluj")
+                return;
+
             var status = GetPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))
             {
