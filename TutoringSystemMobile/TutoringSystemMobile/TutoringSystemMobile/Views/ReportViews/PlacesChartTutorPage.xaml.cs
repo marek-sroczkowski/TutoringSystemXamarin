@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class StudentsChartPage : ContentPage
+    public partial class PlacesChartTutorPage : ContentPage
     {
-        public StudentsChartPage()
+        public PlacesChartTutorPage()
         {
             InitializeComponent();
         }

@@ -80,7 +80,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
 
         private async Task OnOpenStudentsChart()
         {
-            await Shell.Current.GoToAsync($"{nameof(SubjectsChartPage)}?{nameof(SubjectsChartViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(SubjectsChartViewModel.EndDate)}={EndDate.ToShortDateString()}&{nameof(SubjectsChartViewModel.IsIncludeZeroProfit)}={IsIncludeZeroProfit}");
+            await Shell.Current.GoToAsync($"{nameof(SubjectsChartTutorPage)}?{nameof(SubjectsChartViewModel.StartDate)}={StartDate.ToShortDateString()}&{nameof(SubjectsChartViewModel.EndDate)}={EndDate.ToShortDateString()}&{nameof(SubjectsChartViewModel.IsIncludeZeroProfit)}={IsIncludeZeroProfit}");
         }
 
         private async Task OnLoadReport()

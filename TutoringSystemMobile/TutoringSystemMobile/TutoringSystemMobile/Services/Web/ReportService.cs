@@ -34,6 +34,19 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200 ? await response.GetJsonAsync<GeneralReportDto>() : new GeneralReportDto();
         }
 
+        public async Task<IEnumerable<GeneralTimedReportDto>> GetGeneralTimedReport(ReportParameters parameters)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegments("summary", "timed")
+                .SetQueryParams(parameters)
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<GeneralTimedReportDto>>() : new List<GeneralTimedReportDto>();
+        }
+
         public async Task<IEnumerable<StudentReportDto>> GetStudentsReportAsync(ReportParameters parameters)
         {
             string token = await SecureStorage.GetAsync("token");

@@ -12,5 +12,6 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<IEnumerable<SubjectCategoryReportDto>> GetSubjectCategoryReportAsync(ReportParameters parameters);
         Task<IEnumerable<SubjectReportDto>> GetSubjectReportAsync(ReportParameters parameters);
         Task<IEnumerable<PlaceReportDto>> GetPlaceReportAsync(ReportParameters parameters);
+        Task<IEnumerable<GeneralTimedReportDto>> GetGeneralTimedReport(ReportParameters parameters);
     }
 }

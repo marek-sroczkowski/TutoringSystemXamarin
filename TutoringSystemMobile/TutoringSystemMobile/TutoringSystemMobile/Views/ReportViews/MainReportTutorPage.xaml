@@ -13,6 +13,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_chart.png" Command="{Binding OpenMainChartCommand}" />
         <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding OpenFilteringPopupCommand}" />
     </ContentPage.ToolbarItems>
 

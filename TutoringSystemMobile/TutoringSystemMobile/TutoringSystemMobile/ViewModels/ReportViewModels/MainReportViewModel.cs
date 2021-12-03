@@ -26,6 +26,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         public string TotalHours { get => totalHours; set => SetValue(ref totalHours, value); }
 
         public Command OpenFilteringPopupCommand { get; }
+        public Command OpenMainChartCommand { get; }
         public Command PageAppearingCommand { get; }
         public Command StudentsReportCommand { get; }
         public Command SubjectsReportCommand { get; }
@@ -42,6 +43,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             });
 
             OpenFilteringPopupCommand = new Command(async () => await OnOpenFiltering());
+            OpenMainChartCommand = new Command(async () => await OnOpenMainChart());
             PageAppearingCommand = new Command(async () => await OnAppearing());
             StudentsReportCommand = new Command(async () => await OnStudentsReport());
             SubjectsReportCommand = new Command(async () => await OnSubjectsReport());
@@ -52,6 +54,11 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         private async Task OnOpenFiltering()
         {
             await PopupNavigation.Instance.PushAsync(new ReportFilteringPopupPage(new ReportFilteringDto(StartDate, EndDate, isIncludeZeroProfitVisible: false)));
+        }
+
+        private async Task OnOpenMainChart()
+        {
+            await Shell.Current.GoToAsync($"{nameof(GeneralTimedChartTutorPage)}");
         }
 
         private async Task OnPlacesReport()
