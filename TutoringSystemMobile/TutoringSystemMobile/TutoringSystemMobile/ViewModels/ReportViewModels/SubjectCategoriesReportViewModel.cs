@@ -47,7 +47,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
                 IsIncludeZeroProfit = sender.IsIncludeZeroProfit;
                 await OnLoadReport();
             });
-            MessagingCenter.Subscribe<BaseReportSortingViewModel>(this, "reportSorting", async (sender) =>
+            MessagingCenter.Subscribe<ReportSortingViewModel>(this, "reportSorting", async (sender) =>
             {
                 SortBy = sender.SortBy;
                 await OnLoadReport();

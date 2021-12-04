@@ -29,7 +29,7 @@
         <CollectionView ItemsSource="{Binding Orders}"
                         SelectionMode="None"
                 RemainingItemsThresholdReachedCommand="{Binding ItemTresholdReachedCommand}"
-                RemainingItemsThreshold="{Binding ItemTreshold}">
+                RemainingItemsThreshold="5">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView BackgroundColor="{AppThemeBinding Dark=Black, Light=#f3f3f3}">

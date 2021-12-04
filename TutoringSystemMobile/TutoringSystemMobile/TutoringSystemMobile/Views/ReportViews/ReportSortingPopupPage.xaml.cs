@@ -12,7 +12,7 @@ namespace TutoringSystemMobile.Views
         public ReportSortingPopupPage(string sortBy)
         {
             InitializeComponent();
-            BindingContext = new BaseReportSortingViewModel(sortBy);
+            BindingContext = new ReportSortingViewModel(sortBy);
         }
 
         private async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)

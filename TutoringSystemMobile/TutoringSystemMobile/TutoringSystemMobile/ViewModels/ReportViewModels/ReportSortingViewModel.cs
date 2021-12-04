@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.ReportViewModels
 {
-    public class BaseReportSortingViewModel : BaseViewModel
+    public class ReportSortingViewModel : BaseViewModel
     {
         private bool isSortingByProfitAsc;
         private bool isSortingByProfitDesc = true;
@@ -80,7 +80,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         public Command SortByReservationsCountAscCommand { get; }
         public Command SortByReservationsCountDescCommand { get; }
 
-        public BaseReportSortingViewModel(string sortBy)
+        public ReportSortingViewModel(string sortBy)
         {
             SortBy = sortBy;
             OnSetOrderBy();

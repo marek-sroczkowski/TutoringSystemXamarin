@@ -9,10 +9,10 @@ namespace TutoringSystemMobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class OrderSortingTutorPopupPage
     {
-        public OrderSortingTutorPopupPage(OrdersViewModel viewModel)
+        public OrderSortingTutorPopupPage(string sortBy)
         {
             InitializeComponent();
-            BindingContext = viewModel;
+            BindingContext = new OrderSortingViewModel(sortBy);
         }
 
         private async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)

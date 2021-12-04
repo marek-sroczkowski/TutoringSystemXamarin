@@ -1,5 +1,6 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.ViewModels.OrderViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,10 +10,10 @@ namespace TutoringSystemMobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class OrderFilteringTutorPopupPage
     {
-        public OrderFilteringTutorPopupPage(OrdersViewModel viewModel)
+        public OrderFilteringTutorPopupPage(AdditionalOrderParameters parameters)
         {
             InitializeComponent();
-            BindingContext = viewModel;
+            BindingContext = new OrderFilteringViewModel(parameters);
         }
 
         private async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)

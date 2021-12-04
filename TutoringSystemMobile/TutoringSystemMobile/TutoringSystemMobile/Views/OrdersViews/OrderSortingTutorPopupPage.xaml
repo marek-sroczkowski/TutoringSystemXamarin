@@ -5,7 +5,7 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.OrderViewModels"
-             x:DataType="viewModel:OrdersViewModel">
+             x:DataType="viewModel:OrderSortingViewModel">
 
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation 
