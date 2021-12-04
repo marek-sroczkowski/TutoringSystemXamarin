@@ -6,7 +6,8 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
-             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ContactViewModels">
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ContactViewModels"
+             x:DataType="viewModel:EditContactViewModel">
 
     <pages:PopupPage.Behaviors>
         <xct:EventToCommandBehavior
@@ -45,6 +46,7 @@
                 Margin="0,20,0,0"
                 Style="{StaticResource PrimaryBlueButtonStyle}"
                 Command="{Binding EditContactCommand}" />
+        
     </StackLayout>
 
 </pages:PopupPage>

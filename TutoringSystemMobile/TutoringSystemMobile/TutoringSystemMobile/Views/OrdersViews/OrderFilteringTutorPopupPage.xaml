@@ -21,6 +21,7 @@
     <StackLayout 
         VerticalOptions="EndAndExpand" 
         HorizontalOptions="FillAndExpand">
+        
         <Frame x:Name="BottomPopup"
                Style="{StaticResource BottomPopupStyle}" >
 
@@ -29,12 +30,15 @@
                 <BoxView Style="{StaticResource BoxViewBottomPopupStyle}" />
                 
                 <Grid RowDefinitions="Auto,Auto">
+                    
                     <Grid Grid.Row="0"
                           ColumnDefinitions="*,50" 
                           Margin="10">
+                        
                         <Label Grid.Column="0" 
                                Text="Opłacone zlecenia" 
                                Style="{StaticResource FilteringLabelStyle}" />
+                        
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding IsPaid}" />
                     </Grid>
@@ -42,21 +46,26 @@
                     <Grid Grid.Row="1"
                           ColumnDefinitions="*,50" 
                           Margin="10">
+                        
                         <Label Grid.Column="0" 
                                Text="Nie opłacone zlecenia" 
                                Style="{StaticResource FilteringLabelStyle}" />
+                        
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding IsNotPaid}" />
                     </Grid>
                 </Grid>
 
                 <Grid RowDefinitions="Auto,Auto,Auto">
+                    
                     <Grid Grid.Row="0"
                           ColumnDefinitions="*,50" 
                           Margin="10">
+                        
                         <Label Grid.Column="0" 
                                Text="Oczekujące" 
                                Style="{StaticResource FilteringLabelStyle}" />
+                        
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding IsPending}" />
                     </Grid>
@@ -64,9 +73,11 @@
                     <Grid Grid.Row="1"
                           ColumnDefinitions="*,50" 
                           Margin="10">
+                        
                         <Label Grid.Column="0" 
                                Text="W realizacji" 
                                Style="{StaticResource FilteringLabelStyle}" />
+                        
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding IsInProgress}" />
                     </Grid>
@@ -74,39 +85,48 @@
                     <Grid Grid.Row="2"
                           ColumnDefinitions="*,50" 
                           Margin="10">
+                        
                         <Label Grid.Column="0" 
                                Text="Zrealizowane" 
                                Style="{StaticResource FilteringLabelStyle}" />
+                        
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding IsRealized}" />
                     </Grid>
                 </Grid>
 
-                <Grid Margin="10" RowDefinitions="Auto,Auto">
+                <Grid Margin="10"
+                      RowDefinitions="Auto,Auto">
+                    
                     <Grid Grid.Row="0">
                         <Label Text="Deadline"
                                    Style="{StaticResource FilteringLabelStyle}"/>
                     </Grid>
 
                     <Grid Grid.Row="1" 
-                              Margin="-10,-5,0,0"
-                              HorizontalOptions="Start" 
-                              VerticalOptions="Center" 
-                              ColumnDefinitions="Auto,Auto,Auto">
+                          Margin="-10,-5,0,0"
+                          HorizontalOptions="Start" 
+                          VerticalOptions="Center" 
+                          ColumnDefinitions="Auto,Auto,Auto">
+                        
                         <DatePicker Grid.Column="1"
                                     TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
                                     Date="{Binding DeadlineStart}"/>
+                        
                         <Label Grid.Column="2" 
                                Text=" - "
                                VerticalOptions="Center"
                                Style="{StaticResource FilteringLabelStyle}" />
+                        
                         <DatePicker Grid.Column="3"
                                     TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
                                     Date="{Binding DeadlineEnd}"/>
                     </Grid>
                 </Grid>
 
-                <Grid Margin="10" RowDefinitions="Auto,Auto">
+                <Grid Margin="10"
+                      RowDefinitions="Auto,Auto">
+                    
                     <Grid Grid.Row="0">
                         <Label Text="Data zgłoszenia"
                                Style="{StaticResource FilteringLabelStyle}"/>
@@ -117,13 +137,16 @@
                           HorizontalOptions="Start" 
                           VerticalOptions="Center" 
                           ColumnDefinitions="Auto,Auto,Auto">
+                        
                         <DatePicker Grid.Column="1"
                                     TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
                                     Date="{Binding ReceiptStartDate}"/>
+                        
                         <Label Grid.Column="2" 
                                Text=" - "
                                VerticalOptions="Center"
                                Style="{StaticResource FilteringLabelStyle}" />
+                        
                         <DatePicker Grid.Column="3"
                                     TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
                                     Date="{Binding ReceiptEndDate}"/>

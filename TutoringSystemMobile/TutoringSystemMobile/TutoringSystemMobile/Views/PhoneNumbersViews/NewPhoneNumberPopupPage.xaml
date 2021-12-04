@@ -23,17 +23,17 @@
     <StackLayout Style="{StaticResource CenterPopupStyle}">
 
         <Label Text="Nowy kontakt telefoniczny"
-              Style="{StaticResource TitleLabelStyle}"
+               Style="{StaticResource TitleLabelStyle}"
                Padding="0,0,0,15"/>
 
         <custom:TitledEntry Text="{Binding Owner}" 
-                                Placeholder="Osoba kontaktowa"
-                                IsTitleVisible="True"/>
+                            Placeholder="Osoba kontaktowa"
+                            IsTitleVisible="True"/>
 
         <custom:TitledEntry Text="{Binding Number}" 
-                                Placeholder="Numer telefonu"
-                                IsTitleVisible="True"
-                                EntryKeyboard="Numeric"/>
+                            Placeholder="Numer telefonu"
+                            IsTitleVisible="True"
+                            EntryKeyboard="Numeric"/>
         
         <Button VerticalOptions="Center" 
                     Text="Zapisz" 

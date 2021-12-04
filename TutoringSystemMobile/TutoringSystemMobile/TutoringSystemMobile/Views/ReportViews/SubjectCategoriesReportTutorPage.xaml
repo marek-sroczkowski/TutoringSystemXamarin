@@ -24,35 +24,46 @@
                 Command="{Binding PageAppearingCommand}" />
     </ContentPage.Behaviors>
 
-    <RefreshView x:DataType="viewModel:SubjectCategoriesReportViewModel" Command="{Binding LoadReportCommand}" IsRefreshing="{Binding IsRefreshing}" RefreshColor="Blue">
+    <RefreshView x:DataType="viewModel:SubjectCategoriesReportViewModel"
+                 Command="{Binding LoadReportCommand}"
+                 IsRefreshing="{Binding IsRefreshing}"
+                 RefreshColor="Blue">
+        
         <CollectionView ItemsSource="{Binding SubjectCategoriesReports}"
                 SelectionMode="None">
+            
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-
-                    <StackLayout Padding="3" x:DataType="model:SubjectCategorySummaryDto">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
+                    <StackLayout Padding="3"
+                                 x:DataType="model:SubjectCategorySummaryDto">
+                        
+                        <Grid RowDefinitions="Auto">
 
                             <BoxView Grid.Row="0" Margin="1" Style="{StaticResource ListBoxView}"/>
 
                             <Grid Grid.Row="0">
 
-                                <Grid Padding="10" RowDefinitions="Auto,Auto" RowSpacing="15">
+                                <Grid Padding="10"
+                                      RowDefinitions="Auto,Auto"
+                                      RowSpacing="15">
 
                                     <Grid Grid.Row="0">
                                         <Label Text="{Binding CategoryName}" 
-                                        LineBreakMode="WordWrap" 
-                                        Style="{StaticResource LabelStyle}"
-                                        FontAttributes="Bold"
-                                        FontSize="19" />
+                                               LineBreakMode="WordWrap" 
+                                               Style="{StaticResource LabelStyle}"
+                                               FontAttributes="Bold"
+                                               FontSize="19" />
                                     </Grid>
 
-                                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
-                                        <Grid Grid.Column="0" RowDefinitions="Auto, Auto" HorizontalOptions="Center">
+                                    <Grid Grid.Row="1"
+                                          ColumnDefinitions="*,*,*">
+                                        
+                                        <Grid Grid.Column="0"
+                                              RowDefinitions="Auto, Auto"
+                                              HorizontalOptions="Center">
+                                            
                                             <BoxView Grid.Row="0" BackgroundColor="#33cc00" CornerRadius="30" />
+                                            
                                             <Label Grid.Row="0"
                                                    FontSize="15"
                                                    FontAttributes="Bold"
@@ -60,12 +71,18 @@
                                                    HorizontalOptions="Center"
                                                    Text="{Binding TotalProfit}"
                                                    Style="{StaticResource LabelStyle}" />
+                                            
                                             <Label Grid.Row="1" 
                                                    Text="Przychód"
                                                    Style="{StaticResource LabelStyle}" />
                                         </Grid>
-                                        <Grid Grid.Column="1" RowDefinitions="Auto, Auto" HorizontalOptions="Center">
+                                        
+                                        <Grid Grid.Column="1"
+                                              RowDefinitions="Auto, Auto"
+                                              HorizontalOptions="Center">
+                                            
                                             <BoxView Grid.Row="0" BackgroundColor="Orange" CornerRadius="30" />
+                                            
                                             <Label Grid.Row="0"
                                                    FontSize="15"
                                                    FontAttributes="Bold"
@@ -73,12 +90,18 @@
                                                    HorizontalOptions="Center"
                                                    Text="{Binding ReservationsCount}"
                                                    Style="{StaticResource LabelStyle}" />
+                                            
                                             <Label Grid.Row="1" 
                                                    Text="Ilość lekcji"
                                                    Style="{StaticResource LabelStyle}" />
                                         </Grid>
-                                        <Grid Grid.Column="2" RowDefinitions="Auto, Auto" HorizontalOptions="Center">
+                                        
+                                        <Grid Grid.Column="2"
+                                              RowDefinitions="Auto, Auto"
+                                              HorizontalOptions="Center">
+                                            
                                             <BoxView Grid.Row="0" BackgroundColor="#4D4DFF" CornerRadius="30" />
+                                            
                                             <Label Grid.Row="0"
                                                    FontSize="15"
                                                    FontAttributes="Bold"
@@ -86,6 +109,7 @@
                                                    HorizontalOptions="Center"
                                                    Text="{Binding TotalHours}"
                                                    Style="{StaticResource LabelStyle}" />
+                                            
                                             <Label Grid.Row="1" 
                                                    Text="Czas zajęć"
                                                    Style="{StaticResource LabelStyle}" />

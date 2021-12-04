@@ -28,12 +28,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByProfitAsc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po przychodzie rosnąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -43,12 +46,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByProfitDesc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po przychodzie malejąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -58,12 +64,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByReservationsCountAsc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po ilości zajęć rosnąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -73,12 +82,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByReservationsCountDesc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po ilości zajęć malejąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -88,12 +100,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByHoursAsc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po ilości godzin rosnąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -105,10 +120,12 @@
                       ColumnDefinitions="Auto,*">
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByHoursDesc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po ilości godzin malejąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"

@@ -20,20 +20,25 @@
 
     <StackLayout VerticalOptions="EndAndExpand" 
                  HorizontalOptions="FillAndExpand">
+        
         <Frame x:Name="BottomPopup"
                Style="{StaticResource BottomPopupStyle}">
+            
             <StackLayout Spacing="15">
                 
                 <BoxView Style="{StaticResource BoxViewBottomPopupStyle}" />
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByNameAsc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po nazwie rosnąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -43,12 +48,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByNameDesc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po nazwie malejąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -58,12 +66,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByPriceAsc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po cenie rosnąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -73,12 +84,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByPriceDesc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Po cenie malejąco"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -88,12 +102,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByDeadlineAsc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Od najstarszego terminu"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -103,12 +120,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByDeadlineDesc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Od najmłodszego terminu"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -118,12 +138,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByCreatedDateAsc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Od najstarszej daty stworzenia"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -133,12 +156,15 @@
 
                 <Grid ColumnSpacing="10"
                       ColumnDefinitions="Auto,*">
+                    
                     <RadioButton Grid.Column="0"
                                  IsChecked="{Binding IsSortingByCreatedDateDesc}" />
+                    
                     <Label Grid.Column="1"
                            Text="Od najmłodszej daty stworzenia"
                            VerticalOptions="Center"
                            Style="{StaticResource FilteringLabelStyle}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -146,6 +172,7 @@
                     </Grid.GestureRecognizers>
                 </Grid>
             </StackLayout>
+            
             <Frame.GestureRecognizers>
                 <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
             </Frame.GestureRecognizers>

@@ -14,27 +14,23 @@
 
     <ContentPage.Content>
         <ScrollView>
+            
             <StackLayout Padding="20,10,20,10">
 
                 <Label Text="Edycja profilu"
-                   FontAttributes="Bold"
-                   Style="{StaticResource LabelStyle}"/>
+                       FontAttributes="Bold"
+                       Style="{StaticResource LabelStyle}"/>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50" 
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_edit_general_informations.png"
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Podstawowe dane"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Podstawowe dane"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
@@ -48,26 +44,20 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_edit_address.png"
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Adres"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Adres"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
-
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -77,26 +67,20 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_edit_contact.png"
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Kontakt"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Kontakt"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
-
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -106,26 +90,20 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_edit_profile_picture.png"
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Avatar"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Avatar"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
-
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -136,17 +114,12 @@
                 </Grid>
 
                 <Label Text="Bezpieczeństwo"
-                   Style="{StaticResource LabelStyle}" 
-                   FontAttributes="Bold"
-                   Margin="0,20,0,0"/>
+                        Style="{StaticResource LabelStyle}" 
+                        FontAttributes="Bold"
+                        Margin="0,20,0,0"/>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_change_password.png"
@@ -155,13 +128,12 @@
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Zmiana hasła"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Zmiana hasła"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
-
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -171,13 +143,9 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid HeightRequest="50" IsVisible="{Binding IsDeactiveAccoutTabVisible}">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto"
+                      IsVisible="{Binding IsDeactiveAccoutTabVisible}">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_deactivate_account.png"
@@ -186,13 +154,12 @@
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Dezaktywacja konta"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Dezaktywacja konta"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
-
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -203,17 +170,12 @@
                 </Grid>
 
                 <Label Text="Inne"
-                   Style="{StaticResource LabelStyle}"
-                   FontAttributes="Bold"
-                   Margin="0,20,0,0"/>
+                       Style="{StaticResource LabelStyle}"
+                       FontAttributes="Bold"
+                       Margin="0,20,0,0"/>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_dark_mode.png"
@@ -222,13 +184,12 @@
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Tryb ciemny"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Tryb ciemny"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
-
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -238,13 +199,8 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_rate_app.png"
@@ -253,13 +209,12 @@
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Ocena aplikacji"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Ocena aplikacji"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
-
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -269,13 +224,8 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid HeightRequest="50">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid HeightRequest="50"
+                      ColumnDefinitions="Auto,*,Auto">
 
                     <controls:IconView Grid.Column="0" 
                                    Source="icon_logout.png"
@@ -284,8 +234,8 @@
                                    Style="{StaticResource MenuItemIconStyle}" />
 
                     <Label Grid.Column="1" 
-                       Text="Wyloguj się"
-                       Style="{StaticResource ProfileMenuItemStyle}" />
+                           Text="Wyloguj się"
+                           Style="{StaticResource ProfileMenuItemStyle}" />
 
                     <controls:IconView Grid.Column="2" 
                                    Source="icon_get_details.png"

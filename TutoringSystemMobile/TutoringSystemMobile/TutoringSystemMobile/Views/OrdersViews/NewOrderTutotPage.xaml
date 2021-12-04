@@ -28,7 +28,8 @@
             <custom:TitledDatePicker Title="Deadline"
                                      SelectedDate="{Binding Deadline}"/>
 
-            <custom:TitledCheckbox Text="Opłacone" IsChecked="{Binding IsPaid}" />
+            <custom:TitledCheckbox Text="Opłacone"
+                                   IsChecked="{Binding IsPaid}" />
 
             <ActivityIndicator IsRunning="{Binding IsBusy}"  
                                IsVisible="{Binding IsBusy}"

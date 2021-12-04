@@ -6,7 +6,8 @@
              xmlns:model="clr-namespace:TutoringSystemMobile.Models.PhoneNumberDtos"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ContactViewModels"
              Title="Kontakt"
-             Style="{StaticResource PageStyle}">
+             Style="{StaticResource PageStyle}"
+             x:Name="ContactPage">
 
     <ContentPage.BindingContext>
         <viewModel:ContactDetailsViewModel />
@@ -19,136 +20,128 @@
     </ContentPage.Behaviors>
 
     <ContentPage.Content>
-        <StackLayout Spacing="15" Padding="20,20,20,20">
+        <ScrollView>
 
-            <Label Text="{Binding Owner}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
+            <StackLayout Padding="20,20,20,20">
 
-            <BoxView Style="{StaticResource HorizontalLineStyle}" />
+                <StackLayout Spacing="15"
+                             Margin="0,0,0,20"
+                             x:Name="ContactStackLayout">
 
-            <Grid Padding="0,-15,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                    <Label Text="{Binding Owner}"
+                           Padding="0,0,0,10"
+                           Style="{StaticResource TitleLabelStyle}"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-            </Grid>
+                    <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-            <Grid Grid.Row="0">
-                <Label Grid.Column="0" 
-                       Text="Email" 
-                       VerticalOptions="Center"
-                       Margin="0,0,0,-20"
-                       Style="{StaticResource LabelStyle}" />
-                <Label Grid.Column="1"
-                       Margin="-70,0,0,-20"
-                       Text="{Binding Email}"
-                       Style="{StaticResource PropertyLabelStyle}" />
-            </Grid>
+                    <Grid>
 
-            <Grid Grid.Row="1" Margin="0,20,0,0">
-                <Label Grid.Column="0"
+                        <Label Grid.Column="0" 
+                           Text="Email" 
+                           VerticalOptions="Center"
+                           Style="{StaticResource LabelStyle}" />
+
+                        <Label Grid.Column="1"
+                           Text="{Binding Email}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+                    </Grid>
+
+                    <Grid>
+                        <Label Grid.Column="0"
                            Text="Discord" 
                            VerticalOptions="Center"
                            HorizontalOptions="Start"
-                           Margin="0,0,0,-20"
                            Style="{StaticResource LabelStyle}" />
-                <Label Grid.Column="1"
-                           Margin="-70,0,0,-20"
+
+                        <Label Grid.Column="1"
                            Text="{Binding DiscordName}"
                            Style="{StaticResource PropertyLabelStyle}" />
-            </Grid>
+                    </Grid>
 
-            <BoxView Style="{StaticResource HorizontalLineStyle}" Margin="0,20,0,0" />
+                    <BoxView Style="{StaticResource HorizontalLineStyle}"/>
 
-            <Grid Margin="0,10,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                    <Grid Margin="0,10,0,-20"
+                              ColumnDefinitions="Auto,Auto">
 
-                <Label Grid.Column="0" Text="Książka telefoniczna" 
-                           VerticalOptions="Center"
-                           FontSize="17"
-                           FontAttributes="Bold"
-                           Style="{StaticResource ContentLabelStyle}"/>
+                        <Label Grid.Column="0"
+                              Text="Książka telefoniczna" 
+                              VerticalOptions="Center"
+                              FontSize="17"
+                              FontAttributes="Bold"
+                              Style="{StaticResource ContentLabelStyle}"/>
 
-                <ImageButton Grid.Column="1" Source="icon_add2.png"
-                             BackgroundColor="Transparent"
-                             HeightRequest="70"
-                             WidthRequest="70"
-                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=AddPhoneNumberCommand}"/>
-            </Grid>
+                        <ImageButton Grid.Column="1"
+                                     Source="icon_add2.png"
+                                     BackgroundColor="Transparent"
+                                     HeightRequest="35"
+                                     WidthRequest="35"
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=AddPhoneNumberCommand}"/>
+                    </Grid>
+                </StackLayout>
 
-            <CollectionView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=PhoneNumbers}" 
-                            x:DataType="model:PhoneNumberDto"
-                            SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="0,0,0,5">
-                            <BoxView Grid.Row="0" Style="{StaticResource PhoneListBoxView}"/>
+                <CollectionView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=PhoneNumbers}" 
+                                x:DataType="model:PhoneNumberDto"
+                                SelectionMode="None"
+                                x:Name="PhonesCollection">
 
-                            <Grid Grid.Row="0">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="40" />
-                                    <ColumnDefinition Width="40" />
-                                    <ColumnDefinition Width="40" />
-                                </Grid.ColumnDefinitions>
+                            <Grid Padding="0,0,0,5">
 
-                                <Grid Grid.Column="0" Padding="10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
+                                <BoxView Grid.Row="0" Style="{StaticResource PhoneListBoxView}"/>
 
-                                    <Label Grid.Row="0"
-                                           Text="{Binding Owner}" 
-                                           Style="{StaticResource LabelStyle}"
-                                           FontAttributes="Bold"
-                                           FontSize="16" />
+                                <Grid Grid.Row="0"
+                                      ColumnDefinitions="*,40,40,40">
 
-                                    <Label Grid.Row="1"
-                                           Text="{Binding Number}" 
-                                           Style="{StaticResource LabelStyle}"
-                                           FontSize="16" />
-                                </Grid>
+                                    <Grid Grid.Column="0"
+                                          Padding="10"
+                                          RowDefinitions="Auto,Auto">
 
-                                <Grid Grid.Column="1">
-                                    <ImageButton Source="icon_edit2.png"
+                                        <Label Grid.Row="0"
+                                               Text="{Binding Owner}" 
+                                               Style="{StaticResource LabelStyle}"
+                                               FontAttributes="Bold"
+                                               FontSize="16" />
+
+                                        <Label Grid.Row="1"
+                                               Text="{Binding Number}" 
+                                               Style="{StaticResource LabelStyle}"
+                                               FontSize="16" />
+                                    </Grid>
+
+                                    <Grid Grid.Column="1">
+                                        <ImageButton Source="icon_edit2.png"
                                                      BackgroundColor="Transparent"
                                                      Margin="0,0,5,0"
                                                      Padding="2"
                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=EditPhoneNumberCommand}" 
                                                      CommandParameter="{Binding .}" />
-                                </Grid>
+                                    </Grid>
 
-                                <Grid Grid.Column="2">
-                                    <ImageButton Source="icon_remove2.png"
+                                    <Grid Grid.Column="2">
+                                        <ImageButton Source="icon_remove2.png"
                                                      BackgroundColor="Transparent"
                                                      Margin="0,0,5,0"
                                                      Padding="2"
                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=RemovePhoneNumberCommand}" 
                                                      CommandParameter="{Binding .}" />
-                                </Grid>
+                                    </Grid>
 
-                                <Grid Grid.Column="3">
-                                    <ImageButton Source="icon_call.png"
+                                    <Grid Grid.Column="3">
+                                        <ImageButton Source="icon_call.png"
                                                      BackgroundColor="Transparent"
                                                      Margin="0,0,5,0"
                                                      Padding="2"
                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=CallToStudentCommand}" 
                                                      CommandParameter="{Binding .}" />
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

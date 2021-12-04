@@ -16,36 +16,29 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <StackLayout Spacing="15" Padding="20,20,20,0">
+        <StackLayout Spacing="15"
+                     Padding="20,20,20,0">
 
-            <ActivityIndicator Color="Blue" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <ActivityIndicator Color="Blue"
+                               IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
 
-            <Label Text="{Binding Name}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
+            <Label Text="{Binding Name}"
+                   Padding="0,0,0,10"
+                   Style="{StaticResource TitleLabelStyle}"/>
 
             <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-            <Grid Padding="0,-10,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-            </Grid>
-
             <Grid Grid.Row="0">
+                
                 <Label Grid.Column="0" 
-                           Text="Przychód" 
-                           VerticalOptions="Center"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Przychód" 
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1" 
-                           Style="{StaticResource PropertyLabelStyle}" >
+                       Style="{StaticResource PropertyLabelStyle}" >
+                    
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="{Binding Cost}" />
@@ -56,48 +49,57 @@
             </Grid>
 
             <Grid Grid.Row="1">
+                
                 <Label Grid.Column="0" 
-                           Text="Status płatności" 
-                           VerticalOptions="Center"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Status płatności" 
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1"
-                           Text="{Binding PaidStatus}"
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding PaidStatus}"
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="2">
+                
                 <Label Grid.Column="0" 
-                           Text="Data zgłoszenia" 
-                           VerticalOptions="Center"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Data zgłoszenia" 
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1" 
-                           Text="{Binding ReceiptDate, StringFormat='{0:dd/MM/yyyy}'}" 
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding ReceiptDate, StringFormat='{0:dd/MM/yyyy}'}" 
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="3">
+                
                 <Label Grid.Column="0" 
-                           Text="Deadline" 
-                           VerticalOptions="Center"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Deadline" 
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1" 
-                           Text="{Binding Deadline, StringFormat='{0:dd/MM/yyyy}'}" 
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding Deadline, StringFormat='{0:dd/MM/yyyy}'}" 
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
-            <Grid Grid.Row="4" Padding="0,0,0,10">
+            <Grid Grid.Row="4">
                 <Label Grid.Column="0" 
-                           Text="Status" 
-                           VerticalOptions="Center"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Status" 
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}" />
                 <Label Grid.Column="1" 
-                           Text="{Binding OrderStatus}" 
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding OrderStatus}" 
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-            <Label Text="{Binding Description}" Padding="0,10,0,0" Style="{StaticResource ContentLabelStyle}" />
+            <Label Text="{Binding Description}"
+                   Padding="0,10,0,0"
+                   Style="{StaticResource ContentLabelStyle}" />
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

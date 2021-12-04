@@ -30,9 +30,10 @@
                    Style="{StaticResource LabelStyle}"/>
 
             <Label HorizontalOptions="Center"
-                    TextColor="#OO7FFF"
-                    FontSize="17"
-                    Text="Wyślij nowy">
+                   TextColor="#OO7FFF"
+                   FontSize="17"
+                   Text="Wyślij nowy">
+                
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding NewActivationCodeCommand}" />
                 </Label.GestureRecognizers>

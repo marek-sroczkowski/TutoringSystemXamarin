@@ -10,5 +10,11 @@ namespace TutoringSystemMobile.Views
         {
             InitializeComponent();
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            PhonesCollection.HeightRequest = ContactPage.Height - ContactStackLayout.Height - 60;
+        }
     }
 }

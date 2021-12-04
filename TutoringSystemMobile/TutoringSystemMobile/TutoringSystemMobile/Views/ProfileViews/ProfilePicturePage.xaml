@@ -37,12 +37,17 @@
                                VerticalOptions="Center"/>
             </Grid>
 
-            <Grid Padding="10,40,10,10" ColumnSpacing="20" ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
+            <Grid Padding="10,40,10,10"
+                  ColumnSpacing="20"
+                  ColumnDefinitions="Auto,Auto"
+                  HorizontalOptions="Center">
+                
                 <Button Grid.Column="0"
                         Text="Usuń zdjęcie"
                         IsEnabled="{Binding HasUserPhoto}"
                         Command="{Binding RemoveImageCommand}"
                         Style="{StaticResource PrimaryRedButtonStyle}"/>
+                
                 <Button Grid.Column="1"
                         Text="Ustaw zdjęcie"
                         Command="{Binding SetImageCommand}"

@@ -25,11 +25,16 @@
                 Command="{Binding PageAppearingCommand}" />
     </ContentPage.Behaviors>
 
-    <RefreshView x:DataType="viewModel:OrdersViewModel" Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsRefreshing}" RefreshColor="Blue">
+    <RefreshView x:DataType="viewModel:OrdersViewModel"
+                 Command="{Binding LoadOrdersCommand}"
+                 IsRefreshing="{Binding IsRefreshing}"
+                 RefreshColor="Blue">
+        
         <CollectionView ItemsSource="{Binding Orders}"
                         SelectionMode="None"
-                RemainingItemsThresholdReachedCommand="{Binding ItemTresholdReachedCommand}"
-                RemainingItemsThreshold="5">
+                        RemainingItemsThresholdReachedCommand="{Binding ItemTresholdReachedCommand}"
+                        RemainingItemsThreshold="5">
+            
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView BackgroundColor="{AppThemeBinding Dark=Black, Light=#f3f3f3}">
@@ -59,37 +64,32 @@
                             </SwipeItems>
                         </SwipeView.RightItems>
                         
-                        <StackLayout Padding="3" x:DataType="model:OrderDto">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
+                        <StackLayout Padding="3"
+                                     x:DataType="model:OrderDto">
+                            
+                            <Grid RowDefinitions="Auto">
 
-                                <BoxView Grid.Row="0" Margin="1" Style="{StaticResource ListBoxView}"/>
+                                <BoxView Grid.Row="0"
+                                         Margin="1"
+                                         Style="{StaticResource ListBoxView}"/>
 
-                                <Grid Grid.Row="0">
+                                <Grid Grid.Row="0"
+                                      ColumnDefinitions="*,20">
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="20" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid Grid.Column="0" Padding="10">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
+                                    <Grid Grid.Column="0"
+                                          Padding="10"
+                                          RowDefinitions="Auto,Auto,Auto">
 
                                         <Label Grid.Row="0" Text="{Binding Name}" 
-                                        LineBreakMode="WordWrap" 
-                                        Style="{StaticResource LabelStyle}"
-                                        FontAttributes="Bold"
-                                        FontSize="18" />
+                                               LineBreakMode="WordWrap" 
+                                               Style="{StaticResource LabelStyle}"
+                                               FontAttributes="Bold"
+                                               FontSize="18" />
 
                                         <Label Grid.Row="1"
-                                        Style="{StaticResource LabelStyle}"
-                                        FontSize="13">
+                                               Style="{StaticResource LabelStyle}"
+                                               FontSize="13">
+                                            
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <FormattedString.Spans>
@@ -101,8 +101,9 @@
                                         </Label>
 
                                         <Label Grid.Row="2"
-                                        Style="{StaticResource LabelStyle}"
-                                        FontSize="13">
+                                               Style="{StaticResource LabelStyle}"
+                                               FontSize="13">
+                                            
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <FormattedString.Spans>
@@ -123,9 +124,9 @@
 
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer 
-                                NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=OrderTappedCommand}"		
-                                CommandParameter="{Binding .}">
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=OrderTappedCommand}"		
+                                        CommandParameter="{Binding .}">
                                 </TapGestureRecognizer>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>

@@ -18,79 +18,75 @@
     </ContentPage.Behaviors>
 
     <ContentPage.Content>
-        <StackLayout Spacing="15" Padding="20,20,20,0">
+        <StackLayout Spacing="15"
+                     Padding="20,20,20,0">
 
-            <Label Text="{Binding Owner}" Padding="0,0,0,10" Style="{StaticResource TitleLabelStyle}"/>
+            <Label Text="{Binding Owner}"
+                   Padding="0,0,0,10"
+                   Style="{StaticResource TitleLabelStyle}"/>
 
             <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-            <Grid Padding="0,-15,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-            </Grid>
-
             <Grid Grid.Row="0">
+                
                 <Label Grid.Column="0" 
-                           Text="Ulica" 
-                           VerticalOptions="Center"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Ulica" 
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1"
-                           Text="{Binding Street}"
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding Street}"
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="1">
+                
                 <Label Grid.Column="0"
-                           Text="Numer domu/lokalu" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="Start"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Numer domu/lokalu" 
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1"
-                       Margin="-15,0,0,0"
-                           Text="{Binding HouseAndFlatNumber}"
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding HouseAndFlatNumber}"
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="2">
+                
                 <Label Grid.Column="0"
-                           Text="Kod pocztowy" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="Start"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Kod pocztowy" 
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1"
-                       Margin="-15,0,0,0"
-                           Text="{Binding PostalCode}"
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding PostalCode}"
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <Grid Grid.Row="3">
+                
                 <Label Grid.Column="0"
-                           Text="Miasto" 
-                           VerticalOptions="Center"
-                           HorizontalOptions="Start"
-                           Style="{StaticResource LabelStyle}" />
+                       Text="Miasto" 
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Style="{StaticResource LabelStyle}" />
+                
                 <Label Grid.Column="1"
-                       Margin="-15,0,0,0"
-                           Text="{Binding City}"
-                           Style="{StaticResource PropertyLabelStyle}" />
+                       Text="{Binding City}"
+                       Style="{StaticResource PropertyLabelStyle}" />
             </Grid>
 
             <BoxView Style="{StaticResource HorizontalLineStyle}" />
 
-            <Label Text="{Binding Description}" Padding="0,10,0,0" Style="{StaticResource ContentLabelStyle}" />
+            <Label Text="{Binding Description}"
+                   Padding="0,10,0,0"
+                   Style="{StaticResource ContentLabelStyle}" />
 
             <Button VerticalOptions="Center" 
                     Text="Nawiguj w google maps" 
-                    Margin="0,30,0,0"
+                    Margin="0,20,0,0"
                     Style="{StaticResource PrimaryBlueButtonStyle}"
                     Command="{Binding NavigateToStudentCommand}" />
         </StackLayout>

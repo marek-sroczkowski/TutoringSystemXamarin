@@ -24,8 +24,10 @@
     <StackLayout 
         VerticalOptions="EndAndExpand" 
         HorizontalOptions="FillAndExpand">
+        
         <Frame x:Name="BottomPopup"
                Style="{StaticResource BottomPopupStyle}" >
+            
             <StackLayout>
                 
                 <BoxView Style="{StaticResource BoxViewBottomPopupStyle}" />
@@ -33,13 +35,16 @@
                 <Grid ColumnSpacing="10" 
                       HeightRequest="35" 
                       ColumnDefinitions="*,Auto">
+                    
                     <Label Grid.Column="0"
                            FontSize="20"
                            Text="Automatycznie" 
                            Style="{StaticResource LabelStyle}"/>
+                    
                     <RadioButton Grid.Column="1"
                                  IsChecked="{Binding IsAutomaticModeSelected}" 
                                  IsVisible="{Binding IsAutomaticModeSelected}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -50,13 +55,16 @@
                 <Grid ColumnSpacing="10" 
                       HeightRequest="35" 
                       ColumnDefinitions="*,Auto">
+                    
                     <Label Grid.Column="0" 
                            Text="Włączony"
                            FontSize="20"
                            Style="{StaticResource LabelStyle}"/>
+                    
                     <RadioButton Grid.Column="1" 
                                  IsChecked="{Binding IsDarkModeSelected}" 
                                  IsVisible="{Binding IsDarkModeSelected}" />
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -67,13 +75,16 @@
                 <Grid ColumnSpacing="10" 
                       HeightRequest="35" 
                       ColumnDefinitions="*,Auto">
+                    
                     <Label Grid.Column="0" 
                            Text="Wyłączony"
                            FontSize="20"
                            Style="{StaticResource LabelStyle}"/>
+                    
                     <RadioButton Grid.Column="1"
                                  IsChecked="{Binding IsLightModeSelected}" 
                                  IsVisible="{Binding IsLightModeSelected}"/>
+                    
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"

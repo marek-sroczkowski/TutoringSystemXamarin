@@ -21,24 +21,24 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="20">
-
+                
                 <Label Text="Źródło danych"
-                   Margin="0,0,0,-5"
-                   Style="{StaticResource LabelStyle}"/>
+                       Margin="0,0,0,-5"
+                       Style="{StaticResource LabelStyle}"/>
 
                 <Picker Title="Źródło danych"
-                    TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
-                    ItemsSource="{Binding ChartDataSources}"
-                    SelectedItem="{Binding SelectedDataSource}"/>
+                        TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
+                        ItemsSource="{Binding ChartDataSources}"
+                        SelectedItem="{Binding SelectedDataSource}"/>
 
                 <Label Text="Typ wykresu"
-                   Margin="0,10,0,-5"
-                   Style="{StaticResource LabelStyle}"/>
+                       Margin="0,10,0,-5"
+                       Style="{StaticResource LabelStyle}"/>
 
                 <Picker Title="Typ wykresu"
-                    TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
-                    ItemsSource="{Binding ChartTypes}"
-                    SelectedItem="{Binding SelectedChartType}"/>
+                        TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
+                        ItemsSource="{Binding ChartTypes}"
+                        SelectedItem="{Binding SelectedChartType}"/>
 
                 <forms:ChartView Chart="{Binding DonutChart}"
                           Margin="0,30,0,0"

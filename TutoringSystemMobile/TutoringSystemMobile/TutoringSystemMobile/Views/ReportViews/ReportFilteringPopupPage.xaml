@@ -27,7 +27,9 @@
             <StackLayout>
                 <BoxView Style="{StaticResource BoxViewBottomPopupStyle}" />
 
-                <Grid RowDefinitions="Auto" IsVisible="{Binding IsIncludeZeroProfitVisible}">
+                <Grid RowDefinitions="Auto"
+                      IsVisible="{Binding IsIncludeZeroProfitVisible}">
+
                     <Grid Grid.Row="0"
                           ColumnDefinitions="*,50" 
                           Margin="10">
@@ -39,31 +41,34 @@
                     </Grid>
                 </Grid>
 
-                <Grid Margin="10" RowDefinitions="Auto,Auto">
-                <Grid Grid.Row="0">
-                    <Label Text="Okres czasu dla statystyk"
-                               Style="{StaticResource FilteringLabelStyle}"/>
-                </Grid>
+                <Grid>
+                    <Label Grid.Row="0"
+                           Margin="10,0,0,0"
+                           Text="Okres czasu dla statystyk"
+                           Style="{StaticResource FilteringLabelStyle}"/>
 
-                <Grid Grid.Row="1" 
-                          Margin="-10,-5,0,0"
+                    <Grid Grid.Row="1"
+                          Margin="0,-15,0,0"
                           HorizontalOptions="Start" 
                           VerticalOptions="Center" 
                           ColumnDefinitions="Auto,Auto,Auto">
-                    <DatePicker Grid.Column="1"
+                        
+                        <DatePicker Grid.Column="1"
                                     TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
                                     Date="{Binding StartDate}"/>
-                    <Label Grid.Column="2" 
+                        
+                        <Label Grid.Column="2" 
                                Text=" - "
                                VerticalOptions="Center"
                                Style="{StaticResource FilteringLabelStyle}" />
-                    <DatePicker Grid.Column="3"
+                        
+                        <DatePicker Grid.Column="3"
                                     TextColor="{AppThemeBinding Dark=WhiteSmoke, Light=Black}"
                                     Date="{Binding EndDate}"/>
+                    </Grid>
                 </Grid>
-            </Grid>
 
-            <Button Text="Filtruj"
+                <Button Text="Filtruj"
                         Margin="0,10,0,10"
                         Command="{Binding FilterCommand}"
                         Style="{StaticResource PrimaryBlueButtonStyle}"/>
