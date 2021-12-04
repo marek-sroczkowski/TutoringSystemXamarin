@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.StudentCommands;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -12,9 +11,9 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 {
     public class StudentsViewModel : BaseViewModel
     {
-        public ObservableCollection<StudentDto> Students { get; }
+        public ObservableCollection<DisplayedStudentDto> Students { get; }
 
-        public ICommand LoadStudentsCommand { get; }
+        public Command LoadStudentsCommand { get; }
         public Command NewStudentCommand { get; }
         public Command<StudentDto> StudentTapped { get; }
         public Command PageAppearingCommand { get; }
@@ -24,9 +23,9 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 
         public StudentsViewModel()
         {
-            Students = new ObservableCollection<StudentDto>();
+            Students = new ObservableCollection<DisplayedStudentDto>();
             studentService = DependencyService.Get<IStudentService>();
-            LoadStudentsCommand = new LoadStudentsCommand(this, studentService);
+            LoadStudentsCommand = new Command(async () => await LoadStudentsAsync());
             NewStudentCommand = new Command(async () => await OnNewStudentClick());
             StudentTapped = new Command<StudentDto>(async (student) => await OnStudentSelected(student));
             PageAppearingCommand = new Command(OnAppearing);
@@ -36,6 +35,19 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         private void OnAppearing()
         {
             IsBusy = true;
+        }
+
+        private async Task LoadStudentsAsync()
+        {
+            IsBusy = true;
+
+            var students = await studentService.GetStudentsAsync();
+            var disyplayedStudents = students.Select(s => new DisplayedStudentDto(s));
+            Students.Clear();
+            foreach (var student in disyplayedStudents)
+                Students.Add(student);
+
+            IsBusy = false;
         }
 
         private async Task OnStudentSelected(StudentDto student)

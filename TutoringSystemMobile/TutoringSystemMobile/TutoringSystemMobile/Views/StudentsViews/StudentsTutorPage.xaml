@@ -34,7 +34,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Padding="3"
-                                 x:DataType="model:StudentDto">
+                                 x:DataType="model:DisplayedStudentDto">
 
                         <Grid RowDefinitions="Auto">
 
@@ -53,7 +53,7 @@
                                             Padding="0"
                                             IsClippedToBounds="True">
                                         
-                                        <Image Source="default_student_picture.png" 
+                                        <Image Source="{Binding Image}" 
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center"/>
                                     </Frame>
@@ -64,19 +64,12 @@
                                       RowDefinitions="Auto,Auto,Auto">
 
                                     <Label Grid.Row="0"
+                                           Text="{Binding StudentName}"
                                            LineBreakMode="WordWrap" 
                                            Style="{StaticResource LabelStyle}"
                                            FontAttributes="Bold"
-                                           FontSize="18">
-                                        
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding FirstName} " />
-                                                <Span Text=" " />
-                                                <Span Text="{Binding LastName} " />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
+                                           FontSize="18" />
+
 
                                     <Label Grid.Row="1"
                                            LineBreakMode="NoWrap"
@@ -87,16 +80,10 @@
                                     </Label>
 
                                     <Label Grid.Row="2"
+                                           Text="{Binding HourlRate}"
                                            Style="{StaticResource LabelStyle}"
                                            FontAttributes="Bold"
                                            FontSize="15">
-                                        
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding HourlRate} " />
-                                                <Span Text=" zł za godzinę" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
                                     </Label>
                                 </Grid>
 
