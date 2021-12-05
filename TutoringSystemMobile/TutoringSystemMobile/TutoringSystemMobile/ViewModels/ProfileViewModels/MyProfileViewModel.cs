@@ -1,5 +1,6 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
@@ -64,15 +65,13 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         private async Task OnEditContact()
         {
-            const string contactLabel = "Ogólne dane kontaktowe";
-            const string phonesLabel = "Numery telefonów";
-            var result = await Shell.Current.DisplayActionSheet("Jakie informacje chcesz zaktualizować?", "Anuluj", null, contactLabel, phonesLabel);
-            if (result == contactLabel)
+            var result = await Shell.Current.DisplayActionSheet(AlertConstans.InformationToUpdate, GeneralConstans.Cancel, null, AlertConstans.GeneralContactDetails, AlertConstans.PhoneNumbers);
+            if (result == AlertConstans.GeneralContactDetails)
             {
                 var contact = await DependencyService.Get<IContactService>().GetContactByLoggedInUserAsync();
                 await PopupNavigation.Instance.PushAsync(new EditContactPopupPage(contact.Id));
             }
-            else if (result == phonesLabel)
+            else if (result == AlertConstans.PhoneNumbers)
             {
                 var contact = await DependencyService.Get<IContactService>().GetContactByLoggedInUserAsync();
                 await Shell.Current.GoToAsync($"{nameof(EditPhonesPage)}?{nameof(EditPhonesViewModel.ContactId)}={contact.Id}");
@@ -91,14 +90,14 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         private async Task OnDeactivateAccount()
         {
-            var result = await Shell.Current.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz usunąć swoje konto?", "Tak", "Nie");
+            var result = await Shell.Current.DisplayAlert(AlertConstans.Confirmation, AlertConstans.AccountDeletionConfirmation, GeneralConstans.Yes, GeneralConstans.No);
             if (result)
             {
                 var removed = await DependencyService.Get<IUserService>().DeactivateUserAsync();
                 if (removed)
                     await OnLogout();
                 else
-                    DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -114,7 +113,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         private async Task OnLogout()
         {
-            SecureStorage.Remove("token");
+            SecureStorage.Remove(SecureStorageConstans.Token);
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
             await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }

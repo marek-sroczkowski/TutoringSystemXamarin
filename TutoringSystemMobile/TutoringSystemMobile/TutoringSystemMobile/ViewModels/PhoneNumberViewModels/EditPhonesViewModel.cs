@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -44,7 +45,7 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
             RemovePhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnRemovePhone(phone));
             EditPhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnEditPhone(phone));
 
-            MessagingCenter.Subscribe<ReloadContactService>(this, message: "reload", (sender) =>
+            MessagingCenter.Subscribe<ReloadContactService>(this, message: MessagingCenterConstans.Reload, (sender) =>
             {
                 LoadPhonesByContactId(contactId);
             });
@@ -60,12 +61,12 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
             var removed = await phoneNumberService.DeletePhoneNumberAsync(ContactId, phone.Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
                 PhoneNumbers.Remove(phone);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 

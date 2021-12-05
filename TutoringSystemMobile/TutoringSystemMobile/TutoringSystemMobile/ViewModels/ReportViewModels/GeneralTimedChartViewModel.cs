@@ -3,7 +3,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReportDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -14,7 +14,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
     public class GeneralTimedChartViewModel : BaseViewModel
     {
         private int selectedYear = DateTime.Now.Year;
-        private string selectedDataSource = "Łączny przychód";
+        private string selectedDataSource = PickerConstans.TotalProfit;
         private Chart chart;
 
         public ObservableCollection<GeneralTimedReportDto> GeneralTimedReport { get; }
@@ -65,7 +65,9 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             var reports = await DependencyService.Get<IReportService>().GetGeneralTimedReport(GetReportParameters());
             GeneralTimedReport.Clear();
             foreach (var report in reports)
+            {
                 GeneralTimedReport.Add(report);
+            }
 
             InitData();
 
@@ -91,17 +93,17 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
 
             switch (SelectedDataSource)
             {
-                case "Łączny przychód":
+                case PickerConstans.TotalProfit:
                 default:
                     entries = GetTotalProfitEntries();
                     break;
-                case "Przychód z korepetycji":
+                case PickerConstans.TutoringProfit:
                     entries = GetTutoringProfitEntries();
                     break;
-                case "Przychód ze zleceń":
+                case PickerConstans.OrderProfit:
                     entries = GetOrdersProfitEntries();
                     break;
-                case "Liczba godzin korepetycji":
+                case PickerConstans.TotalHours:
                     entries = GetTotalHoursEntries();
                     break;
             }
@@ -193,14 +195,15 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             for (int i = 2015; i <= DateTime.Now.Year; i++)
                 Years.Add(i);
         }
+
         private void SetChartDataSource()
         {
             ChartDataSources = new List<string>
             {
-                "Łączny przychód",
-                "Przychód z korepetycji",
-                "Przychód ze zleceń",
-                "Liczba godzin korepetycji"
+                PickerConstans.TotalProfit,
+                PickerConstans.TutoringProfit,
+                PickerConstans.OrderProfit,
+                PickerConstans.TotalHours
             };
         }
 
@@ -209,18 +212,18 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         {
             Months = new List<string>
             {
-                "Styczeń",
-                "Luty",
-                "Marzec",
-                "Kwiecień",
-                "Maj",
-                "Czerwiec",
-                "Lipiec",
-                "Sierpień",
-                "Wrzesień",
-                "Październik",
-                "Listopad",
-                "Grudzień"
+                PickerConstans.January,
+                PickerConstans.February,
+                PickerConstans.March,
+                PickerConstans.April,
+                PickerConstans.May,
+                PickerConstans.June,
+                PickerConstans.July,
+                PickerConstans.August,
+                PickerConstans.September,
+                PickerConstans.October,
+                PickerConstans.November,
+                PickerConstans.October
             };
         }
     }

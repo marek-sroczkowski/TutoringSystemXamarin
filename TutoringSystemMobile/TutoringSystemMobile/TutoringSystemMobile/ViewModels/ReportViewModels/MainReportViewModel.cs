@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReportDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -35,7 +36,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
 
         public MainReportViewModel()
         {
-            MessagingCenter.Subscribe<ReportFilteringViewModel>(this, "filterByDates", async (sender) =>
+            MessagingCenter.Subscribe<ReportFilteringViewModel>(this, MessagingCenterConstans.FilterByDates, async (sender) =>
             {
                 StartDate = sender.StartDate;
                 EndDate = sender.EndDate;
@@ -85,7 +86,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         {
             IsBusy = true;
 
-            var generalSummary = await DependencyService.Get<IReportService>().GetGeneralReportAsync(new ReportParameters(StartDate, EndDate, $"{nameof(BaseReportDto.TotalProfit)} desc"));
+            var generalSummary = await DependencyService.Get<IReportService>().GetGeneralReportAsync(new ReportParameters(StartDate, EndDate, SortingConstans.SortByTotalProfitDesc));
             TutoringProfit = $"{generalSummary.TutoringProfit} zł";
             OrderProfit = $"{generalSummary.OrderProfit} zł";
             TotalProfit = $"{generalSummary.TotalProfit} zł";

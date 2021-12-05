@@ -1,7 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Helpers;
-using TutoringSystemMobile.Models.ReportDtos;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.ReportViewModels
@@ -125,39 +125,39 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
         private void SetSortingParams()
         {
             if (IsSortingByProfitAsc)
-                SortBy = $"{nameof(BaseReportDto.TotalProfit)}";
+                SortBy = SortingConstans.SortByTotalProfitAsc;
             else if (IsSortingByProfitDesc)
-                SortBy = $"{nameof(BaseReportDto.TotalProfit)} desc";
+                SortBy = SortingConstans.SortByTotalProfitDesc;
             else if (IsSortingByHoursAsc)
-                SortBy = $"{nameof(BaseReportDto.TotalHours)}";
+                SortBy = SortingConstans.SortByTotalHoursAsc;
             else if (IsSortingByHoursDesc)
-                SortBy = $"{nameof(BaseReportDto.TotalHours)} desc";
+                SortBy = SortingConstans.SortByTotalHoursDesc;
             else if (IsSortingByReservationsCountAsc)
-                SortBy = $"{nameof(BaseReportDto.ReservationsCount)}";
+                SortBy = SortingConstans.SortByReservationsCountAsc;
             else if (IsSortingByReservationsCountDesc)
-                SortBy = $"{nameof(BaseReportDto.ReservationsCount)} desc";
+                SortBy = SortingConstans.SortByReservationsCountDesc;
         }
 
         private void OnSetOrderBy()
         {
             switch (SortBy.ToLower())
             {
-                case "totalprofit":
+                case SortingConstans.SortByTotalProfitAsc:
                     SetButtonsActivity(new ReportSortingRadioButtonsActivity(true, false, false, false, false, false));
                     break;
-                case "totalprofit desc":
+                case SortingConstans.SortByTotalProfitDesc:
                     SetButtonsActivity(new ReportSortingRadioButtonsActivity(false, true, false, false, false, false));
                     break;
-                case "totalhours":
+                case SortingConstans.SortByTotalHoursAsc:
                     SetButtonsActivity(new ReportSortingRadioButtonsActivity(false, false, true, false, false, false));
                     break;
-                case "totalhours desc":
+                case SortingConstans.SortByTotalHoursDesc:
                     SetButtonsActivity(new ReportSortingRadioButtonsActivity(false, false, false, true, false, false));
                     break;
-                case "reservationscount":
+                case SortingConstans.SortByReservationsCountAsc:
                     SetButtonsActivity(new ReportSortingRadioButtonsActivity(false, false, false, false, true, false));
                     break;
-                case "reservationscount desc":
+                case SortingConstans.SortByReservationsCountDesc:
                     SetButtonsActivity(new ReportSortingRadioButtonsActivity(false, false, false, false, false, true));
                     break;
             }
@@ -173,7 +173,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             IsBusy = false;
 
             SetSortingParams();
-            MessagingCenter.Send(this, "reportSorting");
+            MessagingCenter.Send(this, MessagingCenterConstans.ReportSorting);
 
             await PopupNavigation.Instance.PopAsync();
         }

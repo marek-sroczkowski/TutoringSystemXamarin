@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -46,13 +47,13 @@ namespace TutoringSystemMobile.Commands.PhoneNumberCommands
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Zaktualizowano");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
                 await PopupNavigation.Instance.PopAsync();
                 reloadContactService.ReloadContact();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

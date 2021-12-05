@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReportDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -40,20 +41,20 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
 
         public SubjectsReportViewModel()
         {
-            MessagingCenter.Subscribe<ReportFilteringViewModel>(this, "filterByDates", async (sender) =>
+            MessagingCenter.Subscribe<ReportFilteringViewModel>(this, MessagingCenterConstans.FilterByDates, async (sender) =>
             {
                 StartDate = sender.StartDate;
                 EndDate = sender.EndDate;
                 IsIncludeZeroProfit = sender.IsIncludeZeroProfit;
                 await OnLoadReport();
             });
-            MessagingCenter.Subscribe<ReportSortingViewModel>(this, "reportSorting", async (sender) =>
+            MessagingCenter.Subscribe<ReportSortingViewModel>(this, MessagingCenterConstans.ReportSorting, async (sender) =>
             {
                 SortBy = sender.SortBy;
                 await OnLoadReport();
             });
 
-            SortBy = $"{nameof(BaseReportDto.TotalProfit)} desc";
+            SortBy = SortingConstans.SortByTotalProfitDesc;
             reportService = DependencyService.Get<IReportService>();
             SubjectReports = new ObservableCollection<SubjectSummaryDto>();
             LoadReportCommand = new Command(async () => await OnLoadReport());

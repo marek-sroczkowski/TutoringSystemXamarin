@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -47,11 +48,12 @@ namespace TutoringSystemMobile.Commands.OrderCommands
 
             if (updated)
             {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={viewModel.Id}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

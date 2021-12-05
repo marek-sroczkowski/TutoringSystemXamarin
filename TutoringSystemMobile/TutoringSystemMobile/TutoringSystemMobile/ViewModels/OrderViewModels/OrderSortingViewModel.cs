@@ -1,5 +1,6 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Helpers;
 using Xamarin.Forms;
@@ -119,50 +120,50 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         private void SetSortingParams()
         {
             if (IsSortingByNameAsc)
-                SortBy = $"{nameof(OrderDetailsDto.Name)}";
+                SortBy = SortingConstans.SortByNameAsc;
             else if (IsSortingByNameDesc)
-                SortBy = $"{nameof(OrderDetailsDto.Name)} desc";
+                SortBy = SortingConstans.SortByNameDesc;
             else if (IsSortingByPriceAsc)
-                SortBy = $"{nameof(OrderDetailsDto.Cost)}";
+                SortBy = SortingConstans.SortByCostAsc;
             else if (IsSortingByPriceDesc)
-                SortBy = $"{nameof(OrderDetailsDto.Cost)} desc";
+                SortBy = SortingConstans.SortByCostDesc;
             else if (IsSortingByDeadlineAsc)
-                SortBy = $"{nameof(OrderDetailsDto.Deadline)}";
+                SortBy = SortingConstans.SortByDeadlineAsc;
             else if (IsSortingByDeadlineDesc)
-                SortBy = $"{nameof(OrderDetailsDto.Deadline)} desc";
+                SortBy = SortingConstans.SortByDeadlineDesc;
             else if (IsSortingByCreatedDateAsc)
-                SortBy = $"{nameof(OrderDetailsDto.ReceiptDate)}";
+                SortBy = SortingConstans.SortByReceiptDateAsc;
             else if (IsSortingByCreatedDateDesc)
-                SortBy = $"{nameof(OrderDetailsDto.ReceiptDate)} desc";
+                SortBy = SortingConstans.SortByReceiptDateDesc;
         }
 
         private void OnSetOrderBy()
         {
             switch (SortBy.ToLower())
             {
-                case "name":
+                case SortingConstans.SortByNameAsc:
                 default:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(true, false, false, false, false, false, false, false));
                     break;
-                case "name desc":
+                case SortingConstans.SortByNameDesc:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(false, true, false, false, false, false, false, false));
                     break;
-                case "cost":
+                case SortingConstans.SortByCostAsc:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(false, false, true, false, false, false, false, false));
                     break;
-                case "cost desc":
+                case SortingConstans.SortByCostDesc:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(false, false, false, true, false, false, false, false));
                     break;
-                case "deadline":
+                case SortingConstans.SortByDeadlineAsc:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(false, false, false, false, true, false, false, false));
                     break;
-                case "deadline desc":
+                case SortingConstans.SortByDeadlineDesc:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(false, false, false, false, false, true, false, false));
                     break;
-                case "receiptdate":
+                case SortingConstans.SortByReceiptDateAsc:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(false, false, false, false, false, false, true, false));
                     break;
-                case "receiptdate desc":
+                case SortingConstans.SortByReceiptDateDesc:
                     SetButtonsActivity(new OrderSortingRadioButtonsActivity(false, false, false, false, false, false, false, true));
                     break;
             }
@@ -218,7 +219,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             IsBusy = false;
 
             SetSortingParams();
-            MessagingCenter.Send(this, "orderSorting");
+            MessagingCenter.Send(this, MessagingCenterConstans.OrderSorting);
 
             await PopupNavigation.Instance.PopAsync();
         }

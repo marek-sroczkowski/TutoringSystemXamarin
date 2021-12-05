@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -45,7 +46,7 @@ namespace TutoringSystemMobile.Commands.StudentCommands
             if(updated)
                 await Shell.Current.GoToAsync($"..");
             else
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
         }
     }
 }

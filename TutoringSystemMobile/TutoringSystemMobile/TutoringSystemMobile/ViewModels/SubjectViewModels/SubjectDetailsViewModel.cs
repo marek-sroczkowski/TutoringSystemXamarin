@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -32,8 +33,8 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public string Description { get => description; set => SetValue(ref description, value); }
         public SubjectPlace Place { get => place; set => SetValue(ref place, value); }
         public SubjectCategory Category { get => category; set => SetValue(ref category, value); }
-        public string CategoryPl { get => categoryPl; set => SetValue(ref categoryPl, value); }
-        public string PlacePl { get => placePl; set => SetValue(ref placePl, value); }
+        public string DisplayedCategory { get => categoryPl; set => SetValue(ref categoryPl, value); }
+        public string DisplayedPlace { get => placePl; set => SetValue(ref placePl, value); }
 
         public Command EditSubjectCommand { get; }
         public Command RemoveSubjectCommand { get; }
@@ -56,70 +57,75 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             Description = subject.Description;
             Place = subject.Place;
             Category = subject.Category;
-            SetCategoryPl();
-            SetPlacePl();
+            SetCategory();
+            SetPlace();
 
             IsBusy = false;
         }
 
-        private void SetCategoryPl()
+        private void SetCategory()
         {
             switch (Category)
             {
                 case SubjectCategory.Other:
-                    CategoryPl = "Inny";
+                    DisplayedCategory = PickerConstans.OtherSubjectCategory;
                     break;
                 case SubjectCategory.Math:
-                    CategoryPl = "Matematyka";
+                    DisplayedCategory = PickerConstans.Math;
                     break;
                 case SubjectCategory.Informatics:
-                    CategoryPl = "Informatyka";
+                    DisplayedCategory = PickerConstans.Informatics;
                     break;
                 case SubjectCategory.ForeignLanguage:
-                    CategoryPl = "Język obcy";
+                    DisplayedCategory = PickerConstans.ForeignLanguage;
                     break;
                 case SubjectCategory.NativeLanguage:
-                    CategoryPl = "Język polski";
+                    DisplayedCategory = PickerConstans.NativeLanguage;
                     break;
                 case SubjectCategory.Physics:
-                    CategoryPl = "Fizyka";
+                    DisplayedCategory = PickerConstans.Physics;
                     break;
                 case SubjectCategory.Biology:
-                    CategoryPl = "Biologia";
+                    DisplayedCategory = PickerConstans.Biology;
                     break;
                 case SubjectCategory.Chemistry:
-                    CategoryPl = "Chemia";
+                    DisplayedCategory = PickerConstans.Chemistry;
                     break;
                 case SubjectCategory.Music:
-                    CategoryPl = "Muzyka";
+                    DisplayedCategory = PickerConstans.Music;
+                    break;
+                case SubjectCategory.Geography:
+                    DisplayedCategory = PickerConstans.Geography;
+                    break;
+                default:
                     break;
             }
         }
 
-        private void SetPlacePl()
+        private void SetPlace()
         {
             switch (Place)
             {
                 case SubjectPlace.AtTutor:
-                    PlacePl = "U nauczyciela";
+                    DisplayedPlace = PickerConstans.AtTutor;
                     break;
                 case SubjectPlace.AtStudent:
-                    PlacePl = "U ucznia";
+                    DisplayedPlace = PickerConstans.AtStudent;
                     break;
                 case SubjectPlace.Online:
-                    PlacePl = "Online";
+                    DisplayedPlace = PickerConstans.Online;
                     break;
                 case SubjectPlace.AtTutorAndAtStudent:
-                    PlacePl = "U nauczyciela / ucznia";
+                    DisplayedPlace = PickerConstans.AtTutorAndAtStudent;
                     break;
                 case SubjectPlace.AtTutorAndOnline:
-                    PlacePl = "U nauczyciela / online";
+                    DisplayedPlace = PickerConstans.AtTutorAndOnline;
                     break;
                 case SubjectPlace.AtStudentAndOnline:
-                    PlacePl = "U ucznia / online";
+                    DisplayedPlace = PickerConstans.AtStudentAndOnline;
                     break;
                 case SubjectPlace.All:
-                    PlacePl = "Dowolne";
+                    DisplayedPlace = PickerConstans.AllPlaces;
                     break;
             }
         }
@@ -131,7 +137,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
 
         private async Task OnRemoveRequest()
         {
-            var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", "Czy na pewno chcesz usunąć ten przedmiot?", "Tak", "Nie");
+            var result = await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.ConfirmationSubjectDeletion, GeneralConstans.Yes, GeneralConstans.No);
             if (result)
                 await RemoveSubjectAsync();
         }
@@ -141,12 +147,12 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             var removed = await subjectService.DeleteSubjectAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto przedmiot!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SubjectRemoved);
                 await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

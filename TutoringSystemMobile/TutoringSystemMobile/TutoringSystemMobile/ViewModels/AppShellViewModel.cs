@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Commands.ProfileCommands;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -16,7 +17,7 @@ namespace TutoringSystemMobile.ViewModels
         private bool isTutor = true;
         private bool isStudent = true;
         private string user;
-        private ImageSource profileImage = "default_user_picture.png";
+        private ImageSource profileImage = ResourceConstans.DefaultUserPicture;
 
         public bool IsTutor { get => isTutor; set => SetValue(ref isTutor, value); }
         public bool IsStudent { get => isStudent; set => SetValue(ref isStudent, value); }
@@ -42,12 +43,12 @@ namespace TutoringSystemMobile.ViewModels
                 await LoadPictureAsync();
             });
 
-            MessagingCenter.Subscribe<ProfilePictureViewModel>(this, message: "photoChanged", async (sender) =>
+            MessagingCenter.Subscribe<ProfilePictureViewModel>(this, message: MessagingCenterConstans.PhotoChanged, async (sender) =>
             {
                 await LoadPictureAsync();
             });
 
-            MessagingCenter.Subscribe<EditGeneralUserInfoCommand>(this, message: "nameChanged", async (sender) =>
+            MessagingCenter.Subscribe<EditGeneralUserInfoCommand>(this, message: MessagingCenterConstans.NameChanged, async (sender) =>
             {
                 await LoadUserAsync();
             });
@@ -63,7 +64,7 @@ namespace TutoringSystemMobile.ViewModels
 
         private async Task LoadUserAsync()
         {
-            User = await SecureStorage.GetAsync("userName");
+            User = await SecureStorage.GetAsync(SecureStorageConstans.UserName);
             var user = await DependencyService.Get<IUserService>().GetGeneralUserInfoAsync();
             User = $"{user.FirstName} {user.LastName}";
         }
@@ -73,7 +74,7 @@ namespace TutoringSystemMobile.ViewModels
             var picture = await DependencyService.Get<IImageService>()?.GetProfileImageAsync();
             ProfileImage = picture.ProfilePictureBase64 != null ?
                 ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(picture.ProfilePictureBase64))) :
-                "default_user_picture.png";
+                ResourceConstans.DefaultUserPicture;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.StudentDtos;
@@ -47,17 +48,17 @@ namespace TutoringSystemMobile.Commands.StudentCommands
             switch (status)
             {
                 case AddStudentToTutorStatus.InternalError:
-                    DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
                     break;
                 case AddStudentToTutorStatus.Added:
-                    DependencyService.Get<IToast>()?.MakeLongToast("Dodano ucznia!");
+                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedStudent);
                     await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
                     break;
                 case AddStudentToTutorStatus.IncorrectUsername:
-                    await Application.Current.MainPage.DisplayAlert("Uwaga!", "Uczeń o podanym loginie nie istnieje!", "OK");
+                    await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.StudentNotExist, GeneralConstans.Ok);
                     break;
                 case AddStudentToTutorStatus.StudentWasAlreadyAdded:
-                    await Application.Current.MainPage.DisplayAlert("Uwaga!", "Uczeń jest już dodany!", "OK");
+                    await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.StudentAlreadyExist, GeneralConstans.Ok);
                     break;
             }
         }

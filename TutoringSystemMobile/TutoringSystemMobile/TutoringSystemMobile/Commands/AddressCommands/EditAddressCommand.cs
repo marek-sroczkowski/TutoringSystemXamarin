@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.AddressDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -37,11 +38,16 @@ namespace TutoringSystemMobile.Commands.AddressCommands
             viewModel.IsBusy = true;
             var updated = await addressService.UpdateAddressAsync(new UpdatedAddressDto(viewModel.Id, viewModel.Street, viewModel.HouseAndFlatNumber, viewModel.City, viewModel.PostalCode, viewModel.Description));
             viewModel.IsBusy = false;
-            
+
             if (updated)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
                 await Shell.Current.GoToAsync("..");
+            }
             else
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
         }
     }
 }

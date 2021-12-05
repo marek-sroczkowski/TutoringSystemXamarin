@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.SubjectDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -45,11 +46,11 @@ namespace TutoringSystemMobile.Commands.SubjectCommands
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Dodano przedmiot");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedSubject);
                 await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}/{nameof(SubjectDetailsTutorPage)}?{nameof(SubjectDetailsViewModel.Id)}={newOrderId}");
             }
         }

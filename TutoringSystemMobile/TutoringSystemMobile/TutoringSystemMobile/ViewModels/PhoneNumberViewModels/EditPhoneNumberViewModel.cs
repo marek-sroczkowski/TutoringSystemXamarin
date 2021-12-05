@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using TutoringSystemMobile.Commands.PhoneNumberCommands;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -36,7 +37,7 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
         {
             IsBusy = true;
 
-            ContactId = long.Parse(await SecureStorage.GetAsync("contactId"));
+            ContactId = long.Parse(await SecureStorage.GetAsync(SecureStorageConstans.ContactId));
             var phoneNumber = await phoneNumberService.GetPhoneNumberById(ContactId, PhoneNumberId);
             Owner = phoneNumber.Owner;
             Number = phoneNumber.Number;

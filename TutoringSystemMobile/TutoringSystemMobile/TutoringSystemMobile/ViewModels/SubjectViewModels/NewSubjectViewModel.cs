@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 using TutoringSystemMobile.Commands.SubjectCommands;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
@@ -32,34 +33,34 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                 IsCategoryLabelVisible = true;
                 switch (selectedCategory)
                 {
-                    case "Inna":
+                    case PickerConstans.OtherSubjectCategory:
                         Category = SubjectCategory.Other;
                         break;
-                    case "Matematyka":
+                    case PickerConstans.Math:
                         Category = SubjectCategory.Math;
                         break;
-                    case "Informatyka":
+                    case PickerConstans.Informatics:
                         Category = SubjectCategory.Informatics;
                         break;
-                    case "Język obcy":
+                    case PickerConstans.ForeignLanguage:
                         Category = SubjectCategory.ForeignLanguage;
                         break;
-                    case "Język polski":
+                    case PickerConstans.NativeLanguage:
                         Category = SubjectCategory.NativeLanguage;
                         break;
-                    case "Fizyka":
+                    case PickerConstans.Physics:
                         Category = SubjectCategory.Physics;
                         break;
-                    case "Biologia":
+                    case PickerConstans.Biology:
                         Category = SubjectCategory.Biology;
                         break;
-                    case "Chemia":
+                    case PickerConstans.Chemistry:
                         Category = SubjectCategory.Chemistry;
                         break;
-                    case "Muzyka":
+                    case PickerConstans.Music:
                         Category = SubjectCategory.Music;
                         break;
-                    case "Geografia":
+                    case PickerConstans.Geography:
                         Category = SubjectCategory.Geography;
                         break;
                 }
@@ -74,25 +75,25 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                 IsPlaceLabelVisible = true;
                 switch (selectedPlace)
                 {
-                    case "U nauczyciela":
+                    case PickerConstans.AtTutor:
                         Place = SubjectPlace.AtTutor;
                         break;
-                    case "U ucznia":
+                    case PickerConstans.AtStudent:
                         Place = SubjectPlace.AtStudent;
                         break;
-                    case "Online":
+                    case PickerConstans.Online:
                         Place = SubjectPlace.Online;
                         break;
-                    case "U nauczyciela / ucznia":
+                    case PickerConstans.AtTutorAndAtStudent:
                         Place = SubjectPlace.AtTutorAndAtStudent;
                         break;
-                    case "U nauczyciela / online":
+                    case PickerConstans.AtTutorAndOnline:
                         Place = SubjectPlace.AtTutorAndOnline;
                         break;
-                    case "U ucznia / online":
+                    case PickerConstans.AtStudentAndOnline:
                         Place = SubjectPlace.AtStudentAndOnline;
                         break;
-                    case "Dowolne":
+                    case PickerConstans.AllPlaces:
                         Place = SubjectPlace.All;
                         break;
                 }
@@ -110,10 +111,41 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public NewSubjectViewModel()
         {
             AddNewSubjectCommand = new AddNewSubjectCommand(this, DependencyService.Get<ISubjectService>());
-            Categories = new List<string> { "Inna", "Matematyka", "Informatyka", "Język obcy", "Język polski", "Fizyka", "Biologia", "Chemia", "Muzyka", "Geografia" };
-            Places = new List<string> { "Dowolne", "U nauczyciela", "U ucznia", "Online", "U nauczyciela / ucznia", "U nauczyciela / online", "U ucznia / online" };
+            SetCategories();
+            SetPlaces();
             IsCategoryLabelVisible = false;
             IsPlaceLabelVisible = false;
+        }
+
+        private void SetCategories()
+        {
+            Categories = new List<string>
+            {
+                PickerConstans.OtherSubjectCategory,
+                PickerConstans.Math,
+                PickerConstans.Informatics,
+                PickerConstans.ForeignLanguage,
+                PickerConstans.NativeLanguage,
+                PickerConstans.Physics,
+                PickerConstans.Biology,
+                PickerConstans.Chemistry,
+                PickerConstans.Music,
+                PickerConstans.Geography,
+            };
+        }
+
+        private void SetPlaces()
+        {
+            Places = new List<string>
+            {
+                PickerConstans.AllPlaces,
+                PickerConstans.AtTutor,
+                PickerConstans.AtStudent,
+                PickerConstans.Online,
+                PickerConstans.AtTutorAndAtStudent,
+                PickerConstans.AtTutorAndOnline,
+                PickerConstans.AtStudentAndOnline,
+            };
         }
     }
 }

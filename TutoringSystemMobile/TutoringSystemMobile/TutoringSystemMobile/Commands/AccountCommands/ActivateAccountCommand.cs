@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
@@ -52,7 +53,7 @@ namespace TutoringSystemMobile.Commands.AccountCommands
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Uwaga!", "Nieprawidłowy kod", "OK");
+                await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.IncorrectActivationCode, GeneralConstans.Ok);
             }
         }
     }

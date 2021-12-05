@@ -1,4 +1,5 @@
-﻿using TutoringSystemMobile.Models.Enums;
+﻿using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Models.Enums;
 
 namespace TutoringSystemMobile.Models.ReportDtos
 {
@@ -26,13 +27,13 @@ namespace TutoringSystemMobile.Models.ReportDtos
             switch (place)
             {
                 case ReservationPlace.AtTutor:
-                    PlaceName = "U nauczyciela";
+                    PlaceName = PickerConstans.AtTutor;
                     break;
                 case ReservationPlace.AtStudent:
-                    PlaceName = "U ucznia";
+                    PlaceName = PickerConstans.AtStudent;
                     break;
                 case ReservationPlace.Online:
-                    PlaceName = "Online";
+                    PlaceName = PickerConstans.Online;
                     break;
                 default:
                     break;

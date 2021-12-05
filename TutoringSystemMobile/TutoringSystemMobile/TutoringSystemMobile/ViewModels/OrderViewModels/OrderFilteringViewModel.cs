@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
@@ -46,7 +47,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             {
                 if (!value && !IsPending && !IsRealized)
                 {
-                    DependencyService.Get<IToast>()?.MakeShortToast("Musi być wybrany minimum 1 status!");
+                    DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
                     IsPending = true;
                 }
                 SetValue(ref isInProgress, value);
@@ -59,7 +60,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             {
                 if (!value && !IsInProgress && !IsRealized)
                 {
-                    DependencyService.Get<IToast>()?.MakeShortToast("Musi być wybrany minimum 1 status!");
+                    DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
                     IsInProgress = true;
                 }
                 SetValue(ref isPending, value);
@@ -72,7 +73,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             {
                 if (!value && !IsInProgress && !IsPending)
                 {
-                    DependencyService.Get<IToast>()?.MakeShortToast("Musi być wybrany minimum 1 status!");
+                    DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
                     IsInProgress = true;
                 }
                 SetValue(ref isRealized, value);
@@ -102,7 +103,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         private async Task OnFilter()
         {
-            MessagingCenter.Send(this, "orderFiltering");
+            MessagingCenter.Send(this, MessagingCenterConstans.OrderFiltering);
             await PopupNavigation.Instance.PopAsync();
         }
     }

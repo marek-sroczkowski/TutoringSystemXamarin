@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using TutoringSystemMobile.Constans;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Models.StudentDtos
@@ -21,15 +22,10 @@ namespace TutoringSystemMobile.Models.StudentDtos
             Id = student.Id;
             Username = student.Username;
             StudentName = $"{student.FirstName} {student.LastName}";
-            HourlRate = $"{student.HourlRate} zł za godzinę";
-            if (string.IsNullOrEmpty(student.ProfilePictureBase64))
-            {
-                Image = "default_user_picture.png";
-            }
-            else
-            {
-                Image = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(student.ProfilePictureBase64)));
-            }
+            HourlRate = $"{student.HourlRate} {GeneralConstans.PlnPerHours}";
+            Image = string.IsNullOrEmpty(student.ProfilePictureBase64)
+                ? ResourceConstans.DefaultStudentPicture
+                : ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(student.ProfilePictureBase64)));
         }
     }
 }

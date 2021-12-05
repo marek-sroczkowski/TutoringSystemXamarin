@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
@@ -42,12 +43,12 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         public OrdersViewModel()
         {
-            MessagingCenter.Subscribe<OrderSortingViewModel>(this, "orderSorting", async (sender) =>
+            MessagingCenter.Subscribe<OrderSortingViewModel>(this, MessagingCenterConstans.OrderSorting, async (sender) =>
             {
                 SortBy = sender.SortBy;
                 await OnLoadOrders();
             });
-            MessagingCenter.Subscribe<OrderFilteringViewModel>(this, "orderFiltering", async (sender) =>
+            MessagingCenter.Subscribe<OrderFilteringViewModel>(this, MessagingCenterConstans.OrderFiltering, async (sender) =>
             {
                 OrderParameters.DeadlineEnd = sender.DeadlineEnd;
                 OrderParameters.DeadlineStart = sender.DeadlineStart;
@@ -74,7 +75,8 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             PageAppearingCommand = new Command(async () => await OnAppearing());
             ChangeOrderStatusCommand = new Command<OrderDto>(async (order) => await OnChangeOrderStatus(order));
             ChangePaymentStatusCommand = new Command<OrderDto>(async (order) => await OnChangePaymentStatus(order));
-            SortBy = $"{nameof(OrderDetailsDto.ReceiptDate)} desc";
+
+            SortBy = SortingConstans.SortByReceiptDateDesc;
         }
 
         private async Task OnLoadOrders()
@@ -149,19 +151,19 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             if (order is null)
                 return;
 
-            var result = await Shell.Current.DisplayActionSheet("Zmiana statusu zlecenia", "Anuluj", null, "Oczekujące", "W realizacji", "Zrealizowane");
-            if (result is null || result == "Anuluj")
+            var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderStatus, GeneralConstans.Cancel, null, PickerConstans.PendingOrder, PickerConstans.InProgressOrder, PickerConstans.RealizedOrder);
+            if (result is null || result == GeneralConstans.Cancel)
                 return;
 
             var status = GetOrderStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
-                DependencyService.Get<IToast>()?.MakeLongToast("Zmieniono status zlecenia");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedOrderStatus);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -170,45 +172,44 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             if (order is null)
                 return;
 
-            var result = await Shell.Current.DisplayActionSheet("Zmiana statusu płatności", "Anuluj", null, "Opłacone", "Nie opłacone");
-            if (result is null || result == "Anuluj")
+            var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderPaymentStatus, GeneralConstans.Cancel, null, PickerConstans.IsPaid, PickerConstans.IsNotPaid);
+            if (result is null || result == GeneralConstans.Cancel)
                 return;
 
             var status = GetPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
-                DependencyService.Get<IToast>()?.MakeLongToast("Zmieniono status płatności");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedOrderPaymentStatus);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
-        private AdditionalOrderStatus GetOrderStatus(string statusStringPl)
+        private AdditionalOrderStatus GetOrderStatus(string statusString)
         {
-            switch (statusStringPl)
+            switch (statusString)
             {
-                case "Oczekujące":
+                case PickerConstans.PendingOrder:
                     return AdditionalOrderStatus.Pending;
-                case "W realizacji":
+                case PickerConstans.InProgressOrder:
                     return AdditionalOrderStatus.InProgress;
-                case "Zrealizowane":
+                case PickerConstans.RealizedOrder:
                     return AdditionalOrderStatus.Realized;
                 default:
                     return AdditionalOrderStatus.Pending;
             }
         }
 
-        private bool GetPaymentStatus(string paymentStatusStringPl)
+        private bool GetPaymentStatus(string paymentStatusString)
         {
-            switch (paymentStatusStringPl)
+            switch (paymentStatusString)
             {
-                case "Opłacone":
+                case PickerConstans.IsPaid:
                     return true;
-                case "Nie opłacone":
-                    return false;
+                case PickerConstans.IsNotPaid:
                 default:
                     return false;
             }

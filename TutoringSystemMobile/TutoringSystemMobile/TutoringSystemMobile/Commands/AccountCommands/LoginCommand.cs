@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Enums;
@@ -62,7 +63,7 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
         private async Task LoggedInCorrectly(UserDto user)
         {
-            await SecureStorage.SetAsync("userName", $"{user.FirstName} {user.LastName}");
+            await SecureStorage.SetAsync(SecureStorageConstans.UserName, $"{user.FirstName} {user.LastName}");
 
             switch (user.Role)
             {
@@ -84,7 +85,7 @@ namespace TutoringSystemMobile.Commands.AccountCommands
         private async Task InvalidUsernameOrPassword()
         {
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
-            await Application.Current.MainPage.DisplayAlert("Uwaga!", "Nieprawidłowe dane logowania", "OK");
+            await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.InvalidLogin, GeneralConstans.Ok);
         }
 
         private async Task LoggedAsTutor()

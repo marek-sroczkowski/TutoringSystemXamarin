@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using TutoringSystemMobile.Commands.StudentCommands;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -25,7 +26,7 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
                 if (!string.IsNullOrEmpty(street))
                     return street;
                 else
-                    return "- ";
+                    return GeneralConstans.NoValue;
             }
 
             set => SetValue(ref street, value);
@@ -37,7 +38,7 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
                 if (!string.IsNullOrEmpty(houseAndFlatNumber))
                     return houseAndFlatNumber;
                 else
-                    return "- ";
+                    return GeneralConstans.NoValue;
             }
 
             set => SetValue(ref houseAndFlatNumber, value);
@@ -49,7 +50,7 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
                 if (!string.IsNullOrEmpty(city))
                     return city;
                 else
-                    return "- ";
+                    return GeneralConstans.NoValue;
             }
 
             set => SetValue(ref city, value);
@@ -61,7 +62,7 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
                 if (!string.IsNullOrEmpty(postalCode))
                     return postalCode;
                 else
-                    return "- ";
+                    return GeneralConstans.NoValue;
             }
 
             set => SetValue(ref postalCode, value);
@@ -85,8 +86,8 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
         {
             IsBusy = true;
 
-            await SecureStorage.SetAsync("currentPage", "address");
-            long addressId = long.Parse(await SecureStorage.GetAsync("addressId"));
+            await SecureStorage.SetAsync(SecureStorageConstans.CurrentPage, SecureStorageConstans.Address);
+            long addressId = long.Parse(await SecureStorage.GetAsync(SecureStorageConstans.AddressId));
             var address = await addressService.GetAddressByIdAsync(addressId);
 
             Street = address.Street;

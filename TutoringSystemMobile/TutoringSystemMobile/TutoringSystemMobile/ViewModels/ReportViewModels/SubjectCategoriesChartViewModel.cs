@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReportDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -64,15 +65,15 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             PageAppearingCommand = new Command(async () => await OnLoadReport());
             ChartDataSources = new List<string>
             {
-                "Przychód",
-                "Licza zajęć",
-                "Łączna ilość godzin"
+                PickerConstans.Profit,
+                PickerConstans.ReservationCount,
+                PickerConstans.TotalHours
             };
             SelectedDataSource = ChartDataSources[0];
             ChartTypes = new List<string>
             {
-                "Kołowy",
-                "Słupkowy"
+                PickerConstans.DonutChart,
+                PickerConstans.BarChart
             };
             SelectedChartType = ChartTypes[0];
         }
@@ -101,19 +102,19 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             IEnumerable<ChartEntry> donutChartEntries;
             switch (SelectedDataSource)
             {
-                case "Przychód":
+                case PickerConstans.Profit:
                 default:
                     donutChartEntries = GetProfitEntries();
                     break;
-                case "Licza zajęć":
+                case PickerConstans.ReservationCount:
                     donutChartEntries = GetReservationsCountEntries();
                     break;
-                case "Łączna ilość godzin":
+                case PickerConstans.TotalHours:
                     donutChartEntries = GetHoursEntries();
                     break;
             }
 
-            if (SelectedChartType == "Słupkowy")
+            if (SelectedChartType == PickerConstans.BarChart)
             {
                 DonutChart = new BarChart
                 {
@@ -123,7 +124,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
                     ValueLabelOrientation = Orientation.Horizontal
                 };
             }
-            else if (SelectedChartType == "Kołowy")
+            else if (SelectedChartType == PickerConstans.DonutChart)
             {
                 DonutChart = new DonutChart
                 {
@@ -141,7 +142,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             foreach (var report in StudentReports)
             {
                 var categoryReport = new SubjectCategorySummaryDto(report.SubjectCategory, report.ReservationsCount, report.TotalHours, report.TotalProfit);
-                var label = SelectedChartType == "Kołowy" ?
+                var label = SelectedChartType == PickerConstans.DonutChart ?
                     categoryReport.CategoryName.Length > 17 ? categoryReport.CategoryName.Substring(0, 17) : categoryReport.CategoryName :
                     categoryReport.CategoryName;
 
@@ -165,7 +166,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             foreach (var report in StudentReports)
             {
                 var categoryReport = new SubjectCategorySummaryDto(report.SubjectCategory, report.ReservationsCount, report.TotalHours, report.TotalProfit);
-                var label = SelectedChartType == "Kołowy" ?
+                var label = SelectedChartType == PickerConstans.DonutChart ?
                     categoryReport.CategoryName.Length > 17 ? categoryReport.CategoryName.Substring(0, 17) : categoryReport.CategoryName :
                     categoryReport.CategoryName;
 
@@ -189,7 +190,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
             foreach (var report in StudentReports)
             {
                 var categoryReport = new SubjectCategorySummaryDto(report.SubjectCategory, report.ReservationsCount, report.TotalHours, report.TotalProfit);
-                var label = SelectedChartType == "Kołowy" ?
+                var label = SelectedChartType == PickerConstans.DonutChart ?
                     categoryReport.CategoryName.Length > 17 ? categoryReport.CategoryName.Substring(0, 17) : categoryReport.CategoryName :
                     categoryReport.CategoryName;
 

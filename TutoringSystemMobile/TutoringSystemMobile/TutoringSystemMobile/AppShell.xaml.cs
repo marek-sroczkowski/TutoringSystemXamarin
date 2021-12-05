@@ -1,4 +1,5 @@
 ﻿using System;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
@@ -47,7 +48,7 @@ namespace TutoringSystemMobile
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
         {
-            SecureStorage.Remove("token");
+            SecureStorage.Remove(SecureStorageConstans.Token);
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
             await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.AccountViewModels;
@@ -38,9 +39,9 @@ namespace TutoringSystemMobile.Commands.AccountCommands
             viewModel.IsBusy = false;
 
             if (sent)
-                DependencyService.Get<IToast>()?.MakeLongToast("Wysłano nowy kod aktywacyjny!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SentActivationCode);
             else
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd wysyłania! Spróbuj ponownie");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorActivationCodeSending);
         }
     }
 }

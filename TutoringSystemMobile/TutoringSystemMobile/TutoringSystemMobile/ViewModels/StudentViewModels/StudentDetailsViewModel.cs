@@ -1,5 +1,6 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -54,8 +55,8 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             IsBusy = true;
 
             selectedStudent = await studentService.GetStudentByIdAsync(studentId);
-            await SecureStorage.SetAsync("addressId", selectedStudent.Address.Id.ToString());
-            await SecureStorage.SetAsync("contactId", selectedStudent.Contact.Id.ToString());
+            await SecureStorage.SetAsync(SecureStorageConstans.AddressId, selectedStudent.Address.Id.ToString());
+            await SecureStorage.SetAsync(SecureStorageConstans.ContactId, selectedStudent.Contact.Id.ToString());
 
             Name = $"{selectedStudent.FirstName} {selectedStudent.LastName}";
             Username = selectedStudent.Username;
@@ -67,12 +68,12 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 
         private async Task OnAppearing()
         {
-            await SecureStorage.SetAsync("currentPage", "generalInformation");
+            await SecureStorage.SetAsync(SecureStorageConstans.CurrentPage, SecureStorageConstans.GeneralInformation);
         }
 
         private async Task OnRemoveStudent()
         {
-            var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", $"Czy na pewno chcesz usunąć  {Username} z listy swoich uczniów?", "Tak", "Nie");
+            var result = await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, $"{AlertConstans.ConfirmationRemovePrefix} {Username} {AlertConstans.FromStudentList}", GeneralConstans.Yes, GeneralConstans.No);
             if (result)
                 await RemoveStudentAsync();
         }
@@ -82,28 +83,28 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             var removed = await studentService.RemoveStudentAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Skreślono ucznia z listy!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.StudentRemoved);
                 await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
         private async Task OnEditStudent()
         {
-            string currentPage = await SecureStorage.GetAsync("currentPage");
+            string currentPage = await SecureStorage.GetAsync(SecureStorageConstans.CurrentPage);
 
             switch(currentPage)
             {
-                case "generalInformation":
+                case SecureStorageConstans.GeneralInformation:
                     await Shell.Current.GoToAsync($"{nameof(EditStudentGeneralInformationTutorPage)}?{nameof(EditStudentGeneralInformationViewModel.Id)}={selectedStudent.Id}");
                     break;
-                case "address":
+                case SecureStorageConstans.Address:
                     await Shell.Current.GoToAsync($"{nameof(EditAddressPage)}?{nameof(EditAddressViewModel.Id)}={selectedStudent.Address.Id}");
                     break;
-                case "contact":
+                case SecureStorageConstans.Contact:
                     await PopupNavigation.Instance.PushAsync(new EditContactPopupPage(selectedStudent.Contact.Id));
                     break;
             }

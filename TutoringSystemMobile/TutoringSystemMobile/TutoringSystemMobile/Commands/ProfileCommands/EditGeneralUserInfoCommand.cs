@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -43,14 +44,14 @@ namespace TutoringSystemMobile.Commands.ProfileCommands
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Zaktulizowane dane");
-                await SecureStorage.SetAsync("userName", $"{viewModel.FirstName} {viewModel.LastName}");
-                MessagingCenter.Send(this, "nameChanged");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                await SecureStorage.SetAsync(SecureStorageConstans.UserName, $"{viewModel.FirstName} {viewModel.LastName}");
+                MessagingCenter.Send(this, MessagingCenterConstans.NameChanged);
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

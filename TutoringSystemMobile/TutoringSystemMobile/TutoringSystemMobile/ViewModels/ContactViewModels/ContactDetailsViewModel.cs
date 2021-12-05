@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -19,29 +20,29 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         private string discordName;
 
         public long Id { get => id; set => SetValue(ref id, value); }
-        public string Email 
-        { 
+        public string Email
+        {
             get
             {
                 if (!string.IsNullOrEmpty(email))
                     return email;
                 else
-                    return "- ";
+                    return GeneralConstans.NoValue;
             }
 
-            set => SetValue(ref email, value); 
+            set => SetValue(ref email, value);
         }
-        public string DiscordName 
+        public string DiscordName
         {
             get
             {
                 if (!string.IsNullOrEmpty(discordName))
                     return discordName;
                 else
-                    return "- ";
+                    return GeneralConstans.NoValue;
             }
 
-            set => SetValue(ref discordName, value); 
+            set => SetValue(ref discordName, value);
         }
         public string Owner { get => owner; set => SetValue(ref owner, value); }
 
@@ -69,7 +70,7 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             RemovePhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnRemovePhone(phone));
             EditPhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnEditPhone(phone));
 
-            MessagingCenter.Subscribe<ReloadContactService>(this, message: "reload", async (sender) =>
+            MessagingCenter.Subscribe<ReloadContactService>(this, message: MessagingCenterConstans.Reload, async (sender) =>
             {
                 await OnAppearing();
             });
@@ -83,14 +84,14 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         private async Task OnRemovePhone(PhoneNumberDto phone)
         {
             var removed = await phoneNumberService.DeletePhoneNumberAsync(Id, phone.Id);
-            if(removed)
+            if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
                 PhoneNumbers.Remove(phone);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -103,8 +104,8 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         {
             IsBusy = true;
 
-            await SecureStorage.SetAsync("currentPage", "contact");
-            Id = long.Parse(await SecureStorage.GetAsync("contactId"));
+            await SecureStorage.SetAsync(SecureStorageConstans.CurrentPage, SecureStorageConstans.Contact);
+            Id = long.Parse(await SecureStorage.GetAsync(SecureStorageConstans.ContactId));
             var contact = await contactService.GetContactByIdAsync(Id);
 
             Email = contact.Email;
@@ -113,7 +114,9 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
 
             PhoneNumbers.Clear();
             foreach (var phone in contact.PhoneNumbers)
+            {
                 PhoneNumbers.Add(phone);
+            }
 
             IsBusy = false;
         }
@@ -126,15 +129,15 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             }
             catch (ArgumentNullException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Niepoprawny numer!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.InvalidPhoneNumber);
             }
             catch (FeatureNotSupportedException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Na Twoim urządzeniu ta opcja nie działa!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.FeatureNotSupported);
             }
             catch (Exception)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Nie można zadzownić! Sprawdź poprawność numeru!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.CanNotMakeCall);
             }
         }
     }

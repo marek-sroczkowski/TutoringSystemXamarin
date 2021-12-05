@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -66,6 +67,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             Status = order.Status;
             ReceiptDate = order.ReceiptDate;
             Description = order.Description;
+
             SetPaidStatus();
             SetOrderStatus();
 
@@ -74,10 +76,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         private void SetPaidStatus()
         {
-            if (isPaid)
-                PaidStatus = "Zapłacono";
-            else
-                PaidStatus = "Nie zapłacono";
+            PaidStatus = isPaid ? PickerConstans.IsPaid : PickerConstans.IsNotPaid;
         }
 
         private void SetOrderStatus()
@@ -85,13 +84,13 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             switch (Status)
             {
                 case AdditionalOrderStatus.Pending:
-                    OrderStatus = "Oczekujące";
+                    OrderStatus = PickerConstans.PendingOrder;
                     break;
                 case AdditionalOrderStatus.InProgress:
-                    OrderStatus = "W realizacji";
+                    OrderStatus = PickerConstans.InProgressOrder;
                     break;
                 case AdditionalOrderStatus.Realized:
-                    OrderStatus = "Zrealizowane";
+                    OrderStatus = PickerConstans.RealizedOrder;
                     break;
             }
         }
@@ -103,9 +102,11 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         private async Task OnRemoveRequest()
         {
-            var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", "Czy na pewno chcesz usunąć to zlecenie?", "Tak", "Nie");
+            var result = await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.ConfirmationOrderDeletion, GeneralConstans.Yes, GeneralConstans.No);
             if (result)
+            {
                 await RemoveOrderAsync();
+            }
         }
 
         private async Task RemoveOrderAsync()
@@ -113,12 +114,12 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             var removed = await orderService.DeleteAdditionalOrderAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto zlecenie!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.OrderRemoved);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

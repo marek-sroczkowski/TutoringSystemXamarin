@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.ReportDtos;
 using Xamarin.Forms;
 
@@ -31,7 +32,7 @@ namespace TutoringSystemMobile.ViewModels.ReportViewModels
 
         private async Task OnFilter()
         {
-            MessagingCenter.Send(this, "filterByDates");
+            MessagingCenter.Send(this, MessagingCenterConstans.FilterByDates);
             await PopupNavigation.Instance.PopAsync();
         }
     }

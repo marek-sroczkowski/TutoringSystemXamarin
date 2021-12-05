@@ -3,6 +3,7 @@ using Plugin.Media.Abstractions;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -15,7 +16,6 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
     {
         private const float resizedWidth = 512;
         private const float resizedHeight = 512;
-        private const string defaultPhoto = "default_user_picture.png";
 
         private long userId;
         private ImageSource profileImage;
@@ -38,14 +38,12 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         private async Task OnSetImage()
         {
-            const string fromGallery = "Galeria";
-            const string fromCamera = "Aparat";
-            var result = await Shell.Current.DisplayActionSheet("", "Anuluj", null, fromGallery, fromCamera);
-            if (result == fromGallery)
+            var result = await Shell.Current.DisplayActionSheet(string.Empty, GeneralConstans.Cancel, null, AlertConstans.Galerry, AlertConstans.Camera);
+            if (result == AlertConstans.Galerry)
             {
                 await LoadImageFromGallery();
             }
-            else if (result == fromCamera)
+            else if (result == AlertConstans.Camera)
             {
                 await LoadImageFromCamera();
             }
@@ -56,13 +54,13 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             var removed = await DependencyService.Get<IImageService>().RemoveProfileImageAsync();
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Usunięto");
-                ProfileImage = defaultPhoto;
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
+                ProfileImage = ResourceConstans.DefaultUserPicture;
                 HasUserPhoto = false;
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -75,7 +73,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             if (string.IsNullOrEmpty(image.ProfilePictureBase64))
             {
                 HasUserPhoto = false;
-                ProfileImage = defaultPhoto;
+                ProfileImage = ResourceConstans.DefaultUserPicture;
             }
             else
             {
@@ -94,11 +92,11 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             }
             catch (PermissionException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Aby załadować zdjęcie musisz wyrazić zgodę na przydzielenie uprawnień aplikacji!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.NoGalleryPermission);
             }
             catch (Exception)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -110,11 +108,11 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             }
             catch (PermissionException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Aby użyć aparatu musisz wyrazić zgodę na przydzielenie uprawnień aplikacji!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.NoCameraPermission);
             }
             catch (Exception)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -151,11 +149,11 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
                 {
                     ProfileImage = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(base64)));
                     HasUserPhoto = true;
-                    MessagingCenter.Send(this, "photoChanged");
+                    MessagingCenter.Send(this, MessagingCenterConstans.PhotoChanged);
                 }
                 else
                 {
-                    DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później!");
+                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
                     HasUserPhoto = false;
                 }
             }

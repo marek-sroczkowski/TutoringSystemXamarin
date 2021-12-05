@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Errors;
@@ -58,24 +59,24 @@ namespace TutoringSystemMobile.Commands.AccountCommands
 
             if (errors is null)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Rejestracja powiodła się!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SuccessfulRegistration);
                 await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Uwaga!", GetErrorsMessage(errors), "OK");
+                await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, GetErrorsMessage(errors), GeneralConstans.Ok);
             }
         }
 
         public string GetErrorsMessage(RegisterErrorTypes errors)
         {
-            StringBuilder builder = new StringBuilder("Rejestracja nie powiodła się!\n");
+            StringBuilder builder = new StringBuilder($"{ToastConstans.RegistrationFailed}\n");
             if (errors.Email != null)
-                builder.AppendLine("Email jest już zajęty");
+                builder.AppendLine(ToastConstans.TakenEmail);
             if (errors.Username != null)
-                builder.AppendLine("Login jest już zajęty");
+                builder.AppendLine(ToastConstans.TakenLogin);
             if (errors.Password != null)
-                builder.AppendLine("Nieprawidłowe hasło");
+                builder.AppendLine(ToastConstans.IncorrectPassword);
 
             return builder.ToString();
         }

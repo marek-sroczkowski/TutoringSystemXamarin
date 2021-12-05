@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -47,11 +48,11 @@ namespace TutoringSystemMobile.Commands.OrderCommands
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Dodano zlecenie");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedOrder);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={newOrderId}");
             }
         }

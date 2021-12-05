@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -15,7 +16,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 
         public Command LoadStudentsCommand { get; }
         public Command NewStudentCommand { get; }
-        public Command<StudentDto> StudentTapped { get; }
+        public Command<DisplayedStudentDto> StudentTapped { get; }
         public Command PageAppearingCommand { get; }
         public Command RemoveAllStudentsCommand { get; }
 
@@ -27,7 +28,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             studentService = DependencyService.Get<IStudentService>();
             LoadStudentsCommand = new Command(async () => await LoadStudentsAsync());
             NewStudentCommand = new Command(async () => await OnNewStudentClick());
-            StudentTapped = new Command<StudentDto>(async (student) => await OnStudentSelected(student));
+            StudentTapped = new Command<DisplayedStudentDto>(async (student) => await OnStudentSelected(student));
             PageAppearingCommand = new Command(OnAppearing);
             RemoveAllStudentsCommand = new Command(async () => await OnRemoveAllStudent());
         }
@@ -45,12 +46,14 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             var disyplayedStudents = students.Select(s => new DisplayedStudentDto(s));
             Students.Clear();
             foreach (var student in disyplayedStudents)
+            {
                 Students.Add(student);
+            }
 
             IsBusy = false;
         }
 
-        private async Task OnStudentSelected(StudentDto student)
+        private async Task OnStudentSelected(DisplayedStudentDto student)
         {
             if (student == null)
                 return;
@@ -60,7 +63,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 
         private async Task OnRemoveAllStudent()
         {
-            var result = await Application.Current.MainPage.DisplayAlert("Uwaga!", "Czy na pewno chcesz usunąć wszystkich studentów?", "Tak", "Nie");
+            var result = await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.ConfirmationAllStudentsDeletion, GeneralConstans.Yes, GeneralConstans.No);
             if (result)
                 await RemoveStudentsAsync();
         }
@@ -70,25 +73,23 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             var removed = await studentService.RemoveAllStudentsAsync();
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Wyczyszczono listę uczniów!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.CleanedStudents);
                 Students.Clear();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj później!");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
         private async Task OnNewStudentClick()
         {
-            const string existingStudent = "Student posiadający już konto";
-            const string newStudent = "Student nie posiadający konta";
-            var result = await Shell.Current.DisplayActionSheet("Nowy student", "Anuluj", null, newStudent, existingStudent);
-            if (result == existingStudent)
+            var result = await Shell.Current.DisplayActionSheet(AlertConstans.NewStudent, GeneralConstans.Cancel, null, AlertConstans.NotExistingStudent, AlertConstans.ExistingStudent);
+            if (result == AlertConstans.ExistingStudent)
             {
                 await Shell.Current.GoToAsync($"{nameof(NewExistingStudentTutorPage)}");
             }
-            else if(result == newStudent)
+            else if(result == AlertConstans.NotExistingStudent)
             {
                 await Shell.Current.GoToAsync($"{nameof(CreatingNewStudentTutorPage)}");
             }

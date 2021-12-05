@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Enums;
@@ -54,37 +55,37 @@ namespace TutoringSystemMobile.Commands.ProfileCommands
 
             if (errors is null)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Zmieniono hasło");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedPassword);
                 await PopupNavigation.Instance.PopAsync();
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Uwaga!", GetErrorsMessage(errors), "OK");
+                await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, GetErrorsMessage(errors), GeneralConstans.Ok);
             }
         }
 
         private string GetErrorsMessage(IEnumerable<WrongPasswordStatus> errors)
         {
-            StringBuilder builder = new StringBuilder("Zmiana hasła nie powiodła się!\n");
+            StringBuilder builder = new StringBuilder($"{ToastConstans.PasswordChangeFailed}\n");
             foreach (var error in errors)
             {
                 switch (error)
                 {
                     case WrongPasswordStatus.PasswordsVary:
-                        builder.AppendLine("Hasła różnią się");
+                        builder.AppendLine(ToastConstans.PasswordsVary);
                         break;
                     case WrongPasswordStatus.TooShort:
-                        builder.AppendLine("Nowe hasło jest zbyt krótkie");
+                        builder.AppendLine(ToastConstans.TooShortPassword);
                         break;
                     case WrongPasswordStatus.DuplicateOfOld:
-                        builder.AppendLine("Nowe hasło musi się różnić od starego");
+                        builder.AppendLine(ToastConstans.DuplicateOfOldPassword);
                         break;
                     case WrongPasswordStatus.InvalidOldPassword:
-                        builder.AppendLine("Niepoprawne stare hasło");
+                        builder.AppendLine(ToastConstans.InvalidOldPassword);
                         break;
                     case WrongPasswordStatus.InternalError:
                     default:
-                        builder.AppendLine("Wewnętrzny błąd aplikacji, spróbuj ponownie później!");
+                        builder.AppendLine(ToastConstans.InternalError);
                         break;
                 }
             }

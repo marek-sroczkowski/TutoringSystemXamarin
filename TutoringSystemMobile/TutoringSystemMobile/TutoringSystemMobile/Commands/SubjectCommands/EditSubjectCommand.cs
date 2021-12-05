@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.SubjectDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -45,11 +46,12 @@ namespace TutoringSystemMobile.Commands.SubjectCommands
 
             if (updated)
             {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
                 await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}/{nameof(SubjectDetailsTutorPage)}?{nameof(EditSubjectViewModel.Id)}={viewModel.Id}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast("Błąd! Spróbuj ponownie później");
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

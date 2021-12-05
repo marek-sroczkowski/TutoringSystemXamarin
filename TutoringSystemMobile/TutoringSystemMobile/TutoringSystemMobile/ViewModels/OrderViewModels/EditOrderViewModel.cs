@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using TutoringSystemMobile.Commands.OrderCommands;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
@@ -38,13 +39,13 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
                 SetValue(ref selectedStatus, value);
                 switch (selectedStatus)
                 {
-                    case "Oczekujące":
+                    case PickerConstans.PendingOrder:
                         Status = AdditionalOrderStatus.Pending;
                         break;
-                    case "W realizacji":
+                    case PickerConstans.InProgressOrder:
                         Status = AdditionalOrderStatus.InProgress;
                         break;
-                    case "Zrealizowane":
+                    case PickerConstans.RealizedOrder:
                         Status = AdditionalOrderStatus.Realized;
                         break;
                 }
@@ -66,9 +67,19 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         public EditOrderViewModel()
         {
+            SetOrderStatuses();
             orderService = DependencyService.Get<IAdditionalOrderService>();
-            Statuses = new List<string> { "Oczekujące", "W realizacji", "Zrealizowane" };
             EditOrderCommand = new EditOrderCommand(this, orderService);
+        }
+
+        private void SetOrderStatuses()
+        {
+            Statuses = new List<string>
+            {
+                PickerConstans.PendingOrder,
+                PickerConstans.InProgressOrder,
+                PickerConstans.RealizedOrder
+            };
         }
 
         private async void LoadOrderById(long orderId)
@@ -89,13 +100,13 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             switch (Status)
             {
                 case AdditionalOrderStatus.Pending:
-                    SelectedStatus = "Oczekujące";
+                    SelectedStatus = PickerConstans.PendingOrder;
                     break;
                 case AdditionalOrderStatus.InProgress:
-                    SelectedStatus = "W realizacji";
+                    SelectedStatus = PickerConstans.InProgressOrder;
                     break;
                 case AdditionalOrderStatus.Realized:
-                    SelectedStatus = "Zrealizowane";
+                    SelectedStatus = PickerConstans.RealizedOrder;
                     break;
             }
         }

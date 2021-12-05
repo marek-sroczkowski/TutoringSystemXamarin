@@ -1,4 +1,5 @@
-﻿using TutoringSystemMobile.Models.Enums;
+﻿using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Models.Enums;
 
 namespace TutoringSystemMobile.Models.ReportDtos
 {
@@ -26,34 +27,34 @@ namespace TutoringSystemMobile.Models.ReportDtos
             switch (category)
             {
                 case SubjectCategory.Other:
-                    CategoryName = "Inna";
+                    CategoryName = PickerConstans.OtherSubjectCategory;
                     break;
                 case SubjectCategory.Math:
-                    CategoryName = "Matematyka";
+                    CategoryName = PickerConstans.Math;
                     break;
                 case SubjectCategory.Informatics:
-                    CategoryName = "Informatyka";
+                    CategoryName = PickerConstans.Informatics;
                     break;
                 case SubjectCategory.ForeignLanguage:
-                    CategoryName = "Język obcy";
+                    CategoryName = PickerConstans.ForeignLanguage;
                     break;
                 case SubjectCategory.NativeLanguage:
-                    CategoryName = "Język polski";
+                    CategoryName = PickerConstans.NativeLanguage;
                     break;
                 case SubjectCategory.Physics:
-                    CategoryName = "Fizyka";
+                    CategoryName = PickerConstans.Physics;
                     break;
                 case SubjectCategory.Biology:
-                    CategoryName = "Biologia";
+                    CategoryName = PickerConstans.Biology;
                     break;
                 case SubjectCategory.Chemistry:
-                    CategoryName = "Chemia";
+                    CategoryName = PickerConstans.Chemistry;
                     break;
                 case SubjectCategory.Music:
-                    CategoryName = "Muzyka";
+                    CategoryName = PickerConstans.Music;
                     break;
                 case SubjectCategory.Geography:
-                    CategoryName = "Geografia";
+                    CategoryName = PickerConstans.Geography;
                     break;
                 default:
                     break;

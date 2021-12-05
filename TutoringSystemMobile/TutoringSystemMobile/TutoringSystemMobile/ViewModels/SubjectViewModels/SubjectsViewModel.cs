@@ -13,7 +13,6 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
     {
         public ObservableCollection<SubjectDto> Subjects { get; }
 
-
         public ICommand LoadSubjectsCommand { get; }
         public Command NewSubjectFormCommand { get; }
         public Command<SubjectDto> SubjectTapped { get; }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 using TutoringSystemMobile.Commands.SubjectCommands;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
@@ -41,34 +42,34 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                 SetValue(ref selectedCategory, value);
                 switch (selectedCategory)
                 {
-                    case "Inna":
+                    case PickerConstans.OtherSubjectCategory:
                         Category = SubjectCategory.Other;
                         break;
-                    case "Matematyka":
+                    case PickerConstans.Math:
                         Category = SubjectCategory.Math;
                         break;
-                    case "Informatyka":
+                    case PickerConstans.Informatics:
                         Category = SubjectCategory.Informatics;
                         break;
-                    case "Język obcy":
+                    case PickerConstans.ForeignLanguage:
                         Category = SubjectCategory.ForeignLanguage;
                         break;
-                    case "Język polski":
+                    case PickerConstans.NativeLanguage:
                         Category = SubjectCategory.NativeLanguage;
                         break;
-                    case "Fizyka":
+                    case PickerConstans.Physics:
                         Category = SubjectCategory.Physics;
                         break;
-                    case "Biologia":
+                    case PickerConstans.Biology:
                         Category = SubjectCategory.Biology;
                         break;
-                    case "Chemia":
+                    case PickerConstans.Chemistry:
                         Category = SubjectCategory.Chemistry;
                         break;
-                    case "Muzyka":
+                    case PickerConstans.Music:
                         Category = SubjectCategory.Music;
                         break;
-                    case "Geografia":
+                    case PickerConstans.Geography:
                         Category = SubjectCategory.Geography;
                         break;
                 }
@@ -82,25 +83,25 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                 SetValue(ref selectedPlace, value);
                 switch (selectedPlace)
                 {
-                    case "U nauczyciela":
+                    case PickerConstans.AtTutor:
                         Place = SubjectPlace.AtTutor;
                         break;
-                    case "U ucznia":
+                    case PickerConstans.AtStudent:
                         Place = SubjectPlace.AtStudent;
                         break;
-                    case "Online":
+                    case PickerConstans.Online:
                         Place = SubjectPlace.Online;
                         break;
-                    case "U nauczyciela / ucznia":
+                    case PickerConstans.AtTutorAndAtStudent:
                         Place = SubjectPlace.AtTutorAndAtStudent;
                         break;
-                    case "U nauczyciela / online":
+                    case PickerConstans.AtTutorAndOnline:
                         Place = SubjectPlace.AtTutorAndOnline;
                         break;
-                    case "U ucznia / online":
+                    case PickerConstans.AtStudentAndOnline:
                         Place = SubjectPlace.AtStudentAndOnline;
                         break;
-                    case "Dowolne":
+                    case PickerConstans.AllPlaces:
                         Place = SubjectPlace.All;
                         break;
                 }
@@ -118,8 +119,39 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         {
             subjectService = DependencyService.Get<ISubjectService>();
             EditSubjectCommand = new EditSubjectCommand(this, subjectService);
-            Categories = new List<string> { "Inna", "Matematyka", "Informatyka", "Język obcy", "Język polski", "Fizyka", "Biologia", "Chemia", "Muzyka", "Geografia" };
-            Places = new List<string> { "Dowolne", "U nauczyciela", "U ucznia", "Online", "U nauczyciela / ucznia", "U nauczyciela / online", "U ucznia / online" };
+            SetCategories();
+            SetPlaces();
+        }
+
+        private void SetCategories()
+        {
+            Categories = new List<string>
+            {
+                PickerConstans.OtherSubjectCategory,
+                PickerConstans.Math,
+                PickerConstans.Informatics,
+                PickerConstans.ForeignLanguage,
+                PickerConstans.NativeLanguage,
+                PickerConstans.Physics,
+                PickerConstans.Biology,
+                PickerConstans.Chemistry,
+                PickerConstans.Music,
+                PickerConstans.Geography,
+            };
+        }
+
+        private void SetPlaces()
+        {
+            Places = new List<string>
+            {
+                PickerConstans.AllPlaces,
+                PickerConstans.AtTutor,
+                PickerConstans.AtStudent,
+                PickerConstans.Online,
+                PickerConstans.AtTutorAndAtStudent,
+                PickerConstans.AtTutorAndOnline,
+                PickerConstans.AtStudentAndOnline,
+            };
         }
 
         private async void LoadSubjectById(long subjectId)
@@ -130,6 +162,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             Description = subject.Description;
             Category = subject.Category;
             Place = subject.Place;
+
             SetSelectedCategory();
             SetSelectedPlace();
         }
@@ -139,34 +172,36 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             switch (Category)
             {
                 case SubjectCategory.Other:
-                    SelectedCategory = "Inna";
+                    SelectedCategory = PickerConstans.OtherSubjectCategory;
                     break;
                 case SubjectCategory.Math:
-                    SelectedCategory = "Matematyka";
+                    SelectedCategory = PickerConstans.Math;
                     break;
                 case SubjectCategory.Informatics:
-                    SelectedCategory = "Informatyka";
+                    SelectedCategory = PickerConstans.Informatics;
                     break;
                 case SubjectCategory.ForeignLanguage:
-                    SelectedCategory = "Język obcy";
+                    SelectedCategory = PickerConstans.ForeignLanguage;
                     break;
                 case SubjectCategory.NativeLanguage:
-                    SelectedCategory = "Język polski";
+                    SelectedCategory = PickerConstans.NativeLanguage;
                     break;
                 case SubjectCategory.Physics:
-                    SelectedCategory = "Fizyka";
+                    SelectedCategory = PickerConstans.Physics;
                     break;
                 case SubjectCategory.Biology:
-                    SelectedCategory = "Biologia";
+                    SelectedCategory = PickerConstans.Biology;
                     break;
                 case SubjectCategory.Chemistry:
-                    SelectedCategory = "Chemia";
+                    SelectedCategory = PickerConstans.Chemistry;
                     break;
                 case SubjectCategory.Music:
-                    SelectedCategory = "Muzyka";
+                    SelectedCategory = PickerConstans.Music;
                     break;
                 case SubjectCategory.Geography:
-                    SelectedCategory = "Geografia";
+                    SelectedCategory = PickerConstans.Geography;
+                    break;
+                default:
                     break;
             }
         }
@@ -176,25 +211,25 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             switch (Place)
             {
                 case SubjectPlace.AtTutor:
-                    SelectedPlace = "U nauczyciela";
+                    SelectedPlace = PickerConstans.AtTutor;
                     break;
                 case SubjectPlace.AtStudent:
-                    SelectedPlace = "U ucznia";
+                    SelectedPlace = PickerConstans.AtStudent;
                     break;
                 case SubjectPlace.Online:
-                    SelectedPlace = "Online";
+                    SelectedPlace = PickerConstans.Online;
                     break;
                 case SubjectPlace.AtTutorAndAtStudent:
-                    SelectedPlace = "U nauczyciela / ucznia";
+                    SelectedPlace = PickerConstans.AtTutorAndAtStudent;
                     break;
                 case SubjectPlace.AtTutorAndOnline:
-                    SelectedPlace = "U nauczyciela / online";
+                    SelectedPlace = PickerConstans.AtTutorAndOnline;
                     break;
                 case SubjectPlace.AtStudentAndOnline:
-                    SelectedPlace = "U ucznia / online";
+                    SelectedPlace = PickerConstans.AtStudentAndOnline;
                     break;
                 case SubjectPlace.All:
-                    SelectedPlace = "Dowolne";
+                    SelectedPlace = PickerConstans.AllPlaces;
                     break;
             }
         }
