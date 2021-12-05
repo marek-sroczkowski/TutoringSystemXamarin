@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.SubjectCommands;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.SubjectDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
+using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.SubjectViewModels
@@ -106,15 +109,42 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public List<string> Categories { get; set; }
         public List<string> Places { get; set; }
 
-        public ICommand AddNewSubjectCommand { get; }
+        public Command AddNewSubjectCommand { get; }
 
         public NewSubjectViewModel()
         {
-            AddNewSubjectCommand = new AddNewSubjectCommand(this, DependencyService.Get<ISubjectService>());
+            AddNewSubjectCommand = new Command(async () => await AddNewSubject(), CanAddNewSubject);
+            PropertyChanged += (_, __) => AddNewSubjectCommand.ChangeCanExecute();
             SetCategories();
             SetPlaces();
             IsCategoryLabelVisible = false;
             IsPlaceLabelVisible = false;
+        }
+
+        private async Task AddNewSubject()
+        {
+            IsBusy = true;
+            long newOrderId = await DependencyService.Get<ISubjectService>()
+                .AddSubjectAsync(new NewSubjectDto(Name, Description, Place, Category));
+            IsBusy = false;
+
+            if (newOrderId == -1)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedSubject);
+                await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}/{nameof(SubjectDetailsTutorPage)}?{nameof(SubjectDetailsViewModel.Id)}={newOrderId}");
+            }
+        }
+
+        public bool CanAddNewSubject()
+        {
+            return !Name.IsEmpty() &&
+                   !SelectedCategory.IsEmpty() &&
+                   !SelectedPlace.IsEmpty() &&
+                   !IsBusy;
         }
 
         private void SetCategories()

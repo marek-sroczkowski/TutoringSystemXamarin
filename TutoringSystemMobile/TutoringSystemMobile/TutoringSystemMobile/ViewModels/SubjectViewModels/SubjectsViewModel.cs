@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.SubjectCommands;
 using TutoringSystemMobile.Models.SubjectDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
@@ -13,21 +11,30 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
     {
         public ObservableCollection<SubjectDto> Subjects { get; }
 
-        public ICommand LoadSubjectsCommand { get; }
+        public Command LoadSubjectsCommand { get; }
         public Command NewSubjectFormCommand { get; }
         public Command<SubjectDto> SubjectTapped { get; }
         public Command PageAppearingCommand { get; }
 
-        private readonly ISubjectService subjectService;
-
         public SubjectsViewModel()
         {
             Subjects = new ObservableCollection<SubjectDto>();
-            subjectService = DependencyService.Get<ISubjectService>();
-            LoadSubjectsCommand = new LoadSubjectsCommand(this, subjectService);
+            LoadSubjectsCommand = new Command(async () => await OnLoadSubject());
             NewSubjectFormCommand = new Command(async () => await OnNewSubjectClick());
             SubjectTapped = new Command<SubjectDto>(async (subject) => await OnSubjectSelected(subject));
             PageAppearingCommand = new Command(OnAppearing);
+        }
+
+        private async Task OnLoadSubject()
+        {
+            IsBusy = true;
+
+            Subjects.Clear();
+            var subjects = await DependencyService.Get<ISubjectService>().GetSubjectsAsync();
+            foreach (var subject in subjects)
+                Subjects.Add(subject);
+
+            IsBusy = false;
         }
 
         private void OnAppearing()

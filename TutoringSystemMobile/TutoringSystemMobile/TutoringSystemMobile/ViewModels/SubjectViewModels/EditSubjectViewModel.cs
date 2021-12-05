@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.SubjectCommands;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.SubjectDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
+using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.SubjectViewModels
@@ -111,16 +114,55 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public List<string> Categories { get; set; }
         public List<string> Places { get; set; }
 
-        public ICommand EditSubjectCommand { get; }
+        public Command EditSubjectCommand { get; }
 
         private readonly ISubjectService subjectService;
 
         public EditSubjectViewModel()
         {
             subjectService = DependencyService.Get<ISubjectService>();
-            EditSubjectCommand = new EditSubjectCommand(this, subjectService);
+            EditSubjectCommand = new Command(async () => await OnEditSubject(), CanEditSubject);
+            PropertyChanged += (_, __) => EditSubjectCommand.ChangeCanExecute();
             SetCategories();
             SetPlaces();
+        }
+
+        private async Task OnEditSubject()
+        {
+            IsBusy = true;
+            bool updated = await subjectService.UpdateSubjectAsync(new UpdatedSubjectDto(Id, Name, Description, Place, Category));
+            IsBusy = false;
+
+            if (updated)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}/{nameof(SubjectDetailsTutorPage)}?{nameof(Id)}={Id}");
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
+        }
+
+        public bool CanEditSubject()
+        {
+            return !Name.IsEmpty() &&
+                !SelectedCategory.IsEmpty() &&
+                !SelectedPlace.IsEmpty() &&
+                !IsBusy;
+        }
+
+        private async void LoadSubjectById(long subjectId)
+        {
+            var subject = await subjectService.GetSubjectByIdAsync(subjectId);
+
+            Name = subject.Name;
+            Description = subject.Description;
+            Category = subject.Category;
+            Place = subject.Place;
+
+            SetSelectedCategory();
+            SetSelectedPlace();
         }
 
         private void SetCategories()
@@ -152,19 +194,6 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                 PickerConstans.AtTutorAndOnline,
                 PickerConstans.AtStudentAndOnline,
             };
-        }
-
-        private async void LoadSubjectById(long subjectId)
-        {
-            var subject = await subjectService.GetSubjectByIdAsync(subjectId);
-
-            Name = subject.Name;
-            Description = subject.Description;
-            Category = subject.Category;
-            Place = subject.Place;
-
-            SetSelectedCategory();
-            SetSelectedPlace();
         }
 
         private void SetSelectedCategory()
