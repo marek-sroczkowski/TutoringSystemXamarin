@@ -43,7 +43,7 @@
             <Button VerticalOptions="Center" 
                    Text="Zarejestruj się"
                    Style="{StaticResource PrimaryGreenButtonStyle}"
-                   Command="{Binding RegisterTutorCommand}" />
+                   Command="{Binding RegisterTutorFormCommand}" />
 
         </StackLayout>
     </ContentPage.Content>
