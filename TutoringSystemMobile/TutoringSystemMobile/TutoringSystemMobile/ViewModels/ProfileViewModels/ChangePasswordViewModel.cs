@@ -51,8 +51,8 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
         private async Task OnChangePassword()
         {
             IsBusy = true;
-            var errors = await DependencyService.Get<IUserService>().ChangePasswordAsync(new
-                PasswordDto(NewPassword, ConfirmPassword, OldPassword));
+            var errors = await DependencyService.Get<IUserService>()
+                .ChangePasswordAsync(new PasswordDto(NewPassword, ConfirmPassword, OldPassword));
             IsBusy = false;
 
             if (errors is null)

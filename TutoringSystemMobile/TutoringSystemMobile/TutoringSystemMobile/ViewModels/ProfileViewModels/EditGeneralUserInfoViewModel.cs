@@ -38,8 +38,8 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
         private async Task OnEditUser()
         {
             IsBusy = true;
-            var updated = await DependencyService.Get<IUserService>().UpdateGeneralUserInfoAsync(new
-                UpdatedUserDto(FirstName, LastName));
+            var updated = await DependencyService.Get<IUserService>()
+                .UpdateGeneralUserInfoAsync(new UpdatedUserDto(FirstName, LastName));
             IsBusy = false;
 
             if (updated)
