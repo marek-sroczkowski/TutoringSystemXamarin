@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.PhoneNumberCommands;
+﻿using Rg.Plugins.Popup.Services;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -21,7 +23,7 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
         public string Number { get => number; set => SetValue(ref number, value); }
 
         public Command PageAppearingCommand { get; }
-        public ICommand EditPhoneNumberCommand { get; }
+        public Command EditPhoneNumberCommand { get; }
 
         private readonly IPhoneNumberService phoneNumberService;
 
@@ -30,7 +32,34 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
             PhoneNumberId = phoneNumberId;
             phoneNumberService = DependencyService.Get<IPhoneNumberService>();
             PageAppearingCommand = new Command(async () => await OnAppearing());
-            EditPhoneNumberCommand = new EditPhoneNumberCommand(this, phoneNumberService);
+            EditPhoneNumberCommand = new Command(async () => await OnEditPhoneNumber(), CanEditPhoneNumber);
+            PropertyChanged += (_, __) => EditPhoneNumberCommand.ChangeCanExecute();
+        }
+
+        public bool CanEditPhoneNumber()
+        {
+            return !Owner.IsEmpty() &&
+                   !Number.IsEmpty() &&
+                   !IsBusy;
+        }
+
+        private async Task OnEditPhoneNumber()
+        {
+            IsBusy = true;
+            var updated = await phoneNumberService
+                .UpdatePhoneNumberAsync(ContactId, new UpdatedPhoneNumberDto(PhoneNumberId, Owner, Number));
+            IsBusy = false;
+
+            if (updated)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                await PopupNavigation.Instance.PopAsync();
+                DependencyService.Get<IReloadContactService>().ReloadContact();
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
         }
 
         private async Task OnAppearing()

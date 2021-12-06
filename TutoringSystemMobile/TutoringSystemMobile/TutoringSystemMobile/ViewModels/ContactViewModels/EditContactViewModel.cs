@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.ContactCommands;
+﻿using Rg.Plugins.Popup.Services;
+using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Models.ContactDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.ContactViewModels
@@ -15,7 +17,7 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         public string DiscordName { get => discordName; set => SetValue(ref discordName, value); }
 
         public Command PageAppearingCommand { get; }
-        public ICommand EditContactCommand { get; }
+        public Command EditContactCommand { get; }
 
         private readonly IContactService contactService;
 
@@ -24,7 +26,32 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             Id = contactId;
             contactService = DependencyService.Get<IContactService>();
             PageAppearingCommand = new Command(async () => await OnAppearing());
-            EditContactCommand = new EditContactCommand(this, contactService);
+            EditContactCommand = new Command(async () => await OnEditContact(), CanEditContact);
+            PropertyChanged += (_, __) => EditContactCommand.ChangeCanExecute();
+
+        }
+
+        public bool CanEditContact()
+        {
+            return !IsBusy;
+        }
+
+        private async Task OnEditContact()
+        {
+            IsBusy = true;
+            var updated = await contactService.UpdateContactAsync(new UpdatedContactDto(Id, DiscordName));
+            IsBusy = false;
+
+            if (updated)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                await PopupNavigation.Instance.PopAsync();
+                DependencyService.Get<IReloadContactService>().ReloadContact();
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
         }
 
         private async Task OnAppearing()

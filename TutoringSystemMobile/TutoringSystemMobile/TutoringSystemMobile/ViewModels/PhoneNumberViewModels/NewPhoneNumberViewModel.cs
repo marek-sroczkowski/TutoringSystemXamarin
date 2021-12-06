@@ -1,6 +1,10 @@
-﻿using System.Windows.Input;
-using TutoringSystemMobile.Commands.PhoneNumberCommands;
+﻿using Rg.Plugins.Popup.Services;
+using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
@@ -15,12 +19,38 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumberViewModels
         public string Owner { get => owner; set => SetValue(ref owner, value); }
         public string Number { get => number; set => SetValue(ref number, value); }
 
-        public ICommand AddPhoneNumberCommand { get; }
+        public Command AddPhoneNumberCommand { get; }
 
         public NewPhoneNumberViewModel(long contactId)
         {
             ContactId = contactId;
-            AddPhoneNumberCommand = new NewPhoneNumberCommand(this, DependencyService.Get<IPhoneNumberService>());
+            AddPhoneNumberCommand = new Command(async () => await OnAddPhoneNumber(), CanAddPhoneNumber);
+            PropertyChanged += (_, __) => AddPhoneNumberCommand.ChangeCanExecute();
+        }
+
+        public bool CanAddPhoneNumber()
+        {
+            return !Owner.IsEmpty() &&
+                !Number.IsEmpty() &&
+                !IsBusy;
+        }
+
+        private async Task OnAddPhoneNumber()
+        {
+            IsBusy = true;
+            var added = await DependencyService.Get<IPhoneNumberService>()
+                .AddPhoneNumberAsync(ContactId, new NewPhoneNumberDto(Owner, Number));
+            IsBusy = false;
+
+            if (added)
+            {
+                await PopupNavigation.Instance.PopAsync();
+                DependencyService.Get<IReloadContactService>().ReloadContact();
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
         }
     }
 }
