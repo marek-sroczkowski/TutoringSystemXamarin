@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.OrderCommands;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
+using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.OrderViewModels
@@ -61,7 +64,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         public List<string> Statuses { get; set; }
 
-        public ICommand EditOrderCommand { get; }
+        public Command EditOrderCommand { get; }
 
         private readonly IAdditionalOrderService orderService;
 
@@ -69,7 +72,36 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         {
             SetOrderStatuses();
             orderService = DependencyService.Get<IAdditionalOrderService>();
-            EditOrderCommand = new EditOrderCommand(this, orderService);
+            EditOrderCommand = new Command(async () => await OnEditOrder(), CanEditOrder);
+            PropertyChanged += (_, __) => EditOrderCommand.ChangeCanExecute();
+        }
+
+        public bool CanEditOrder()
+        {
+            return !Name.IsEmpty() &&
+                   !Cost.IsEmpty() &&
+                   double.TryParse(Cost, out double cost) &&
+                   cost > 0 &&
+                   Deadline.HasValue &&
+                   !IsBusy;
+        }
+
+        private async Task OnEditOrder()
+        {
+            IsBusy = true;
+            bool updated = await orderService
+                .UpdateAdditionalOrderAsync(new UpdatedOrderDto(Id, Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid, Status));
+            IsBusy = false;
+
+            if (updated)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={Id}");
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
         }
 
         private void SetOrderStatuses()

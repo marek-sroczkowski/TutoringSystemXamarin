@@ -1,6 +1,8 @@
-﻿using System.Windows.Input;
-using TutoringSystemMobile.Commands.AddressCommands;
+﻿using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Models.AddressDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.AddressViewModels
@@ -30,14 +32,38 @@ namespace TutoringSystemMobile.ViewModels.AddressViewModels
         public string PostalCode { get => postalCode; set => SetValue(ref postalCode, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
 
-        public ICommand EditAddressCommand { get; }
+        public Command EditAddressCommand { get; }
 
         private readonly IAddressService addressService;
 
         public EditAddressViewModel()
         {
             addressService = DependencyService.Get<IAddressService>();
-            EditAddressCommand = new EditAddressCommand(this, addressService);
+            EditAddressCommand = new Command(async () => await OnEditAddress(), CanEditAddress);
+            PropertyChanged += (_, __) => EditAddressCommand.ChangeCanExecute();
+        }
+
+        public bool CanEditAddress()
+        {
+            return !IsBusy;
+        }
+
+        private async Task OnEditAddress()
+        {
+            IsBusy = true;
+            var updated = await addressService
+                .UpdateAddressAsync(new UpdatedAddressDto(Id, Street, HouseAndFlatNumber, City, PostalCode, Description));
+            IsBusy = false;
+
+            if (updated)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                await Shell.Current.GoToAsync("..");
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
         }
 
         private async void LoadAddressById(long addressId)

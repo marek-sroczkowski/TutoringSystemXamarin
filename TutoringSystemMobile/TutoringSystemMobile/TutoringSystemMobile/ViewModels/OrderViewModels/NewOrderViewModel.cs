@@ -1,7 +1,11 @@
 ﻿using System;
-using System.Windows.Input;
-using TutoringSystemMobile.Commands.OrderCommands;
+using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Models.AdditionalOrderDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Utils;
+using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.OrderViewModels
@@ -20,11 +24,40 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         public bool IsPaid { get => isPaid; set => SetValue(ref isPaid, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
 
-        public ICommand AddNewOrderCommand { get; }
+        public Command AddNewOrderCommand { get; }
 
         public NewOrderViewModel()
         {
-            AddNewOrderCommand = new AddNewOrderCommand(this, DependencyService.Get<IAdditionalOrderService>());
+            AddNewOrderCommand = new Command(async () => await OnAddNewOrder(), CanAddNewOrder);
+            PropertyChanged += (_, __) => AddNewOrderCommand.ChangeCanExecute();
+        }
+
+        public bool CanAddNewOrder()
+        {
+            return !Name.IsEmpty() &&
+                !Cost.IsEmpty() &&
+                double.TryParse(Cost, out double cost) &&
+                cost > 0 &&
+                Deadline.HasValue &&
+                !IsBusy;
+        }
+
+        private async Task OnAddNewOrder()
+        {
+            IsBusy = true;
+            long newOrderId = await DependencyService.Get<IAdditionalOrderService>()
+                .AddAdditionalOrderAsync(new NewOrderDto(Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid));
+            IsBusy = false;
+
+            if (newOrderId == -1)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
+            else
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedOrder);
+                await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={newOrderId}");
+            }
         }
     }
 }
