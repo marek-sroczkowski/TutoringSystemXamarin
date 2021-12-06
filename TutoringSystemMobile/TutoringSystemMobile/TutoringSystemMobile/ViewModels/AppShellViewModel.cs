@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Commands.ProfileCommands;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
@@ -48,7 +47,7 @@ namespace TutoringSystemMobile.ViewModels
                 await LoadPictureAsync();
             });
 
-            MessagingCenter.Subscribe<EditGeneralUserInfoCommand>(this, message: MessagingCenterConstans.NameChanged, async (sender) =>
+            MessagingCenter.Subscribe<EditGeneralUserInfoViewModel>(this, message: MessagingCenterConstans.NameChanged, async (sender) =>
             {
                 await LoadUserAsync();
             });
