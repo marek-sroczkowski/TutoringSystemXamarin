@@ -5,12 +5,9 @@
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.SubjectViewModels"
              Title="Nowy przedmiot"
-             Style="{StaticResource PageStyle}">
+             Style="{StaticResource PageStyle}"
+             x:DataType="viewModel:NewSubjectViewModel">
 
-    <ContentPage.BindingContext>
-        <viewModel:NewSubjectViewModel />
-    </ContentPage.BindingContext>
-    
     <ContentPage.Content>
         <StackLayout Padding="15,20,15,0"
                      HorizontalOptions="Start">
@@ -32,9 +29,9 @@
                    IsVisible="{Binding IsPlaceLabelVisible}"
                    Style="{StaticResource LabelStyle}"/>
 
-            <Picker Title="Miejsce zajęć"
-                    ItemsSource="{Binding Places}"
-                    SelectedItem="{Binding SelectedPlace}"/>
+            <Entry Text="{Binding SelectedPlace}"
+                   Placeholder="Miejsce zajęć"
+                   Focused="SelectedPlaceEntry_Focused" />
 
             <custom:TitledEntry Text="{Binding Description}" 
                                 Placeholder="Opis" />

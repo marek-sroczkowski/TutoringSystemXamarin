@@ -9,5 +9,6 @@
         public const string FilterByDates = "filterByDates";
         public const string ReportSorting = "reportSorting";
         public const string NameChanged = "nameChanged";
+        public const string SubjectPlaceSelected = "subjectPlaceSelected";
     }
 }

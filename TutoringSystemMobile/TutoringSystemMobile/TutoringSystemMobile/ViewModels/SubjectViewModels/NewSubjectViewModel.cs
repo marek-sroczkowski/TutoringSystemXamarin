@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Rg.Plugins.Popup.Services;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
@@ -16,7 +18,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         private string name;
         private string description;
         private SubjectCategory category;
-        private SubjectPlace place;
+        private SubjectPlace? place = null;
         private string selectedCategory;
         private string selectedPlace;
         private bool isCategoryLabelVisible;
@@ -25,8 +27,40 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public string Name { get => name; set => SetValue(ref name, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
         public SubjectCategory Category { get => category; set => SetValue(ref category, value); }
-        public SubjectPlace Place { get => place; set => SetValue(ref place, value); }
-
+        public string SelectedPlace { get => selectedPlace; set => SetValue(ref selectedPlace, value); }
+        public SubjectPlace? Place
+        {
+            get => place;
+            set
+            {
+                SetValue(ref place, value);
+                IsPlaceLabelVisible = true;
+                switch (place)
+                {
+                    case SubjectPlace.AtTutor:
+                        SelectedPlace = PickerConstans.AtTutor;
+                        break;
+                    case SubjectPlace.AtStudent:
+                        SelectedPlace = PickerConstans.AtStudent;
+                        break;
+                    case SubjectPlace.Online:
+                        SelectedPlace = PickerConstans.Online;
+                        break;
+                    case SubjectPlace.AtTutorAndAtStudent:
+                        SelectedPlace = PickerConstans.AtTutorAndAtStudent;
+                        break;
+                    case SubjectPlace.AtTutorAndOnline:
+                        SelectedPlace = PickerConstans.AtTutorAndOnline;
+                        break;
+                    case SubjectPlace.AtStudentAndOnline:
+                        SelectedPlace = PickerConstans.AtStudentAndOnline;
+                        break;
+                    case SubjectPlace.All:
+                        SelectedPlace = PickerConstans.AllPlaces;
+                        break;
+                }
+            }
+        }
         public string SelectedCategory
         {
             get => selectedCategory;
@@ -69,39 +103,6 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                 }
             }
         }
-        public string SelectedPlace
-        {
-            get => selectedPlace;
-            set
-            {
-                SetValue(ref selectedPlace, value);
-                IsPlaceLabelVisible = true;
-                switch (selectedPlace)
-                {
-                    case PickerConstans.AtTutor:
-                        Place = SubjectPlace.AtTutor;
-                        break;
-                    case PickerConstans.AtStudent:
-                        Place = SubjectPlace.AtStudent;
-                        break;
-                    case PickerConstans.Online:
-                        Place = SubjectPlace.Online;
-                        break;
-                    case PickerConstans.AtTutorAndAtStudent:
-                        Place = SubjectPlace.AtTutorAndAtStudent;
-                        break;
-                    case PickerConstans.AtTutorAndOnline:
-                        Place = SubjectPlace.AtTutorAndOnline;
-                        break;
-                    case PickerConstans.AtStudentAndOnline:
-                        Place = SubjectPlace.AtStudentAndOnline;
-                        break;
-                    case PickerConstans.AllPlaces:
-                        Place = SubjectPlace.All;
-                        break;
-                }
-            }
-        }
 
         public bool IsCategoryLabelVisible { get => isCategoryLabelVisible; set => SetValue(ref isCategoryLabelVisible, value); }
         public bool IsPlaceLabelVisible { get => isPlaceLabelVisible; set => SetValue(ref isPlaceLabelVisible, value); }
@@ -113,7 +114,11 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
 
         public NewSubjectViewModel()
         {
-            AddNewSubjectCommand = new Command(async () => await AddNewSubject(), CanAddNewSubject);
+            MessagingCenter.Subscribe<SubjectPlaceViewModel>(this, MessagingCenterConstans.SubjectPlaceSelected, (sender) =>
+            {
+                Place = sender.Place;
+            });
+            AddNewSubjectCommand = new Command(async () => await OnAddNewSubject(), CanAddNewSubject);
             PropertyChanged += (_, __) => AddNewSubjectCommand.ChangeCanExecute();
             SetCategories();
             SetPlaces();
@@ -121,11 +126,16 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             IsPlaceLabelVisible = false;
         }
 
-        private async Task AddNewSubject()
+        public async Task OnSelectPlace()
+        {
+            await PopupNavigation.Instance.PushAsync(new SubjectPlacePopupPage(Place));
+        }
+
+        private async Task OnAddNewSubject()
         {
             IsBusy = true;
             long newOrderId = await DependencyService.Get<ISubjectService>()
-                .AddSubjectAsync(new NewSubjectDto(Name, Description, Place, Category));
+                .AddSubjectAsync(new NewSubjectDto(Name, Description, Place.Value, Category));
             IsBusy = false;
 
             if (newOrderId == -1)
@@ -144,6 +154,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             return !Name.IsEmpty() &&
                    !SelectedCategory.IsEmpty() &&
                    !SelectedPlace.IsEmpty() &&
+                   Place.HasValue &&
                    !IsBusy;
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Rg.Plugins.Popup.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
@@ -18,7 +19,7 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         private string name;
         private string description;
         private SubjectCategory category;
-        private SubjectPlace place;
+        private SubjectPlace? place = null;
         private string selectedCategory;
         private string selectedPlace;
 
@@ -35,7 +36,39 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
         public string Name { get => name; set => SetValue(ref name, value); }
         public string Description { get => description; set => SetValue(ref description, value); }
         public SubjectCategory Category { get => category; set => SetValue(ref category, value); }
-        public SubjectPlace Place { get => place; set => SetValue(ref place, value); }
+        public string SelectedPlace { get => selectedPlace; set => SetValue(ref selectedPlace, value); }
+        public SubjectPlace? Place
+        {
+            get => place;
+            set
+            {
+                SetValue(ref place, value);
+                switch (place)
+                {
+                    case SubjectPlace.AtTutor:
+                        SelectedPlace = PickerConstans.AtTutor;
+                        break;
+                    case SubjectPlace.AtStudent:
+                        SelectedPlace = PickerConstans.AtStudent;
+                        break;
+                    case SubjectPlace.Online:
+                        SelectedPlace = PickerConstans.Online;
+                        break;
+                    case SubjectPlace.AtTutorAndAtStudent:
+                        SelectedPlace = PickerConstans.AtTutorAndAtStudent;
+                        break;
+                    case SubjectPlace.AtTutorAndOnline:
+                        SelectedPlace = PickerConstans.AtTutorAndOnline;
+                        break;
+                    case SubjectPlace.AtStudentAndOnline:
+                        SelectedPlace = PickerConstans.AtStudentAndOnline;
+                        break;
+                    case SubjectPlace.All:
+                        SelectedPlace = PickerConstans.AllPlaces;
+                        break;
+                }
+            }
+        }
 
         public string SelectedCategory
         {
@@ -78,38 +111,6 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
                 }
             }
         }
-        public string SelectedPlace
-        {
-            get => selectedPlace;
-            set
-            {
-                SetValue(ref selectedPlace, value);
-                switch (selectedPlace)
-                {
-                    case PickerConstans.AtTutor:
-                        Place = SubjectPlace.AtTutor;
-                        break;
-                    case PickerConstans.AtStudent:
-                        Place = SubjectPlace.AtStudent;
-                        break;
-                    case PickerConstans.Online:
-                        Place = SubjectPlace.Online;
-                        break;
-                    case PickerConstans.AtTutorAndAtStudent:
-                        Place = SubjectPlace.AtTutorAndAtStudent;
-                        break;
-                    case PickerConstans.AtTutorAndOnline:
-                        Place = SubjectPlace.AtTutorAndOnline;
-                        break;
-                    case PickerConstans.AtStudentAndOnline:
-                        Place = SubjectPlace.AtStudentAndOnline;
-                        break;
-                    case PickerConstans.AllPlaces:
-                        Place = SubjectPlace.All;
-                        break;
-                }
-            }
-        }
 
         public List<string> Categories { get; set; }
         public List<string> Places { get; set; }
@@ -120,6 +121,10 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
 
         public EditSubjectViewModel()
         {
+            MessagingCenter.Subscribe<SubjectPlaceViewModel>(this, MessagingCenterConstans.SubjectPlaceSelected, (sender) =>
+            {
+                Place = sender.Place;
+            });
             subjectService = DependencyService.Get<ISubjectService>();
             EditSubjectCommand = new Command(async () => await OnEditSubject(), CanEditSubject);
             PropertyChanged += (_, __) => EditSubjectCommand.ChangeCanExecute();
@@ -127,10 +132,15 @@ namespace TutoringSystemMobile.ViewModels.SubjectViewModels
             SetPlaces();
         }
 
+        public async Task OnSelectPlace()
+        {
+            await PopupNavigation.Instance.PushAsync(new SubjectPlacePopupPage(Place));
+        }
+
         private async Task OnEditSubject()
         {
             IsBusy = true;
-            bool updated = await subjectService.UpdateSubjectAsync(new UpdatedSubjectDto(Id, Name, Description, Place, Category));
+            bool updated = await subjectService.UpdateSubjectAsync(new UpdatedSubjectDto(Id, Name, Description, Place.Value, Category));
             IsBusy = false;
 
             if (updated)

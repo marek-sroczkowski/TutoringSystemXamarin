@@ -5,11 +5,8 @@
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.SubjectViewModels"
              Title="Edycja"
-             Style="{StaticResource PageStyle}">
-
-    <ContentPage.BindingContext>
-        <viewModel:EditSubjectViewModel />
-    </ContentPage.BindingContext>
+             Style="{StaticResource PageStyle}"
+             x:DataType="viewModel:EditSubjectViewModel">
 
     <ContentPage.Content>
         <StackLayout Padding="15,20,15,0"
@@ -31,9 +28,9 @@
                    Margin="0,0,0,-5"
                    Style="{StaticResource LabelStyle}"/>
 
-            <Picker Title="Miejsce zajęć"
-                    ItemsSource="{Binding Places}"
-                    SelectedItem="{Binding SelectedPlace}"/>
+            <Entry Text="{Binding SelectedPlace}"
+                   Placeholder="Miejsce zajęć"
+                   Focused="SelectedPlaceEntry_Focused" />
 
             <custom:TitledEntry Text="{Binding Description}" 
                                 Placeholder="Opis"
