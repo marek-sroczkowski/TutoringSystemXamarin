@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using TutoringSystemMobile.Models.AddressDtos;
+﻿using TutoringSystemMobile.Models.AddressDtos;
 using TutoringSystemMobile.Models.ContactDtos;
-using TutoringSystemMobile.Models.SubjectDtos;
 
 namespace TutoringSystemMobile.Models.TutorDtos
 {
@@ -11,10 +9,9 @@ namespace TutoringSystemMobile.Models.TutorDtos
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public double HourlRate { get; set; }
 
         public ContactDto Contact { get; set; }
         public AddressDto Address { get; set; }
-
-        public ICollection<SubjectDto> Subjects { get; set; }
     }
 }

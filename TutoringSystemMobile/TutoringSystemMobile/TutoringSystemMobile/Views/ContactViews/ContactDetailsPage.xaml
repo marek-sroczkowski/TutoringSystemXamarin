@@ -71,6 +71,7 @@
                               Style="{StaticResource ContentLabelStyle}"/>
 
                         <ImageButton Grid.Column="1"
+                                     IsVisible="{Binding IsTutorLoggedIn}"
                                      Source="icon_add2.png"
                                      BackgroundColor="Transparent"
                                      HeightRequest="35"
@@ -115,6 +116,7 @@
                                                      BackgroundColor="Transparent"
                                                      Margin="0,0,5,0"
                                                      Padding="2"
+                                                     IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=IsTutorLoggedIn}"                                                    
                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=EditPhoneNumberCommand}" 
                                                      CommandParameter="{Binding .}" />
                                     </Grid>
@@ -124,6 +126,7 @@
                                                      BackgroundColor="Transparent"
                                                      Margin="0,0,5,0"
                                                      Padding="2"
+                                                     IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=IsTutorLoggedIn}" 
                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:ContactDetailsViewModel}}, Path=RemovePhoneNumberCommand}" 
                                                      CommandParameter="{Binding .}" />
                                     </Grid>

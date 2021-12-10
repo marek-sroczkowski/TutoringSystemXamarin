@@ -3,6 +3,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.PhoneNumberDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -18,6 +20,7 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         private string owner;
         private string email;
         private string discordName;
+        private bool isTutorLoggedIn;
 
         public long Id { get => id; set => SetValue(ref id, value); }
         public string Email
@@ -45,6 +48,7 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             set => SetValue(ref discordName, value);
         }
         public string Owner { get => owner; set => SetValue(ref owner, value); }
+        public bool IsTutorLoggedIn { get => isTutorLoggedIn; set => SetValue(ref isTutorLoggedIn, value); }
 
         public ObservableCollection<PhoneNumberDto> PhoneNumbers { get; }
 
@@ -59,6 +63,8 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
 
         public ContactDetailsViewModel()
         {
+            GetLoggedInUserRole();
+
             PhoneNumbers = new ObservableCollection<PhoneNumberDto>();
 
             contactService = DependencyService.Get<IContactService>();
@@ -74,6 +80,13 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             {
                 await OnAppearing();
             });
+        }
+
+        private async void GetLoggedInUserRole()
+        {
+            var statusString = await SecureStorage.GetAsync(nameof(AccountStatus));
+            var status = statusString.GetAccountStatus();
+            IsTutorLoggedIn = status == AccountStatus.LoggedAsTutor;
         }
 
         private async Task OnEditPhone(PhoneNumberDto phone)

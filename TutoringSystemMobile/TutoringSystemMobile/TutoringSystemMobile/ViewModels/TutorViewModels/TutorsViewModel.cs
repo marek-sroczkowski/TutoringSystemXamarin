@@ -9,6 +9,8 @@ using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Models.TutorDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
+using TutoringSystemMobile.ViewModels.StudentViewModels;
+using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.TutorViewModels
@@ -59,7 +61,7 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
             if (tutor == null)
                 return;
 
-            //await Shell.Current.GoToAsync($"{nameof(StudentDetailsTutorPage)}?{nameof(StudentDetailsViewModel.Id)}={tutor.Id}");
+            await Shell.Current.GoToAsync($"{nameof(TutorDetailsStudentPage)}?{nameof(TutorDetailsViewModel.Id)}={tutor.Id}");
         }
 
         private async Task OnAddTutor()
