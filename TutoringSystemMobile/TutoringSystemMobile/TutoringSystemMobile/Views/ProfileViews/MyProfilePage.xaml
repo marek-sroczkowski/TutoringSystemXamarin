@@ -32,7 +32,7 @@
                            Text="Podstawowe dane"
                            Style="{StaticResource ProfileMenuItemStyle}" />
 
-                    <controls:IconView Grid.Column="2" 
+                    <controls:IconView Grid.Column="2"
                                    Source="icon_get_details.png"
                                    Style="{StaticResource MenuDetailsIconStyle}" />
 

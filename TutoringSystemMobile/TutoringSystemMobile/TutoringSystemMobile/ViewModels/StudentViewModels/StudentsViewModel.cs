@@ -27,7 +27,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             Students = new ObservableCollection<DisplayedStudentDto>();
             studentService = DependencyService.Get<IStudentService>();
             LoadStudentsCommand = new Command(async () => await LoadStudentsAsync());
-            NewStudentCommand = new Command(async () => await OnNewStudentClick());
+            NewStudentCommand = new Command(async () => await OnNewStudent());
             StudentTapped = new Command<DisplayedStudentDto>(async (student) => await OnStudentSelected(student));
             PageAppearingCommand = new Command(OnAppearing);
             RemoveAllStudentsCommand = new Command(async () => await OnRemoveAllStudent());
@@ -82,7 +82,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             }
         }
 
-        private async Task OnNewStudentClick()
+        private async Task OnNewStudent()
         {
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.NewStudent, GeneralConstans.Cancel, null, AlertConstans.NotExistingStudent, AlertConstans.ExistingStudent);
             if (result == AlertConstans.ExistingStudent)

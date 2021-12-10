@@ -2,13 +2,106 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.TutorsStudentPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.TutorDtos"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.TutorViewModels"
+             Title="Korepetytorzy"
              Style="{StaticResource PageStyle}">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to student tutors page"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-                Style="{StaticResource LabelStyle}"/>
-        </StackLayout>
-    </ContentPage.Content>
+
+    <ContentPage.BindingContext>
+        <viewModel:TutorsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_add.png" Command="{Binding AddTutorCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <RefreshView x:DataType="viewModel:TutorsViewModel"
+                 Command="{Binding LoadTutorsCommand}"
+                 IsRefreshing="{Binding IsBusy}"
+                 RefreshColor="Blue">
+
+        <CollectionView ItemsSource="{Binding Tutors}"
+                SelectionMode="None">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="3"
+                                 x:DataType="model:DisplayedTutorDto">
+
+                        <Grid RowDefinitions="Auto">
+
+                            <BoxView Grid.Row="0" Margin="1" Style="{StaticResource ListBoxView}"/>
+
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="100,*,20">
+
+                                <Grid Grid.Column="0"
+                                      Padding="10,10,0,10">
+
+                                    <Frame  CornerRadius="100" 
+                                            HeightRequest="80"
+                                            WidthRequest="80"
+                                            HorizontalOptions="Center"
+                                            Padding="0"
+                                            IsClippedToBounds="True">
+
+                                        <Image Source="{Binding Image}" 
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Frame>
+                                </Grid>
+
+                                <Grid Grid.Column="1"
+                                      Padding="10"
+                                      RowDefinitions="Auto,Auto,Auto">
+
+                                    <Label Grid.Row="0"
+                                           Text="{Binding TutorName}"
+                                           LineBreakMode="WordWrap" 
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="18" />
+
+
+                                    <Label Grid.Row="1"
+                                           LineBreakMode="NoWrap"
+                                           Text="{Binding Username}"
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="15">
+                                    </Label>
+
+                                    <Label Grid.Row="2"
+                                           Text="{Binding HourlRate}"
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="15">
+                                    </Label>
+                                </Grid>
+
+                                <Grid Grid.Column="2">
+                                    <Image Source="icon_get_details.png" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TutorsViewModel}}, Path=TutorTapped}"		
+                                CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>
