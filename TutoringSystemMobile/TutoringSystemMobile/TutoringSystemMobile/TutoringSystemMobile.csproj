@@ -74,6 +74,9 @@
     <Compile Update="Views\ReportViews\SubjectsChartTutorPage.xaml.cs">
       <DependentUpon>SubjectsChartTutorPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\TutorsViews\NewTutorStudentPage.xaml.cs">
+      <DependentUpon>NewTutorStudentPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -225,6 +228,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ProfileViews\MyProfilePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\TutorsViews\NewTutorStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\TutorsViews\TutorDetailsStudentPage.xaml">

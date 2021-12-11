@@ -45,7 +45,7 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
         {
             IsBusy = true;
 
-            var tutors = await tutorService.GetTutorsAsync();
+            var tutors = await tutorService.GetTutorsByStudentAsync();
             var displayedTutors = tutors.Select(t => new DisplayedTutorDto(t));
             Tutors.Clear();
             foreach (var tutor in displayedTutors)
@@ -66,15 +66,7 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
 
         private async Task OnAddTutor()
         {
-            //var result = await Shell.Current.DisplayActionSheet(AlertConstans.NewStudent, GeneralConstans.Cancel, null, AlertConstans.NotExistingStudent, AlertConstans.ExistingStudent);
-            //if (result == AlertConstans.ExistingStudent)
-            //{
-            //    await Shell.Current.GoToAsync($"{nameof(NewExistingStudentTutorPage)}");
-            //}
-            //else if (result == AlertConstans.NotExistingStudent)
-            //{
-            //    await Shell.Current.GoToAsync($"{nameof(CreatingNewStudentTutorPage)}");
-            //}
+            await Shell.Current.GoToAsync($"{nameof(NewTutorStudentPage)}");
         }
     }
 }

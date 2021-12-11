@@ -204,6 +204,12 @@
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="Margin" Value="0,0,0,10" />
             </Style>
+
+            <Style x:Key="SearchBarStyle" TargetType="SearchBar">
+                <Setter Property="CancelButtonColor" Value="{AppThemeBinding Dark=WhiteSmoke, Light=#cccccc}" />
+                <Setter Property="PlaceholderColor" Value="{AppThemeBinding Dark=WhiteSmoke, Light=#cccccc}" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=WhiteSmoke, Light=Black}" />
+            </Style>
         </ResourceDictionary>        
     </Application.Resources>
 </Application>

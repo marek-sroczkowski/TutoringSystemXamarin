@@ -24,5 +24,11 @@
         public const string IncorrectActivationCode = "Nieprawidłowy kod";
         public const string StudentAlreadyExist = "Uczeń jest już dodany!";
         public const string StudentNotExist = "Uczeń o podanym loginie nie istnieje!";
+        public const string ConfirmationTutorAdding = "Czy na pewno chcesz dodać ";
+        public const string ToYourTutors = " do listy nauczycieli";
+        public const string TutorAlreadyExist = "Nauczyciel jest już dodany!";
+        public const string RequestWasAlreadyCreated = "Prośba została już wysłana i oczekuje na akceptację nauczyciela!";
+        public const string RequestSent = "Prośba wysłana!";
+        public const string NewTutorRequestCreated = "Poczekaj, aż nauczyciel zaakceptuje prośbę dołączenia do jego uczniów!";
     }
 }
