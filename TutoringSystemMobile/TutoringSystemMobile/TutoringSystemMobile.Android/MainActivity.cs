@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using ImageCircle.Forms.Plugin.Droid;
+using Plugin.FirebasePushNotification;
 
 namespace TutoringSystemMobile.Droid
 {
@@ -20,6 +21,8 @@ namespace TutoringSystemMobile.Droid
             ImageCircleRenderer.Init();
 
             LoadApplication(new App());
+
+            //FirebasePushNotificationManager.ProcessIntent(this, Intent);
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

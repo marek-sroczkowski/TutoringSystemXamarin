@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using Plugin.FirebasePushNotification;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.PushNotificationTokenDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
@@ -19,10 +21,30 @@ namespace TutoringSystemMobile
             TheTheme.SetTheme();
             flyoutItemService = DependencyService.Get<IFlyoutItemService>();
             MainPage = new AppShell();
+
+            //CrossFirebasePushNotification.Current.OnTokenRefresh += async (s, p) =>
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"TOKEN : {p.Token}");
+            //    await DependencyService.Get<IPushNotificationTokenService>().PutTokenAsync();
+            //};
+            //// Push message received event
+            //CrossFirebasePushNotification.Current.OnNotificationReceived += (s, p) =>
+            //{
+            //    System.Diagnostics.Debug.WriteLine("Received");
+            //};
+            //CrossFirebasePushNotification.Current.OnNotificationOpened += (s, p) =>
+            //{
+            //    System.Diagnostics.Debug.WriteLine("Opened");
+            //    foreach (var data in p.Data)
+            //    {
+            //        System.Diagnostics.Debug.WriteLine($"{data.Key} : {data.Value}");
+            //    }
+            //};
         }
 
         protected override async void OnStart()
         {
+            //await DependencyService.Get<IPushNotificationTokenService>().PutTokenAsync();
             await NavigateByLoginStatus();
         }
 

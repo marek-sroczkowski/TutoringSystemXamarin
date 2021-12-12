@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using Plugin.FirebasePushNotification;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.PushNotificationTokenDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
@@ -65,6 +67,7 @@ namespace TutoringSystemMobile.ViewModels.AccountViewModels
         private async Task LoggedInCorrectly(UserDto user)
         {
             await SecureStorage.SetAsync(SecureStorageConstans.UserName, $"{user.FirstName} {user.LastName}");
+            //await DependencyService.Get<IPushNotificationTokenService>().PutTokenAsync();
 
             switch (user.Role)
             {
