@@ -12,6 +12,6 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<TutorDetailsDto> GetTutorByIdAsync(long tutorId);
         Task<bool> RemoveAllTutorsAsync();
         Task<bool> RemoveTutorAsync(long tutorId);
-        Task<TutorsCollectionDto> GetTutorsByParamsAsync(SearchedTutorParameters parameters);
+        Task<TutorsCollectionDto> GetTutorsByParamsAsync(SearchedUserParameters parameters);
     }
 }

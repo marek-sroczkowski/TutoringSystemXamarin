@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.SearchStudentPage"
+             xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.StudentDtos"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.StudentViewModels"
+             Title="Nowy uczeń"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:SearchStudentsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <RefreshView x:DataType="viewModel:SearchStudentsViewModel"
+                     Command="{Binding LoadStudentsCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     RefreshColor="Blue">
+
+            <StackLayout Padding="10">
+
+                <custom:TitledEntry Text="{Binding SearchedParams}"
+                                    Placeholder="Login / imie / nazwisko" />
+
+                <Button VerticalOptions="Center"
+                        Margin="0,10,0,0"
+                        Text="Szukaj" 
+                        Style="{StaticResource PrimaryBlueButtonStyle}"
+                        Command="{Binding SearchStudentsCommand}" />
+
+                <CollectionView ItemsSource="{Binding Students}"
+                                SelectionMode="None"
+                                Margin="0,20,0,0"
+                                RemainingItemsThresholdReachedCommand="{Binding ItemTresholdReachedCommand}"
+                                RemainingItemsThreshold="5">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <StackLayout Padding="3"
+                                         x:DataType="model:StudentSimpleDto">
+
+                                <Grid RowDefinitions="Auto">
+
+                                    <BoxView Grid.Row="0"
+                                             Margin="1"
+                                             Style="{StaticResource ListBoxView}"/>
+
+                                    <Grid Grid.Row="0"
+                                          ColumnDefinitions="*,20">
+
+                                        <Grid Grid.Column="0"
+                                              Padding="10"
+                                              RowDefinitions="Auto,Auto">
+
+                                            <Label Grid.Row="0" Text="{Binding Username}" 
+                                                   LineBreakMode="WordWrap" 
+                                                   Style="{StaticResource LabelStyle}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="18" />
+
+                                            <Label Grid.Row="1" Text="{Binding StudentName}" 
+                                                  LineBreakMode="WordWrap" 
+                                                  Style="{StaticResource LabelStyle}"
+                                                  FontAttributes="Bold"
+                                                  FontSize="16" />
+                                        </Grid>
+
+                                        <Grid Grid.Column="1">
+                                            <Image Source="icon_get_details.png" />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:SearchStudentsViewModel}}, Path=StudentTappedCommand}"		
+                                        CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using TutoringSystemMobile.Constans;
+﻿using Rg.Plugins.Popup.Services;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
-using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -12,53 +13,93 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 {
     public class SearchStudentsViewModel : BaseViewModel
     {
-        private string username;
-        private string hourRate;
-        private string note;
+        private string searchedParams;
+        private int currentPage;
+        private bool hasNext;
+        private bool isRefreshing;
 
-        public string Username { get => username; set => SetValue(ref username, value); }
-        public string HourRate { get => hourRate; set => SetValue(ref hourRate, value); }
-        public string Note { get => note; set => SetValue(ref note, value); }
+        public ObservableCollection<StudentSimpleDto> Students { get; }
 
-        public Command AddStudentCommand { get; }
+        public string SearchedParams { get => searchedParams; set => SetValue(ref searchedParams, value); }
+        public int CurrentPage { get => currentPage; set => SetValue(ref currentPage, value); }
+        public bool HasNext { get => hasNext; set => SetValue(ref hasNext, value); }
+        public bool IsRefreshing { get => isRefreshing; set => SetValue(ref isRefreshing, value); }
+
+        public SearchedUserParameters SearchedUserParameters { get; set; }
+
+        public Command SearchStudentsCommand { get; }
+        public Command LoadStudentsCommand { get; }
+        public Command ItemTresholdReachedCommand { get; }
+        public Command<StudentSimpleDto> StudentTappedCommand { get; }
+
+        private readonly IStudentService studentService;
 
         public SearchStudentsViewModel()
         {
-            AddStudentCommand = new Command(async () => await OnAddStudent(), CanAddStudent);
-            PropertyChanged += (_, __) => AddStudentCommand.ChangeCanExecute();
+            studentService = DependencyService.Get<IStudentService>();
+            Students = new ObservableCollection<StudentSimpleDto>();
+            SearchedUserParameters = new SearchedUserParameters();
+            SearchStudentsCommand = new Command(async () => await OnSearchStudents(), CanSearchStudents);
+            PropertyChanged += (_, __) => SearchStudentsCommand.ChangeCanExecute();
+            LoadStudentsCommand = new Command(async () => await OnLoadStudents());
+            ItemTresholdReachedCommand = new Command(async () => await StudentsTresholdReached());
+            StudentTappedCommand = new Command<StudentSimpleDto>(async (student) => await OnStudentSelected(student));
         }
 
-        private async Task OnAddStudent()
+        private bool CanSearchStudents()
         {
-            //IsBusy = true;
-            //var status = await DependencyService.Get<IStudentService>().AddStudentToTutorAsync(new
-            //    NewExistingStudentDto(Username, double.Parse(HourRate), Note));
-            //IsBusy = false;
-
-            //switch (status)
-            //{
-            //    case AddStudentToTutorStatus.InternalError:
-            //        DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
-            //        break;
-            //    case AddStudentToTutorStatus.Added:
-            //        DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedStudent);
-            //        await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
-            //        break;
-            //    case AddStudentToTutorStatus.IncorrectUsername:
-            //        await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.StudentNotExist, GeneralConstans.Ok);
-            //        break;
-            //    case AddStudentToTutorStatus.StudentWasAlreadyAdded:
-            //        await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.StudentAlreadyExist, GeneralConstans.Ok);
-            //        break;
-            //}
+            return !SearchedParams.IsEmpty();
         }
 
-        public bool CanAddStudent()
+        private async Task OnSearchStudents()
         {
-            return !Username.IsEmpty() &&
-                double.TryParse(HourRate, out double hourRate) &&
-                hourRate > 0 &&
-                !IsBusy;
+            await OnLoadStudents();
+        }
+
+        private async Task OnLoadStudents()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            IsRefreshing = true;
+
+            SearchedUserParameters.PageNumber = 1;
+            SearchedUserParameters.PageSize = 50;
+            SearchedUserParameters.Params = SearchedParams;
+            var studentsCollection = await studentService.GetTutorsByParamsAsync(SearchedUserParameters);
+            CurrentPage = studentsCollection.Pagination.CurrentPage;
+            HasNext = studentsCollection.Pagination.HasNext;
+            Students.Clear();
+            studentsCollection.Students.ToList().ForEach(student => Students.Add(student));
+
+            IsRefreshing = false;
+            IsBusy = false;
+        }
+
+        private async Task StudentsTresholdReached()
+        {
+            if (IsBusy || !HasNext)
+                return;
+
+            IsBusy = true;
+
+            SearchedUserParameters.PageNumber = ++CurrentPage;
+            SearchedUserParameters.PageSize = 50;
+            SearchedUserParameters.Params = SearchedParams;
+            var studentsCollection = await studentService.GetTutorsByParamsAsync(SearchedUserParameters);
+            HasNext = studentsCollection.Pagination.HasNext;
+            studentsCollection.Students.ToList().ForEach(student => Students.Add(student));
+
+            IsBusy = false;
+        }
+
+        private async Task OnStudentSelected(StudentSimpleDto student)
+        {
+            if (student is null)
+                return;
+
+            await PopupNavigation.Instance.PushAsync(new NewExistingStudentTutorPage(student.Id));
         }
     }
 }

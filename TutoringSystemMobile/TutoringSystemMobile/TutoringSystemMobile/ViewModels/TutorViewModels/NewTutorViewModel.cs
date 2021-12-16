@@ -27,7 +27,7 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
         public bool HasNext { get => hasNext; set => SetValue(ref hasNext, value); }
         public bool IsRefreshing { get => isRefreshing; set => SetValue(ref isRefreshing, value); }
 
-        public SearchedTutorParameters SearchedTutorParameters { get; set; }
+        public SearchedUserParameters SearchedUserParameters { get; set; }
 
         public Command SearchTutorsCommand { get; }
         public Command LoadTutorsCommand { get; }
@@ -40,12 +40,12 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
         {
             tutorService = DependencyService.Get<ITutorService>();
             Tutors = new ObservableCollection<TutorSimpleDto>();
-            SearchedTutorParameters = new SearchedTutorParameters();
+            SearchedUserParameters = new SearchedUserParameters();
             SearchTutorsCommand = new Command(async () => await OnSearchTutors(), CanSearchTutors);
             PropertyChanged += (_, __) => SearchTutorsCommand.ChangeCanExecute();
-            LoadTutorsCommand = new Command(async () => await OnLoadOrders());
-            ItemTresholdReachedCommand = new Command(async () => await OrdersTresholdReached());
-            TutorTappedCommand = new Command<TutorSimpleDto>(async (order) => await OnTutorSelected(order));
+            LoadTutorsCommand = new Command(async () => await OnLoadTutors());
+            ItemTresholdReachedCommand = new Command(async () => await TutorsTresholdReached());
+            TutorTappedCommand = new Command<TutorSimpleDto>(async (tutor) => await OnTutorSelected(tutor));
         }
 
         private bool CanSearchTutors()
@@ -55,10 +55,10 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
 
         private async Task OnSearchTutors()
         {
-            await OnLoadOrders();
+            await OnLoadTutors();
         }
 
-        private async Task OnLoadOrders()
+        private async Task OnLoadTutors()
         {
             if (IsBusy)
                 return;
@@ -66,10 +66,10 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
             IsBusy = true;
             IsRefreshing = true;
 
-            SearchedTutorParameters.PageNumber = 1;
-            SearchedTutorParameters.PageSize = 50;
-            SearchedTutorParameters.Params = SearchedParams;
-            var tutorsCollection = await tutorService.GetTutorsByParamsAsync(SearchedTutorParameters);
+            SearchedUserParameters.PageNumber = 1;
+            SearchedUserParameters.PageSize = 50;
+            SearchedUserParameters.Params = SearchedParams;
+            var tutorsCollection = await tutorService.GetTutorsByParamsAsync(SearchedUserParameters);
             CurrentPage = tutorsCollection.Pagination.CurrentPage;
             HasNext = tutorsCollection.Pagination.HasNext;
             Tutors.Clear();
@@ -82,16 +82,16 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
             IsBusy = false;
         }
 
-        private async Task OrdersTresholdReached()
+        private async Task TutorsTresholdReached()
         {
             if (IsBusy || !HasNext)
                 return;
 
             IsBusy = true;
-            SearchedTutorParameters.PageNumber = ++CurrentPage;
-            SearchedTutorParameters.PageSize = 50;
-            SearchedTutorParameters.Params = SearchedParams;
-            var tutorsCollection = await tutorService.GetTutorsByParamsAsync(SearchedTutorParameters);
+            SearchedUserParameters.PageNumber = ++CurrentPage;
+            SearchedUserParameters.PageSize = 50;
+            SearchedUserParameters.Params = SearchedParams;
+            var tutorsCollection = await tutorService.GetTutorsByParamsAsync(SearchedUserParameters);
             HasNext = tutorsCollection.Pagination.HasNext;
             foreach (var tutor in tutorsCollection.Tutors)
             {

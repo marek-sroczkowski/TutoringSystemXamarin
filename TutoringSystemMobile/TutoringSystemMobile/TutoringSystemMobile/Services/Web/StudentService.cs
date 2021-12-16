@@ -1,9 +1,12 @@
 ﻿using Flurl;
 using Flurl.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.Pagination;
+using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -30,7 +33,9 @@ namespace TutoringSystemMobile.Services.Web
                 .AllowAnyHttpStatus()
                 .PostJsonAsync(student);
 
-            return await GetAddedStatusAsync(response);
+            return response.StatusCode == 200 ?
+                await GetAddedStatusAsync(response) :
+                AddStudentToTutorStatus.InternalError;
         }
 
         public async Task<StudentDetailsDto> GetStudentByIdAsync(long studentId)
@@ -43,6 +48,27 @@ namespace TutoringSystemMobile.Services.Web
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<StudentDetailsDto>() : new StudentDetailsDto();
+        }
+
+        public async Task<StudentsCollectionDto> GetTutorsByParamsAsync(SearchedUserParameters parameters)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegment("all")
+                .SetQueryParams(parameters)
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            IEnumerable<StudentSimpleDto> tutors = response.StatusCode == 200 ?
+                await response.GetJsonAsync<IEnumerable<StudentSimpleDto>>() :
+                new List<StudentSimpleDto>();
+
+            var pagination = response.StatusCode == 200 ?
+                JsonConvert.DeserializeObject<PaginationMetadataDto>(response.Headers.FirstOrDefault("X-Pagination")) :
+                new PaginationMetadataDto();
+
+            return new StudentsCollectionDto { Students = tutors, Pagination = pagination };
         }
 
         public async Task<IEnumerable<StudentDto>> GetStudentsAsync()

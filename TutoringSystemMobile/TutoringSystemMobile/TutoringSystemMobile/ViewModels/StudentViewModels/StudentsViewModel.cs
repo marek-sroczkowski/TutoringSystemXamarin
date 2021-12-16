@@ -89,7 +89,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.NewStudent, GeneralConstans.Cancel, null, AlertConstans.NotExistingStudent, AlertConstans.ExistingStudent);
             if (result == AlertConstans.ExistingStudent)
             {
-                await Shell.Current.GoToAsync($"{nameof(NewExistingStudentTutorPage)}");
+                await Shell.Current.GoToAsync($"{nameof(SearchStudentPage)}");
             }
             else if (result == AlertConstans.NotExistingStudent)
             {
