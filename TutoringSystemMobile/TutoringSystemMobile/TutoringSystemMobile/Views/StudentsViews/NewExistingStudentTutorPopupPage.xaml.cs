@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class NewExistingStudentTutorPage
+    public partial class NewExistingStudentTutorPopupPage
     {
-        public NewExistingStudentTutorPage(long studentId)
+        public NewExistingStudentTutorPopupPage(long studentId)
         {
             InitializeComponent();
             BindingContext = new AddExistingStudentViewModel(studentId);

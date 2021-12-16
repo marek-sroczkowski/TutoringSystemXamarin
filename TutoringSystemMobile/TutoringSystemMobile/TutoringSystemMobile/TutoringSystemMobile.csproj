@@ -75,8 +75,11 @@
     <Compile Update="Views\ReportViews\SubjectsChartTutorPage.xaml.cs">
       <DependentUpon>SubjectsChartTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TutorsViews\NewTutorStudentPage.xaml.cs">
-      <DependentUpon>NewTutorStudentPage.xaml</DependentUpon>
+    <Compile Update="Views\StudentsViews\NewExistingStudentTutorPopupPage.xaml.cs">
+      <DependentUpon>NewExistingStudentTutorPopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TutorsViews\SearchTutorsStudentPage.xaml.cs">
+      <DependentUpon>SearchTutorsStudentPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -201,7 +204,7 @@
     <EmbeddedResource Update="Views\StudentsViews\EditStudentGeneralInformationTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\NewExistingStudentTutorPage.xaml">
+    <EmbeddedResource Update="Views\StudentsViews\NewExistingStudentTutorPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StudentsViews\SearchStudentPage.xaml">
@@ -237,7 +240,7 @@
     <EmbeddedResource Update="Views\ProfileViews\MyProfilePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\TutorsViews\NewTutorStudentPage.xaml">
+    <EmbeddedResource Update="Views\TutorsViews\SearchTutorsStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\TutorsViews\TutorDetailsStudentPage.xaml">

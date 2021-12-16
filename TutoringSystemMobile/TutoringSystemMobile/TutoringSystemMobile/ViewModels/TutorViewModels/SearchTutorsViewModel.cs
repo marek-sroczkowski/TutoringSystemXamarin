@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
@@ -13,7 +12,7 @@ using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.TutorViewModels
 {
-    public class NewTutorViewModel : BaseViewModel
+    public class SearchTutorsViewModel : BaseViewModel
     {
         private string searchedParams;
         private int currentPage;
@@ -36,7 +35,7 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
 
         private readonly ITutorService tutorService;
 
-        public NewTutorViewModel()
+        public SearchTutorsViewModel()
         {
             tutorService = DependencyService.Get<ITutorService>();
             Tutors = new ObservableCollection<TutorSimpleDto>();

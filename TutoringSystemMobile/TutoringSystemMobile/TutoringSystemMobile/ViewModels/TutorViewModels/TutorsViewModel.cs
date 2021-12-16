@@ -66,7 +66,7 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
 
         private async Task OnAddTutor()
         {
-            await Shell.Current.GoToAsync($"{nameof(NewTutorStudentPage)}");
+            await Shell.Current.GoToAsync($"{nameof(SearchTutorStudentPage)}");
         }
     }
 }

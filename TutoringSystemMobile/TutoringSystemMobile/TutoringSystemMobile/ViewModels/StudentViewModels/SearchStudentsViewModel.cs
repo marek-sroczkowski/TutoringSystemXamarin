@@ -99,7 +99,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             if (student is null)
                 return;
 
-            await PopupNavigation.Instance.PushAsync(new NewExistingStudentTutorPage(student.Id));
+            await PopupNavigation.Instance.PushAsync(new NewExistingStudentTutorPopupPage(student.Id));
         }
     }
 }

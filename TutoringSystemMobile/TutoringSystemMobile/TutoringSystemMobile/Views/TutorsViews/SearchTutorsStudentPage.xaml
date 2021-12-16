@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TutoringSystemMobile.Views.NewTutorStudentPage"
+             x:Class="TutoringSystemMobile.Views.SearchTutorStudentPage"
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
              xmlns:model="clr-namespace:TutoringSystemMobile.Models.TutorDtos"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.TutorViewModels"
@@ -9,12 +9,12 @@
              Style="{StaticResource PageStyle}">
 
     <ContentPage.BindingContext>
-        <viewModel:NewTutorViewModel />
+        <viewModel:SearchTutorsViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
 
-        <RefreshView x:DataType="viewModel:NewTutorViewModel"
+        <RefreshView x:DataType="viewModel:SearchTutorsViewModel"
                      Command="{Binding LoadTutorsCommand}"
                      IsRefreshing="{Binding IsRefreshing}"
                      RefreshColor="Blue">
@@ -77,7 +77,7 @@
                                 <StackLayout.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         NumberOfTapsRequired="1"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:NewTutorViewModel}}, Path=TutorTappedCommand}"		
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:SearchTutorsViewModel}}, Path=TutorTappedCommand}"		
                                         CommandParameter="{Binding .}">
                                     </TapGestureRecognizer>
                                 </StackLayout.GestureRecognizers>
