@@ -117,7 +117,7 @@ namespace TutoringSystemMobile.ViewModels.TutorViewModels
         private async Task TryAddTutor(TutorSimpleDto tutor)
         {
             IsBusy = true;
-            var status = await tutorService.AddTutorToStudentAsync(tutor.Id);
+            var status = await DependencyService.Get<IStudentRequestService>().AddRequestAsync(tutor.Id);
             IsBusy = false;
 
             switch (status)

@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Rg.Plugins.Popup.Services;
+using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
-using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.StudentDtos;
 using TutoringSystemMobile.Services.Interfaces;
@@ -12,18 +12,19 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
 {
     public class AddExistingStudentViewModel : BaseViewModel
     {
-        private string username;
+        private long studentId;
         private string hourRate;
         private string note;
 
-        public string Username { get => username; set => SetValue(ref username, value); }
+        public long StudentId { get => studentId; set => SetValue(ref studentId, value); }
         public string HourRate { get => hourRate; set => SetValue(ref hourRate, value); }
         public string Note { get => note; set => SetValue(ref note, value); }
 
         public Command AddStudentCommand { get; }
 
-        public AddExistingStudentViewModel()
+        public AddExistingStudentViewModel(long studentId)
         {
+            StudentId = studentId;
             AddStudentCommand = new Command(async () => await OnAddStudent(), CanAddStudent);
             PropertyChanged += (_, __) => AddStudentCommand.ChangeCanExecute();
         }
@@ -32,7 +33,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         {
             IsBusy = true;
             var status = await DependencyService.Get<IStudentService>().AddStudentToTutorAsync(new
-                NewExistingStudentDto(Username, double.Parse(HourRate), Note));
+                NewExistingStudentDto(StudentId, double.Parse(HourRate), Note));
             IsBusy = false;
 
             switch (status)
@@ -51,12 +52,13 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
                     await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.StudentAlreadyExist, GeneralConstans.Ok);
                     break;
             }
+
+            await PopupNavigation.Instance.PopAsync();
         }
 
         public bool CanAddStudent()
         {
-            return !Username.IsEmpty() &&
-                double.TryParse(HourRate, out double hourRate) &&
+            return double.TryParse(HourRate, out double hourRate) &&
                 hourRate > 0 &&
                 !IsBusy;
         }

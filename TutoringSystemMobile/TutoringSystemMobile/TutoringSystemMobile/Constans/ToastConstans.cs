@@ -34,5 +34,6 @@
         public const string InternalError = "Wewnętrzny błąd aplikacji, spróbuj ponownie później!";
         public const string AddedStudent = "Dodano ucznia";
         public const string AddedSubject = "Dodano przedmiot";
+        public const string StudentRequestRemoved = "Usunięto prośbę";
     }
 }

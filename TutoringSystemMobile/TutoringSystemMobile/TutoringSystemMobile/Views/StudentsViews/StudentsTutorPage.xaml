@@ -13,6 +13,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_student_requests.png" Command="{Binding StudentRequestsCommand}" />
         <ToolbarItem IconImageSource="icon_add.png" Command="{Binding NewStudentCommand}" />
         <ToolbarItem IconImageSource="icon_remove.png" Command="{Binding RemoveAllStudentsCommand}" />
     </ContentPage.ToolbarItems>

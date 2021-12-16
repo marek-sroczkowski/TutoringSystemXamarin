@@ -2,7 +2,7 @@
 {
     public class NewExistingStudentDto
     {
-        public string Username { get; set; }
+        public long StudentId { get; set; }
         public double HourRate { get; set; }
         public string Note { get; set; }
 
@@ -10,9 +10,9 @@
         {
         }
 
-        public NewExistingStudentDto(string username, double hourlRate, string note)
+        public NewExistingStudentDto(long studentId, double hourlRate, string note)
         {
-            Username = username;
+            StudentId = studentId;
             HourRate = hourlRate;
             Note = note;
         }

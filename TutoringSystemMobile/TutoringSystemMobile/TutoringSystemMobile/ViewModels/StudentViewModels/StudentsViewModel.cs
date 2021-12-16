@@ -19,6 +19,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         public Command<DisplayedStudentDto> StudentTapped { get; }
         public Command PageAppearingCommand { get; }
         public Command RemoveAllStudentsCommand { get; }
+        public Command StudentRequestsCommand { get; }
 
         public readonly IStudentService studentService;
 
@@ -31,6 +32,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             StudentTapped = new Command<DisplayedStudentDto>(async (student) => await OnStudentSelected(student));
             PageAppearingCommand = new Command(OnAppearing);
             RemoveAllStudentsCommand = new Command(async () => await OnRemoveAllStudent());
+            StudentRequestsCommand = new Command(async () => await OnStudentRequests());
         }
 
         private void OnAppearing()
@@ -89,10 +91,15 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             {
                 await Shell.Current.GoToAsync($"{nameof(NewExistingStudentTutorPage)}");
             }
-            else if(result == AlertConstans.NotExistingStudent)
+            else if (result == AlertConstans.NotExistingStudent)
             {
                 await Shell.Current.GoToAsync($"{nameof(CreatingNewStudentTutorPage)}");
             }
+        }
+
+        private async Task OnStudentRequests()
+        {
+            await Shell.Current.GoToAsync($"{nameof(StudentRequestsTutorPage)}");
         }
     }
 }

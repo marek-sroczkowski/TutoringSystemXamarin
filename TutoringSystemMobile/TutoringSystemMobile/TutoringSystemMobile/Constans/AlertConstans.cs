@@ -30,5 +30,6 @@
         public const string RequestWasAlreadyCreated = "Prośba została już wysłana i oczekuje na akceptację nauczyciela!";
         public const string RequestSent = "Prośba wysłana!";
         public const string NewTutorRequestCreated = "Poczekaj, aż nauczyciel zaakceptuje prośbę dołączenia do jego uczniów!";
+        public const string ConfirmationStudentRequestDeletion = "Czy na pewno chcesz odrzucić prośbę?";
     }
 }

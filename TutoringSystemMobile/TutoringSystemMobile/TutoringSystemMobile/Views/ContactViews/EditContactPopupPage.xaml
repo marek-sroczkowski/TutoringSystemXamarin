@@ -27,11 +27,7 @@
                                    ScaleOut="0.8" />
     </pages:PopupPage.Animation>
 
-    <StackLayout Margin="12"
-                 Padding="24"
-                 BackgroundColor="#191919"
-                 HorizontalOptions="Center"
-                 VerticalOptions="Center">
+    <StackLayout Style="{StaticResource CenterPopupStyle}">
 
         <Label Text="Edycja kontaktu"
                Style="{StaticResource TitleLabelStyle}"

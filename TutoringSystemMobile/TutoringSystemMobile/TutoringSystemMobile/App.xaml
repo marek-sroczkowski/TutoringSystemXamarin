@@ -183,7 +183,7 @@
             </Style>
 
             <Style x:Key="CenterPopupStyle" TargetType="StackLayout">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=#191919, Light=White}" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=#363636, Light=White}" />
                 <Setter Property="Margin" Value="12" />
                 <Setter Property="Padding" Value="24" />
                 <Setter Property="HorizontalOptions" Value="Center" />

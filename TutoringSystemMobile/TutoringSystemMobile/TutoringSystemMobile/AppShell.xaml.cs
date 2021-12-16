@@ -24,8 +24,8 @@ namespace TutoringSystemMobile
             Routing.RegisterRoute(nameof(EditSubjectTutorPage), typeof(EditSubjectTutorPage));
 
             Routing.RegisterRoute(nameof(StudentDetailsTutorPage), typeof(StudentDetailsTutorPage));
-            Routing.RegisterRoute(nameof(NewExistingStudentTutorPage), typeof(NewExistingStudentTutorPage));
             Routing.RegisterRoute(nameof(CreatingNewStudentTutorPage), typeof(CreatingNewStudentTutorPage));
+            Routing.RegisterRoute(nameof(StudentRequestsTutorPage), typeof(StudentRequestsTutorPage));
 
             Routing.RegisterRoute(nameof(EditStudentGeneralInformationTutorPage), typeof(EditStudentGeneralInformationTutorPage));
             Routing.RegisterRoute(nameof(EditContactPopupPage), typeof(EditContactPopupPage));

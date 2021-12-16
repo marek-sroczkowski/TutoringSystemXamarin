@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.StudentRequestsTutorPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.StudentRequestDtos"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.StudentViewModels"
+             Title="Prośby o dołączenie"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:StudentRequestsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <RefreshView x:DataType="viewModel:StudentRequestsViewModel"
+                 Command="{Binding LoadRequestsCommand}"
+                 IsRefreshing="{Binding IsBusy}"
+                 RefreshColor="Blue">
+
+        <CollectionView ItemsSource="{Binding Requests}"
+                SelectionMode="None">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="3"
+                                 x:DataType="model:StudentRequestDto">
+
+                        <Grid RowDefinitions="Auto">
+
+                            <BoxView Grid.Row="0" Margin="1" Style="{StaticResource ListBoxView}"/>
+
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="*,50,50">
+
+                                <Grid Grid.Column="0"
+                                      Padding="10"
+                                      RowDefinitions="Auto,Auto,Auto">
+
+                                    <Label Grid.Row="0"
+                                           Text="{Binding StudentName}"
+                                           LineBreakMode="WordWrap" 
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="18" />
+
+                                    <Label Grid.Row="1"
+                                           LineBreakMode="NoWrap"
+                                           Text="{Binding StudentUsername}"
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="15" />
+
+                                    <Label Grid.Row="2"
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="15">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Prośba z dnia "/>
+                                                <Span Text="{Binding CreatedDate}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+
+                                <Grid Grid.Column="1"
+                                      Margin="0,0,10,0">
+                                    <ImageButton Source="icon_accept.png"
+                                                 BackgroundColor="Transparent"
+                                                 HeightRequest="35"
+                                                 WidthRequest="35"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentRequestsViewModel}}, Path=AcceptRequestCommand}"
+                                                 CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}" />
+                                </Grid>
+                                
+                                <Grid Grid.Column="2"
+                                      Margin="0,0,10,0">
+                                    <ImageButton Source="icon_remove2.png"
+                                                 BackgroundColor="Transparent"
+                                                 HeightRequest="35"
+                                                 WidthRequest="35"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentRequestsViewModel}}, Path=DeclineRequestCommand}"
+                                                 CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

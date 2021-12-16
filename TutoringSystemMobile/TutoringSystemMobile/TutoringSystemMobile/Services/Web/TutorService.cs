@@ -25,18 +25,6 @@ namespace TutoringSystemMobile.Services.Web
             baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "tutor";
         }
 
-        public async Task<AddTutorToStudentStatus> AddTutorToStudentAsync(long tutorId)
-        {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment(tutorId)
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
-                .PostAsync();
-
-            return await GetAddedStatusAsync(response);
-        }
-
         public async Task<IEnumerable<TutorDto>> GetTutorsByStudentAsync()
         {
             string token = await SecureStorage.GetAsync("token");
@@ -103,13 +91,6 @@ namespace TutoringSystemMobile.Services.Web
                 .DeleteAsync();
 
             return response.StatusCode == 204;
-        }
-
-        private async Task<AddTutorToStudentStatus> GetAddedStatusAsync(IFlurlResponse response)
-        {
-            var status = await response.GetStringAsync();
-
-            return (AddTutorToStudentStatus)Enum.Parse(typeof(AddTutorToStudentStatus), status.Trim('\"'));
         }
     }
 }
