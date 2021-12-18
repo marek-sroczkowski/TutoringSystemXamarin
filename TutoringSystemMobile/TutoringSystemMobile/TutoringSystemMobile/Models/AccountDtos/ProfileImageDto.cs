@@ -2,15 +2,15 @@
 {
     public class ProfileImageDto
     {
-        public string ProfilePictureBase64 { get; set; }
+        public string ProfilePictureFirebaseUrl { get; set; }
 
         public ProfileImageDto()
         {
         }
 
-        public ProfileImageDto(string profilePictureBase64)
+        public ProfileImageDto(string profilePictureFirebaseUrl)
         {
-            ProfilePictureBase64 = profilePictureBase64;
+            ProfilePictureFirebaseUrl = profilePictureFirebaseUrl;
         }
     }
 }

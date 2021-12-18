@@ -1,9 +1,9 @@
 ﻿using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.AccountDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -31,6 +31,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         public ProfilePictureViewModel()
         {
+            HasUserPhoto = false;
             PageAppearingCommand = new Command(async () => await OnAppearing());
             RemoveImageCommand = new Command(async () => await OnRemoveImage());
             SetImageCommand = new Command(async () => await OnSetImage());
@@ -51,9 +52,15 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         private async Task OnRemoveImage()
         {
+            if (!HasUserPhoto)
+                return;
+
+            IsBusy = true;
             var removed = await DependencyService.Get<IImageService>().RemoveProfileImageAsync();
+
             if (removed)
             {
+                await FirebaseStorageManager.RemoveImageFirebase($"{userId}.jpg");
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
                 ProfileImage = ResourceConstans.DefaultUserPicture;
                 HasUserPhoto = false;
@@ -62,15 +69,16 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
+
+            IsBusy = false;
         }
 
         private async Task OnAppearing()
         {
-            IsBusy = true;
             var image = await DependencyService.Get<IImageService>()?.GetProfileImageAsync();
             UserId = image.UserId;
 
-            if (string.IsNullOrEmpty(image.ProfilePictureBase64))
+            if (string.IsNullOrEmpty(image.ProfilePictureFirebaseUrl))
             {
                 HasUserPhoto = false;
                 ProfileImage = ResourceConstans.DefaultUserPicture;
@@ -78,7 +86,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             else
             {
                 HasUserPhoto = true;
-                ProfileImage = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(image.ProfilePictureBase64)));
+                ProfileImage = ImageSource.FromUri(new Uri(image.ProfilePictureFirebaseUrl));
             }
 
             IsBusy = false;
@@ -98,6 +106,10 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task LoadImageFromCamera()
@@ -114,11 +126,16 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task TakePhotoAsync()
         {
-            var photo = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions { DefaultCamera = CameraDevice.Front });
+            var photo = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions { DefaultCamera = CameraDevice.Front, PhotoSize = PhotoSize.Small });
+            IsBusy = true;
 
             if (photo != null)
             {
@@ -128,7 +145,8 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         private async Task LoadPhotoAsync()
         {
-            var photo = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions());
+            var photo = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions { PhotoSize = PhotoSize.Small });
+            IsBusy = true;
 
             if (photo != null)
             {
@@ -138,21 +156,21 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 
         private async Task TrySetPhoto(MediaFile photo)
         {
-            using (var stream = photo.GetStreamWithImageRotatedForExternalStorage())
+            using var stream = photo.GetStreamWithImageRotatedForExternalStorage();
+            var imageUrl = await FirebaseStorageManager.StoreImage(stream, $"{userId}.jpg");
+            if (!string.IsNullOrEmpty(imageUrl))
             {
-                byte[] filebytearray = new byte[stream.Length];
-                stream.Read(filebytearray, 0, (int)stream.Length);
-                byte[] resizedImage = DependencyService.Get<IImageTransformationService>().ResizeImage(filebytearray, resizedWidth, resizedHeight);
-                string base64 = Convert.ToBase64String(resizedImage);
-                var set = await DependencyService.Get<IImageService>().SetProfileImageAsync(new ProfileImageDto(base64));
+                var set = await DependencyService.Get<IImageService>().SetProfileImageAsync(new ProfileImageDto(imageUrl));
+
                 if (set)
                 {
-                    ProfileImage = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(base64)));
+                    ProfileImage = ImageSource.FromUri(new Uri(imageUrl));
                     HasUserPhoto = true;
                     MessagingCenter.Send(this, MessagingCenterConstans.PhotoChanged);
                 }
                 else
                 {
+                    await FirebaseStorageManager.RemoveImageFirebase($"{userId}.jpg");
                     DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
                     HasUserPhoto = false;
                 }

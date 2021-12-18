@@ -351,3 +351,6 @@ MigrationBackup/
 
 google-services.json
 **/google-services.json
+
+appsettings.json
+**/appsettings.json

@@ -29,7 +29,7 @@
                                       Aspect="AspectFit" 
                                       WidthRequest="250" 
                                       HeightRequest="250"
-                                      FillColor="WhiteSmoke"/>
+                                      FillColor="White"/>
 
                 <ActivityIndicator Grid.Row="0" IsVisible="{Binding IsBusy}"
                                IsRunning="{Binding IsBusy}"

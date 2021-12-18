@@ -71,8 +71,8 @@ namespace TutoringSystemMobile.ViewModels
         private async Task LoadPictureAsync()
         {
             var picture = await DependencyService.Get<IImageService>()?.GetProfileImageAsync();
-            ProfileImage = picture.ProfilePictureBase64 != null ?
-                ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(picture.ProfilePictureBase64))) :
+            ProfileImage = picture.ProfilePictureFirebaseUrl != null ?
+                ImageSource.FromUri(new Uri(picture.ProfilePictureFirebaseUrl)) :
                 ResourceConstans.DefaultUserPicture;
         }
     }
