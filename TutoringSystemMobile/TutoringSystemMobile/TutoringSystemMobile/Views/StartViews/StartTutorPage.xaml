@@ -2,15 +2,120 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TutoringSystemMobile.Views.StartTutorPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin" 
+             xmlns:reservationModel="clr-namespace:TutoringSystemMobile.Models.ReservationDtos"
+             xmlns:orderModel="clr-namespace:TutoringSystemMobile.Models.AdditionalOrderDtos"
+             xmlns:requestModel="clr-namespace:TutoringSystemMobile.Models.StudentRequestDtos"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.StartViewModels"
              Title="MS Korepetytor"
              Style="{StaticResource PageStyle}">
 
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to start page"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-                   Style="{StaticResource LabelStyle}"/>
+    <ContentPage.BindingContext>
+        <viewModel:TutorStartPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <RefreshView x:DataType="viewModel:TutorStartPageViewModel"
+                 Command="{Binding LoadCollectionsCommand}"
+                 IsRefreshing="{Binding IsBusy}"
+                 RefreshColor="Blue">
+
+        <StackLayout Padding="10">
+
+            <Label Text="Dzisiejsze lekcje"
+                   Style="{StaticResource TitleLabelStyle}" />
+
+            <CollectionView ItemsSource="{Binding Reservations}"
+                        SelectionMode="None"
+                        ItemsLayout="HorizontalList">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <StackLayout Padding="3"
+                                     x:DataType="reservationModel:DisplayedReservationDto">
+
+                            <Grid RowDefinitions="Auto">
+
+                                <BoxView Grid.Row="0"
+                                         Margin="1"
+                                         Style="{StaticResource CaruselListBoxView}"/>
+
+                                <Grid Grid.Row="0"
+                                      Padding="10"
+                                      RowDefinitions="Auto,Auto">
+
+                                    <Grid Grid.Row="0"
+                                          ColumnDefinitions="*,70">
+
+                                        <Grid Grid.Column="0"
+                                              RowDefinitions="Auto,Auto,Auto">
+
+                                            <Label Grid.Row="0"
+                                                   Text="{Binding Student}"
+                                                   LineBreakMode="WordWrap"
+                                                   FontAttributes="Bold"
+                                                   FontSize="20"
+                                                   Style="{StaticResource LabelStyle}"/>
+
+                                            <Label Grid.Row="1"
+                                                   Text="{Binding SubjectName}"
+                                                   LineBreakMode="WordWrap"
+                                                   FontAttributes="Bold"
+                                                   FontSize="16"
+                                                   Style="{StaticResource LabelStyle}"/>
+
+                                            <Label Grid.Row="2"
+                                                   Text="{Binding Place}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="15"
+                                                   Style="{StaticResource LabelStyle}"/>
+                                        </Grid>
+
+                                        <controls:CircleImage Grid.Column="1"
+                                                              Margin="10,0,0,0"
+                                                              Source="default_student_picture.png" 
+                                                              Aspect="AspectFit" 
+                                                              WidthRequest="70" 
+                                                              HeightRequest="70"
+                                                              FillColor="WhiteSmoke"/>
+                                    </Grid>
+
+                                    <Label Grid.Row="1"
+                                           Text="{Binding LessonTime}"
+                                           FontAttributes="Bold"
+                                           FontSize="16"
+                                           HorizontalOptions="Start"
+                                           Style="{StaticResource LabelStyle}"/>
+
+                                    <Label Grid.Row="1"
+                                           Text="{Binding Cost}"
+                                           FontAttributes="Bold"
+                                           FontSize="16"
+                                           HorizontalOptions="End"
+                                           Style="{StaticResource LabelStyle}"/>
+
+                                </Grid>
+                            </Grid>
+
+                            <!--<StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=OrderTappedCommand}"		
+                                        CommandParameter="{Binding .}">
+                                </TapGestureRecognizer>
+                            </StackLayout.GestureRecognizers>-->
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
         </StackLayout>
-    </ContentPage.Content>
+    </RefreshView>
 </ContentPage>

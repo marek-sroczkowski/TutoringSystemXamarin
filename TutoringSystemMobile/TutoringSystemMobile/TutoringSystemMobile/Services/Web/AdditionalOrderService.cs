@@ -73,9 +73,14 @@ namespace TutoringSystemMobile.Services.Web
                 .WithOAuthBearerToken(token)
                 .GetAsync();
 
+            return await GetOrdersAsync(response);
+        }
+
+        private static async Task<OrdersCollectionDto> GetOrdersAsync(IFlurlResponse response)
+        {
             IEnumerable<OrderDto> orders = response.StatusCode == 200 ?
-                await response.GetJsonAsync<IEnumerable<OrderDto>>() :
-                new List<OrderDto>();
+                            await response.GetJsonAsync<IEnumerable<OrderDto>>() :
+                            new List<OrderDto>();
 
             var pagination = response.StatusCode == 200 ?
                 JsonConvert.DeserializeObject<PaginationMetadataDto>(response.Headers.FirstOrDefault("X-Pagination")) :

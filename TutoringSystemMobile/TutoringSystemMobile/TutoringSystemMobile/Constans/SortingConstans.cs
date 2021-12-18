@@ -16,5 +16,7 @@
         public const string SortByTotalHoursDesc = "totalhours desc";
         public const string SortByReservationsCountAsc = "reservationscount asc";
         public const string SortByReservationsCountDesc = "reservationscount desc";
+        public const string SortByStartTimeAsc = "starttime asc";
+        public const string SortByStartTimeDesc = "starttime desc";
     }
 }

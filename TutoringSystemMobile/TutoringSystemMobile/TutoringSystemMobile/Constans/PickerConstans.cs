@@ -44,5 +44,6 @@
         public const string AtTutorAndOnline = "U nauczyciela / online";
         public const string AtStudentAndOnline = "U ucznia / online";
         public const string AllPlaces = "Dowolne";
+        public const string LessonOtherPlace = "Inne miejsce";
     }
 }
