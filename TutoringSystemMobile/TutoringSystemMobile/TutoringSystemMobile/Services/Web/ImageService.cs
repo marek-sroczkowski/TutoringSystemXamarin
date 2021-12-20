@@ -1,6 +1,8 @@
-﻿using Flurl.Http;
+﻿using Flurl;
+using Flurl.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.AccountDtos;
+using TutoringSystemMobile.Models.ImagesDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
@@ -49,6 +51,34 @@ namespace TutoringSystemMobile.Services.Web
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<ProfileImageDetailsDto>() : new ProfileImageDetailsDto();
+        }
+
+        public async Task<IEnumerable<ProfileImageDetailsDto>> GetStudentPhotos()
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegment("students")
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ?
+                await response.GetJsonAsync<IEnumerable<ProfileImageDetailsDto>>() :
+                new List<ProfileImageDetailsDto>();
+        }
+
+        public async Task<IEnumerable<ProfileImageDetailsDto>> GetTutorPhotos()
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegment("tutors")
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ?
+                await response.GetJsonAsync<IEnumerable<ProfileImageDetailsDto>>() :
+                new List<ProfileImageDetailsDto>();
         }
     }
 }

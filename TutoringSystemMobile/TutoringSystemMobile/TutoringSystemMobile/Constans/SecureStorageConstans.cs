@@ -10,5 +10,6 @@
         public const string Token = "token";
         public const string GeneralInformation = "generalInformation";
         public const string UserName = "userName";
+        public const string LastSynchronizationDate = "lastSynchronizationDate";
     }
 }

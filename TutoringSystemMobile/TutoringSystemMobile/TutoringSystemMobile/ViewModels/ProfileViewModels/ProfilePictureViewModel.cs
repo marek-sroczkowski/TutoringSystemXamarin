@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Helpers;
-using TutoringSystemMobile.Models.AccountDtos;
+using TutoringSystemMobile.Models.ImagesDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using Xamarin.Essentials;
@@ -14,9 +14,6 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
 {
     public class ProfilePictureViewModel : BaseViewModel
     {
-        private const float resizedWidth = 512;
-        private const float resizedHeight = 512;
-
         private long userId;
         private ImageSource profileImage;
         private bool hasUserPhoto;
@@ -63,6 +60,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
                 await FirebaseStorageManager.RemoveImageFirebase($"{userId}.jpg");
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
                 ProfileImage = ResourceConstans.DefaultUserPicture;
+                MessagingCenter.Send(this, MessagingCenterConstans.PhotoChanged);
                 HasUserPhoto = false;
             }
             else
@@ -153,7 +151,7 @@ namespace TutoringSystemMobile.ViewModels.ProfileViewModels
                 await TrySetPhoto(photo);
             }
         }
-
+         
         private async Task TrySetPhoto(MediaFile photo)
         {
             using var stream = photo.GetStreamWithImageRotatedForExternalStorage();
