@@ -13,7 +13,9 @@ namespace TutoringSystemMobile.Models.ReservationDtos
         public ReservationPlace Place { get; set; }
         public ReservationType Type { get; set; }
         public string SubjectName { get; set; }
+        public long TutorId { get; set; }
         public string Tutor { get; set; }
+        public long StudentId { get; set; }
         public string Student { get; set; }
     }
 }

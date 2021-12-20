@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.ImagesDtos;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.SQLite;
@@ -21,15 +22,30 @@ namespace TutoringSystemMobile.Services.Synchronization
         public ImageSynchronizer()
         {
             client = new WebClient();
-            localImages = SQLiteManager.Instance.GetAll<UserImageDto>();
         }
 
         public async Task SynchronizeStudentImages()
         {
             images = (await DependencyService.Get<IImageService>().GetStudentPhotos())
-                .Select(image => new UserImageDto(image));
+                .Select(image => new UserImageDto(image, Role.Student));
 
-            RemoveDeletingImages();
+            localImages = SQLiteManager.Instance.GetAll<UserImageDto>()
+                .Where(image => image.UserRole.Equals(Role.Student));
+
+            RemoveDeletingImages(Role.Student);
+            await AddNewImages();
+            await UpdateExistingImages();
+        }
+
+        public async Task SynchronizeTutorImages()
+        {
+            images = (await DependencyService.Get<IImageService>().GetTutorPhotos())
+                .Select(image => new UserImageDto(image, Role.Tutor));
+
+            localImages = SQLiteManager.Instance.GetAll<UserImageDto>()
+                .Where(image => image.UserRole.Equals(Role.Tutor));
+
+            RemoveDeletingImages(Role.Tutor);
             await AddNewImages();
             await UpdateExistingImages();
         }
@@ -64,14 +80,15 @@ namespace TutoringSystemMobile.Services.Synchronization
             toAdded.ForEach(image => SQLiteManager.Instance.Add(image));
         }
 
-        private void RemoveDeletingImages()
+        private void RemoveDeletingImages(Role role)
         {
             var userIds = images.Where(image => string.IsNullOrEmpty(image.ProfilePictureFirebaseUrl))
                 .Select(image => image.UserId);
             var toRemoved = localImages.Where(image => userIds.Contains(image.UserId)).ToList();
 
             toRemoved.ForEach(image => SQLiteManager.Instance.Remove<UserImageDto>(image.UserId));
-            localImages = SQLiteManager.Instance.GetAll<UserImageDto>();
+            localImages = SQLiteManager.Instance.GetAll<UserImageDto>()
+                .Where(image => image.UserRole.Equals(role));
         }
     }
 }

@@ -1,13 +1,17 @@
 ﻿using System;
+using System.IO;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Models.ImagesDtos;
+using TutoringSystemMobile.Services.SQLite;
+using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Models.ReservationDtos
 {
     public class DisplayedReservationDto
     {
-        private DateTime startTime;
-        private DateTime endTime;
+        private readonly DateTime startTime;
+        private readonly DateTime endTime;
 
         public long Id { get; set; }
         public string Cost { get; set; }
@@ -16,6 +20,7 @@ namespace TutoringSystemMobile.Models.ReservationDtos
         public string SubjectName { get; set; }
         public string Tutor { get; set; }
         public string Student { get; set; }
+        public ImageSource Image { get; set; }
 
         public DisplayedReservationDto()
         {
@@ -32,6 +37,10 @@ namespace TutoringSystemMobile.Models.ReservationDtos
             Student = reservation.Student;
             LessonTime = $"{startTime.ToShortTimeString()} - {endTime.ToShortTimeString()}";
             SetPlace(reservation.Place);
+            var image = SQLiteManager.Instance.Get<UserImageDto>(reservation.StudentId);
+            Image = image is null
+                ? ResourceConstans.DefaultStudentPicture
+                : ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(image.ProfilePictureBase64)));
         }
 
         private void SetPlace(ReservationPlace place)

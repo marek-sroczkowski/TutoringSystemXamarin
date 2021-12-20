@@ -80,7 +80,7 @@
 
                                         <controls:CircleImage Grid.Column="1"
                                                               Margin="10,0,0,0"
-                                                              Source="default_student_picture.png" 
+                                                              Source="{Binding Image}" 
                                                               Aspect="AspectFit" 
                                                               WidthRequest="70" 
                                                               HeightRequest="70"

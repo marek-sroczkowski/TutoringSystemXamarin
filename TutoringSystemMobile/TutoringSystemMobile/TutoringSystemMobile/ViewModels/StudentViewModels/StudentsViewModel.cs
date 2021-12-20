@@ -76,6 +76,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             if (removed)
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.CleanedStudents);
+                await DependencyService.Get<IImageSynchronizer>().SynchronizeStudentImages();
                 Students.Clear();
             }
             else

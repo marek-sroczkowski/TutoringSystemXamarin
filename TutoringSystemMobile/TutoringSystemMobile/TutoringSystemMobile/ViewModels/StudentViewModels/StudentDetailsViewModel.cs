@@ -84,6 +84,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             if (removed)
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.StudentRemoved);
+                await DependencyService.Get<IImageSynchronizer>().SynchronizeStudentImages();
                 await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
             }
             else

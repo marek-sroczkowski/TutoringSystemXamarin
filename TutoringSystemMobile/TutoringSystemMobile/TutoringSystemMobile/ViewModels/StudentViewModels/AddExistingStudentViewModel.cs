@@ -43,6 +43,7 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
                     break;
                 case AddStudentToTutorStatus.Added:
                     DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedStudent);
+                    await DependencyService.Get<IImageSynchronizer>().SynchronizeStudentImages();
                     await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
                     break;
                 case AddStudentToTutorStatus.IncorrectUsername:

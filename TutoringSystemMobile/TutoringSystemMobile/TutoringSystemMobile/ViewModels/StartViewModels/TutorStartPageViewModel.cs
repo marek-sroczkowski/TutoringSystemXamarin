@@ -9,6 +9,8 @@ using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReservationDtos;
 using TutoringSystemMobile.Models.StudentRequestDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Synchronization;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.StartViewModels
@@ -32,12 +34,14 @@ namespace TutoringSystemMobile.ViewModels.StartViewModels
             Orders = new ObservableCollection<OrderDto>();
             Requests = new ObservableCollection<StudentRequestDto>();
             LoadCollectionsCommand = new Command(async () => await OnLoadCollection());
-            PageAppearingCommand = new Command(OnAppearing);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
         }
 
-        private void OnAppearing()
+        private async Task OnAppearing()
         {
             IsBusy = true;
+
+           await SynchronizationService.Instance.StartSynchronization();
         }
 
         private async Task OnLoadCollection()

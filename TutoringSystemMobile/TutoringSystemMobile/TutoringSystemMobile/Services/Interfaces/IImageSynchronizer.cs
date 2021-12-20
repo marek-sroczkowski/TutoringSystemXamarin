@@ -5,5 +5,6 @@ namespace TutoringSystemMobile.Services.Interfaces
     public interface IImageSynchronizer
     {
         Task SynchronizeStudentImages();
+        Task SynchronizeTutorImages();
     }
 }
