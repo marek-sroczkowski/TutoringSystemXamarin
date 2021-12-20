@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Models.ImagesDtos;
+using TutoringSystemMobile.Services.SQLite;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Models.StudentDtos
@@ -23,9 +25,10 @@ namespace TutoringSystemMobile.Models.StudentDtos
             Username = student.Username;
             StudentName = $"{student.FirstName} {student.LastName}";
             HourlRate = $"{student.HourlRate} {GeneralConstans.PlnPerHours}";
-            Image = string.IsNullOrEmpty(student.ProfilePictureBase64)
+            var image = SQLiteManager.Instance.Get<UserImageDto>(student.Id);
+            Image = image is null
                 ? ResourceConstans.DefaultStudentPicture
-                : ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(student.ProfilePictureBase64)));
+                : ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(image.ProfilePictureBase64)));
         }
     }
 }
