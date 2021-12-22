@@ -8,5 +8,6 @@
         public const string Cancel = "Anuluj";
         public const string NoValue = "- ";
         public const string PlnPerHours = "zł za godzinę";
+        public const string Pln = "zł";
     }
 }

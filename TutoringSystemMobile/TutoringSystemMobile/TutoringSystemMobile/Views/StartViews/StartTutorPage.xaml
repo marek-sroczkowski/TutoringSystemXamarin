@@ -21,101 +21,297 @@
                 Command="{Binding PageAppearingCommand}" />
     </ContentPage.Behaviors>
 
-    <RefreshView x:DataType="viewModel:TutorStartPageViewModel"
+        <RefreshView x:DataType="viewModel:TutorStartPageViewModel"
                  Command="{Binding LoadCollectionsCommand}"
                  IsRefreshing="{Binding IsBusy}"
                  RefreshColor="Blue">
+            
+        <ScrollView>
+            <StackLayout Padding="10">
 
-        <StackLayout Padding="10">
-
-            <Label Text="Dzisiejsze lekcje"
+                <Label Text="Dzisiejsze lekcje"
+                   Margin="10,0,0,0"
                    Style="{StaticResource TitleLabelStyle}" />
 
-            <CollectionView ItemsSource="{Binding Reservations}"
-                        SelectionMode="None"
-                        ItemsLayout="HorizontalList">
+                <CollectionView ItemsSource="{Binding Reservations}"
+                            IsVisible="{Binding IsReservations}"
+                            SelectionMode="None"
+                            HeightRequest="160"
+                            ItemsLayout="HorizontalList">
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
 
-                        <StackLayout Padding="3"
+                            <StackLayout Padding="3"
                                      x:DataType="reservationModel:DisplayedReservationDto">
 
-                            <Grid RowDefinitions="Auto">
+                                <Grid RowDefinitions="Auto">
 
-                                <BoxView Grid.Row="0"
+                                    <BoxView Grid.Row="0"
                                          Margin="1"
                                          Style="{StaticResource CaruselListBoxView}"/>
 
-                                <Grid Grid.Row="0"
+                                    <Grid Grid.Row="0"
                                       Padding="10"
                                       RowDefinitions="Auto,Auto">
 
-                                    <Grid Grid.Row="0"
+                                        <Grid Grid.Row="0"
                                           ColumnDefinitions="*,70">
 
-                                        <Grid Grid.Column="0"
+                                            <Grid Grid.Column="0"
                                               RowDefinitions="Auto,Auto,Auto">
 
-                                            <Label Grid.Row="0"
+                                                <Label Grid.Row="0"
                                                    Text="{Binding Student}"
                                                    LineBreakMode="WordWrap"
                                                    FontAttributes="Bold"
                                                    FontSize="20"
                                                    Style="{StaticResource LabelStyle}"/>
 
-                                            <Label Grid.Row="1"
+                                                <Label Grid.Row="1"
                                                    Text="{Binding SubjectName}"
                                                    LineBreakMode="WordWrap"
                                                    FontAttributes="Bold"
                                                    FontSize="16"
                                                    Style="{StaticResource LabelStyle}"/>
 
-                                            <Label Grid.Row="2"
+                                                <Label Grid.Row="2"
                                                    Text="{Binding Place}"
                                                    FontAttributes="Bold"
                                                    FontSize="15"
                                                    Style="{StaticResource LabelStyle}"/>
-                                        </Grid>
+                                            </Grid>
 
-                                        <controls:CircleImage Grid.Column="1"
+                                            <controls:CircleImage Grid.Column="1"
                                                               Margin="10,0,0,0"
                                                               Source="{Binding Image}" 
                                                               Aspect="AspectFit" 
                                                               WidthRequest="70" 
                                                               HeightRequest="70"
                                                               FillColor="WhiteSmoke"/>
-                                    </Grid>
+                                        </Grid>
 
-                                    <Label Grid.Row="1"
+                                        <Label Grid.Row="1"
                                            Text="{Binding LessonTime}"
                                            FontAttributes="Bold"
                                            FontSize="16"
                                            HorizontalOptions="Start"
                                            Style="{StaticResource LabelStyle}"/>
 
-                                    <Label Grid.Row="1"
+                                        <Label Grid.Row="1"
                                            Text="{Binding Cost}"
                                            FontAttributes="Bold"
                                            FontSize="16"
                                            HorizontalOptions="End"
                                            Style="{StaticResource LabelStyle}"/>
 
+                                    </Grid>
                                 </Grid>
-                            </Grid>
 
-                            <!--<StackLayout.GestureRecognizers>
+                                <!--<StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer 
                                         NumberOfTapsRequired="1"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:OrdersViewModel}}, Path=OrderTappedCommand}"		
                                         CommandParameter="{Binding .}">
                                 </TapGestureRecognizer>
                             </StackLayout.GestureRecognizers>-->
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-        </StackLayout>
+                <Grid IsVisible="{Binding IsNoReservations}"
+                  Margin="0,0,0,10"
+                  ColumnDefinitions="Auto,*">
+
+                    <Label Grid.Column="0"
+                       Margin="10,0,10,0"
+                       Text="Nie zaplanowano żadnych zajęć"
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}"
+                       FontAttributes="Italic" />
+
+                    <Button Grid.Column="1"
+                        Padding="5"
+                        Text="Zaplanuj lekcję"
+                        VerticalOptions="Center"
+                        HorizontalOptions="End"
+                        Command="{Binding NewReservationCommand}"
+                        Style="{StaticResource PrimaryBlueButtonStyle}"/>
+                </Grid>
+
+                <Label Text="Aktualne zlecenia"
+                   Margin="10,0,0,0"
+                   Style="{StaticResource TitleLabelStyle}" />
+
+                <CollectionView ItemsSource="{Binding Orders}"
+                            IsVisible="{Binding IsOrders}"
+                            SelectionMode="None"
+                            HeightRequest="120"
+                            ItemsLayout="HorizontalList">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <StackLayout Padding="3"
+                                     x:DataType="orderModel:DisplayedOrderDto">
+
+                                <Grid RowDefinitions="Auto"
+                                  WidthRequest="280">
+
+                                    <BoxView Grid.Row="0"
+                                         Margin="1"
+                                         Style="{StaticResource CaruselListBoxView}"/>
+
+                                    <Grid Grid.Row="0"
+                                      Padding="10"
+                                      RowDefinitions="Auto,Auto,Auto,Auto">
+
+                                        <Label Grid.Row="0"
+                                           Text="{Binding Name}"
+                                           LineBreakMode="TailTruncation"
+                                           FontAttributes="Bold"
+                                           FontSize="19"
+                                           Style="{StaticResource LabelStyle}"/>
+
+                                        <Grid Grid.Row="1"
+                                          ColumnDefinitions="Auto,Auto">
+
+                                            <Label Grid.Column="0"
+                                               Text="Termin upływa "
+                                               FontAttributes="Bold"
+                                               FontSize="16"
+                                               Style="{StaticResource LabelStyle}"/>
+
+                                            <Label Grid.Column="1"
+                                               Text="{Binding Deadline}"
+                                               FontAttributes="Bold"
+                                               FontSize="16"
+                                               TextColor="{Binding DeadlineTextColor}"
+                                               Style="{StaticResource LabelStyle}"/>
+                                        </Grid>
+
+                                        <Label Grid.Row="2"
+                                           Text="{Binding OrderStatus}"
+                                           FontAttributes="Bold"
+                                           FontSize="15"
+                                           Style="{StaticResource LabelStyle}"/>
+
+                                        <Label Grid.Row="2"
+                                           Text="{Binding Cost}"
+                                           FontAttributes="Bold"
+                                           FontSize="15"
+                                           HorizontalOptions="End"
+                                           Style="{StaticResource LabelStyle}"/>
+
+                                    </Grid>
+                                </Grid>
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TutorStartPageViewModel}}, Path=OrderTappedCommand}"		
+                                        CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Grid IsVisible="{Binding IsNoOrders}"
+                  Margin="0,0,0,10"
+                  ColumnDefinitions="Auto,*">
+
+                    <Label Grid.Column="0"
+                       Margin="10,0,10,0"
+                       Text="Brak zleceń"
+                       VerticalOptions="Center"
+                       Style="{StaticResource LabelStyle}"
+                       FontAttributes="Italic" />
+
+                    <Button Grid.Column="1"
+                        Padding="5"
+                        Text="Dodaj zlecenie"
+                        VerticalOptions="Center"
+                        HorizontalOptions="End"
+                        Command="{Binding NewOrderCommand}"
+                        Style="{StaticResource PrimaryBlueButtonStyle}"/>
+                </Grid>
+
+                <Label Text="Prośby o dołączenie do listy uczniów"
+                       IsVisible="{Binding IsRequests}"
+                       Margin="10,20,0,0"
+                       Style="{StaticResource TitleLabelStyle}" />
+
+                <CollectionView ItemsSource="{Binding Requests}"
+                                IsVisible="{Binding IsRequests}"
+                                SelectionMode="None"
+                                HeightRequest="120"
+                                ItemsLayout="HorizontalList">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <StackLayout Padding="3"
+                                         x:DataType="requestModel:StudentRequestDto">
+
+                                <Grid RowDefinitions="Auto">
+
+                                    <BoxView Grid.Row="0" Margin="1" Style="{StaticResource CaruselListBoxView}"/>
+
+                                    <Grid Grid.Row="0"
+                                          Padding="10"
+                                          RowDefinitions="Auto,Auto,Auto">
+
+                                        <Label Grid.Row="0"
+                                               Text="{Binding StudentName}"
+                                               LineBreakMode="WordWrap" 
+                                               Style="{StaticResource LabelStyle}"
+                                               FontAttributes="Bold"
+                                               FontSize="18" />
+
+                                        <Label Grid.Row="1"
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="15">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Prośba z dnia "/>
+                                                    <Span Text="{Binding CreatedDate}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Grid Grid.Row="2"
+                                              HorizontalOptions="Center"
+                                              ColumnDefinitions="Auto,Auto">
+
+                                            <ImageButton Grid.Column="0"
+                                                         Margin="0,0,10,0"
+                                                         Source="icon_accept.png"
+                                                         BackgroundColor="Transparent"
+                                                         HeightRequest="35"
+                                                         WidthRequest="35"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TutorStartPageViewModel}}, Path=AcceptRequestCommand}"
+                                                         CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}" />
+
+                                            <ImageButton Grid.Column="1"
+                                                         Source="icon_remove2.png"
+                                                         BackgroundColor="Transparent"
+                                                         HeightRequest="35"
+                                                         WidthRequest="35"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TutorStartPageViewModel}}, Path=DeclineRequestCommand}"
+                                                         CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}" />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </StackLayout>
+        </ScrollView>
     </RefreshView>
 </ContentPage>

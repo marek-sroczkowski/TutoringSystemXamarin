@@ -1,6 +1,5 @@
 ﻿using System;
 using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Models.TutorDtos;
 
 namespace TutoringSystemMobile.Models.AdditionalOrderDtos
 {
@@ -14,6 +13,5 @@ namespace TutoringSystemMobile.Models.AdditionalOrderDtos
         public double Cost { get; set; }
         public bool IsPaid { get; set; }
         public AdditionalOrderStatus Status { get; set; }
-        public TutorDto Tutor { get; set; }
     }
 }
