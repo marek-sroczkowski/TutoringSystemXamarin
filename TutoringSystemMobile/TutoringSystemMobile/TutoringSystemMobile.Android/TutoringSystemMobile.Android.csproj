@@ -92,6 +92,9 @@
     <PackageReference Include="Xamarin.GooglePlayServices.Basement">
       <Version>117.6.0.3</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Plugin.Calendar">
+      <Version>1.4.5304</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -307,6 +310,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\default_f_tutor_picture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_prev.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_next.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

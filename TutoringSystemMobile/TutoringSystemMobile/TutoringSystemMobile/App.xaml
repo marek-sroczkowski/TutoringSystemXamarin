@@ -152,6 +152,12 @@
                 <Setter Property="Color" Value="{AppThemeBinding Light=#2196F3, Dark=#7c7c7c}" />
             </Style>
 
+            <Style x:Key="VerticalLineStyle"
+                   TargetType="BoxView">
+                <Setter Property="WidthRequest" Value="1" />
+                <Setter Property="Color" Value="{AppThemeBinding Light=#2196F3, Dark=#7c7c7c}" />
+            </Style>
+
             <Style x:Key="CaruselListBoxView" TargetType="BoxView">
                 <Setter Property="CornerRadius" Value="10" />
                 <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#fbfbfb, Dark=#2e2e2e}" />

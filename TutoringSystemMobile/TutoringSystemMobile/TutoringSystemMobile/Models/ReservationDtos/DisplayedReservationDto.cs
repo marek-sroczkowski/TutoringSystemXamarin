@@ -16,6 +16,7 @@ namespace TutoringSystemMobile.Models.ReservationDtos
         public long Id { get; set; }
         public string Cost { get; set; }
         public string LessonTime { get; set; }
+        public string Duration { get; set; }
         public string Place { get; set; }
         public string SubjectName { get; set; }
         public string Tutor { get; set; }
@@ -36,6 +37,7 @@ namespace TutoringSystemMobile.Models.ReservationDtos
             Tutor = reservation.Tutor;
             Student = reservation.Student;
             LessonTime = $"{startTime.ToShortTimeString()} - {endTime.ToShortTimeString()}";
+            Duration = $"{reservation.Duration} min";
             SetPlace(reservation.Place);
             var image = SQLiteManager.Instance.Get<UserImageDto>(reservation.StudentId);
             Image = image is null
