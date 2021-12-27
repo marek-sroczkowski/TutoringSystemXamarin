@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.ReservationDetailsTutorPage"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.ReservationViewModels"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             Title="{Binding SubjectName}"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:TutorReservationDetailsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_edit.png" Command="{Binding EditReservationCommand}" />
+        <ToolbarItem IconImageSource="icon_remove.png" Command="{Binding RemoveReservationCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="15"
+                     Padding="20,0,20,0">
+
+            <Grid ColumnDefinitions="Auto,80*"
+                  Padding="0,10,0,10">
+
+                <Grid Grid.Column="0"
+                      RowDefinitions="Auto,Auto,Auto">
+
+                    <Label Grid.Row="0"
+                           FontSize="24"
+                           Text="{Binding Student}"
+                           Style="{StaticResource TitleLabelStyle}"/>
+
+                    <Label Grid.Row="1"
+                           FontSize="18"
+                           Text="{Binding LessonDate}"
+                           Style="{StaticResource TitleLabelStyle}"/>
+
+                    <Label Grid.Row="2"
+                           FontSize="18"
+                           Text="{Binding LessonTime}"
+                           Style="{StaticResource TitleLabelStyle}"/>
+                </Grid>
+
+                <Grid Grid.Column="1"
+                      RowDefinitions="Auto"
+                      VerticalOptions="Center">
+
+                    <controls:CircleImage Grid.Row="0"
+                                      Source="{Binding Image}" 
+                                      Aspect="AspectFit" 
+                                      WidthRequest="80" 
+                                      HeightRequest="80"
+                                      FillColor="White"/>
+
+                    <ActivityIndicator Grid.Row="0"
+                                       IsVisible="{Binding IsBusy}"
+                                       IsRunning="{Binding IsBusy}"
+                                       Color="Blue"
+                                       VerticalOptions="Center"/>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            NumberOfTapsRequired="1"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TutorReservationDetailsViewModel}}, Path=StudentTappedCommand}">
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </Grid>
+
+            <BoxView Style="{StaticResource HorizontalLineStyle}" />
+
+            <Grid Grid.Row="0">
+
+                <Label Grid.Column="0"
+                           Text="Przychód"
+                           VerticalOptions="Center"
+                           Style="{StaticResource LabelStyle}" />
+
+                <Label Grid.Column="1"
+                           Text="{Binding Cost}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <Grid Grid.Row="1">
+
+                <Label Grid.Column="0"
+                           Text="Miejsce zajęć" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"
+                           Style="{StaticResource LabelStyle}" />
+
+                <Label Grid.Column="1"
+                           Text="{Binding Place}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <Grid Grid.Row="2">
+
+                <Label Grid.Column="0"
+                           Text="Typ lekcji" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"
+                           Style="{StaticResource LabelStyle}" />
+
+                <Label Grid.Column="1"
+                           Text="{Binding Type}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <Grid Grid.Row="3">
+
+                <Label Grid.Column="0"
+                           Text="Status płatności" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"
+                           Style="{StaticResource LabelStyle}" />
+
+                <Label Grid.Column="1"
+                           Text="{Binding PaymentStatus}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+            </Grid>
+
+            <BoxView Style="{StaticResource HorizontalLineStyle}" />
+
+            <Label Text="{Binding Description}"
+                       Padding="0,10,0,0"
+                       Style="{StaticResource ContentLabelStyle}" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

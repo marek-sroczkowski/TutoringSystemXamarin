@@ -101,7 +101,7 @@
         <FlyoutItem.Icon>
             <FileImageSource File="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" />
         </FlyoutItem.Icon>
-        <ShellContent Route="ReservationTutorPage" ContentTemplate="{DataTemplate local:ReservationTutorPage}" />
+        <ShellContent Route="ReservationsTutorPage" ContentTemplate="{DataTemplate local:ReservationsTutorPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Dodatkowe zlecenia" 
@@ -158,7 +158,7 @@
         <FlyoutItem.Icon>
             <FileImageSource File="{AppThemeBinding Dark=icon_reservations_white.png, Light=icon_reservations.png}" />
         </FlyoutItem.Icon>
-        <ShellContent Route="ReservationStudentPage" ContentTemplate="{DataTemplate local:ReservationStudentPage}" />
+        <ShellContent Route="ReservationsStudentPage" ContentTemplate="{DataTemplate local:ReservationsStudentPage}" />
     </FlyoutItem>
     
     <FlyoutItem Title="Korepetytorzy" 

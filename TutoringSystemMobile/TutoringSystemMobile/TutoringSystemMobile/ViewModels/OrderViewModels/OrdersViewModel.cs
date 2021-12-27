@@ -172,7 +172,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
             if (order is null)
                 return;
 
-            var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderPaymentStatus, GeneralConstans.Cancel, null, PickerConstans.IsPaid, PickerConstans.IsNotPaid);
+            var result = await Shell.Current.DisplayActionSheet(AlertConstans.RemoveRecurringReservation, GeneralConstans.Cancel, null, PickerConstans.OrderIsPaid, PickerConstans.OrderIsNotPaid);
             if (result is null || result == GeneralConstans.Cancel)
                 return;
 
@@ -207,9 +207,9 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
         {
             switch (paymentStatusString)
             {
-                case PickerConstans.IsPaid:
+                case PickerConstans.OrderIsPaid:
                     return true;
-                case PickerConstans.IsNotPaid:
+                case PickerConstans.OrderIsNotPaid:
                 default:
                     return false;
             }

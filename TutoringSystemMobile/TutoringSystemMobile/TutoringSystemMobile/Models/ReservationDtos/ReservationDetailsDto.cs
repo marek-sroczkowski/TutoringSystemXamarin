@@ -1,8 +1,5 @@
 ﻿using System;
 using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Models.StudentDtos;
-using TutoringSystemMobile.Models.SubjectDtos;
-using TutoringSystemMobile.Models.TutorDtos;
 
 namespace TutoringSystemMobile.Models.ReservationDtos
 {
@@ -14,9 +11,14 @@ namespace TutoringSystemMobile.Models.ReservationDtos
         public int Duration { get; set; }
         public string Description { get; set; }
         public ReservationPlace Place { get; set; }
-
-        public SubjectDto Subject { get; set; }
-        public TutorDto Tutor { get; set; }
-        public StudentDto Student { get; set; }
+        public ReservationType Type { get; set; }
+        public ReservationFrequency? Frequency { get; set; }
+        public long SubjectId { get; set; }
+        public string SubjectName { get; set; }
+        public long TutorId { get; set; }
+        public string Tutor { get; set; }
+        public long StudentId { get; set; }
+        public string Student { get; set; }
+        public bool IsPaid { get; set; }
     }
 }

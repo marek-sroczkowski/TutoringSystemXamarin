@@ -7,12 +7,13 @@ using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReservationDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace TutoringSystemMobile.ViewModels.ReservationViewModels
 {
-    public class ReservationsViewModel : BaseViewModel
+    public class TutorReservationsViewModel : BaseViewModel
     {
         private List<string> months;
 
@@ -59,8 +60,9 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
         public Command NextYearCommand { get; }
         public Command PrevMonthCommand { get; }
         public Command NextMonthCommand { get; }
+        public Command<DisplayedSimpleReservationDto> ReservationTappedCommand { get; }
 
-        public ReservationsViewModel()
+        public TutorReservationsViewModel()
         {
             SetMonths();
             MonthLabel = months[Month - 1];
@@ -71,6 +73,15 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             NextYearCommand = new Command(async () => await OnNextYear());
             PrevMonthCommand = new Command(async () => await OnPrevMonth());
             NextMonthCommand = new Command(async () => await OnNextMonth());
+            ReservationTappedCommand = new Command<DisplayedSimpleReservationDto>(async (reservation) => await OnReservationTapped(reservation));
+        }
+
+        private async Task OnReservationTapped(DisplayedSimpleReservationDto reservation)
+        {
+            if (reservation is null)
+                return;
+
+            await Shell.Current.GoToAsync($"{nameof(ReservationDetailsTutorPage)}?{nameof(TutorReservationDetailsViewModel.Id)}={reservation.Id}");
         }
 
         private async Task OnNextMonth()
@@ -111,7 +122,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             IsRefreshing = true;
 
             var reservations = await GetReservationsAsync();
-            var displayedReservation = reservations.Select(reservation => new DisplayedReservationDto(reservation)).ToList();
+            var displayedReservation = reservations.Select(reservation => new DisplayedSimpleReservationDto(reservation)).ToList();
             Reservations.Clear();
             reservations.ToList().ForEach(reservation => AddReservation(reservation, reservations));
 
@@ -124,7 +135,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             if (!Reservations.ContainsKey(reservation.StartTime.Date))
             {
                 Reservations.Add(reservation.StartTime.Date, reservations.Where(r => r.StartTime.Date.Equals(reservation.StartTime.Date))
-                    .Select(reservation => new DisplayedReservationDto(reservation)).ToList());
+                    .Select(reservation => new DisplayedSimpleReservationDto(reservation)).ToList());
             }
         }
 

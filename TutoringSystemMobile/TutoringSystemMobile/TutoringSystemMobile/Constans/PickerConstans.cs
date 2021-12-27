@@ -5,8 +5,10 @@
         public const string PendingOrder = "Oczekujące";
         public const string InProgressOrder = "W realizacji";
         public const string RealizedOrder = "Zrealizowane";
-        public const string IsPaid = "Opłacone";
-        public const string IsNotPaid = "Nie opłacone";
+        public const string OrderIsPaid = "Opłacone";
+        public const string OrderIsNotPaid = "Nie opłacone";
+        public const string ReservationIsPaid = "Opłacona";
+        public const string ReservationIsNotPaid = "Nie opłacona";
         public const string Profit = "Przychód";
         public const string TotalProfit = "Łączny przychód";
         public const string TutoringProfit = "Przychód z korepetycji";
@@ -45,5 +47,11 @@
         public const string AtStudentAndOnline = "U ucznia / online";
         public const string AllPlaces = "Dowolne";
         public const string LessonOtherPlace = "Inne miejsce";
+        public const string MinutesShort = "min";
+        public const string SingleReservation = "Jednorazowa";
+        public const string WeeklyReservation = "Cotygodniowa";
+        public const string OnceTwoWeeksReservation = "Dwutygodniowa";
+        public const string MonthlyReservation = "Miesięczna";
+        public const string OtherReservationType = "Inny";
     }
 }

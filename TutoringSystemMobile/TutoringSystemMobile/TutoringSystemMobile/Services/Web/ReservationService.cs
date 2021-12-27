@@ -48,6 +48,18 @@ namespace TutoringSystemMobile.Services.Web
             return await GetReservationsAsync(response);
         }
 
+        public async Task<ReservationDetailsDto> GetReservationByIdAsync(long reservationId)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AllowAnyHttpStatus()
+                .AppendPathSegment(reservationId)
+                .WithOAuthBearerToken(token)
+                .GetAsync();
+
+            return response.StatusCode == 200 ? await response.GetJsonAsync<ReservationDetailsDto>() : new ReservationDetailsDto();
+        }
+
         private static async Task<ReservationsCollectionDto> GetReservationsAsync(IFlurlResponse response)
         {
             var reservations = response.StatusCode == 200 ?

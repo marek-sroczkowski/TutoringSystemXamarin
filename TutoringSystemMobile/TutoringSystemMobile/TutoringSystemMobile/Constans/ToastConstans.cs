@@ -35,5 +35,6 @@
         public const string AddedStudent = "Dodano ucznia";
         public const string AddedSubject = "Dodano przedmiot";
         public const string StudentRequestRemoved = "Usunięto prośbę";
+        public const string ReservationRemoved = "Usunięto lekcję";
     }
 }

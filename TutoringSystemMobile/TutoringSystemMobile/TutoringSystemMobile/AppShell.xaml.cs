@@ -48,6 +48,9 @@ namespace TutoringSystemMobile
 
             Routing.RegisterRoute(nameof(TutorDetailsStudentPage), typeof(TutorDetailsStudentPage));
             Routing.RegisterRoute(nameof(SearchTutorStudentPage), typeof(SearchTutorStudentPage));
+
+            Routing.RegisterRoute(nameof(ReservationDetailsTutorPage), typeof(ReservationDetailsTutorPage));
+            Routing.RegisterRoute(nameof(EditReservationTutorPage), typeof(EditReservationTutorPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

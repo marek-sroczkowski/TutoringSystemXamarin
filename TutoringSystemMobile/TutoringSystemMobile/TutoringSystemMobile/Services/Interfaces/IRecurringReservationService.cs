@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReservationDtos;
 
@@ -9,7 +10,7 @@ namespace TutoringSystemMobile.Services.Interfaces
     {
         Task<ReservationDto> AddReservationByStudentAsync(NewStudentRecurringReservationDto newReservation);
         Task<ReservationDto> AddReservationByTutorAsync(NewTutorRecurringReservationDto newReservation);
-        Task<bool> DeleteReservationAsync(long reservationId);
+        Task<bool> DeleteReservationAsync(long reservationId, RecurringReservationRemovingMode mode);
         Task<ReservationDetailsDto> GetReservationByIdAsync(long reservationId);
         Task<ICollection<ReservationDto>> GetReservationsByStudentAsync(ReservationParameters parameters);
         Task<ICollection<ReservationDto>> GetReservationsByTutorAsync(ReservationParameters parameters);

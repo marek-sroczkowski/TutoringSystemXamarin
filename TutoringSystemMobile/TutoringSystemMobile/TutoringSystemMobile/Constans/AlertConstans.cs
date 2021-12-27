@@ -31,5 +31,9 @@
         public const string RequestSent = "Prośba wysłana!";
         public const string NewTutorRequestCreated = "Poczekaj, aż nauczyciel zaakceptuje prośbę dołączenia do jego uczniów!";
         public const string ConfirmationStudentRequestDeletion = "Czy na pewno chcesz odrzucić prośbę?";
+        public const string ConfirmationReservationDeletion = "Czy na pewno chcesz usunąć lekcję?";
+        public const string RemoveRecurringReservation = "Usunięcie cyklicznej lekcji";
+        public const string OneLessonRemoving = "Tylko ta lekcja";
+        public const string OneLessonAndFutureRemoving = "Ta lekcja i przyszłe";
     }
 }

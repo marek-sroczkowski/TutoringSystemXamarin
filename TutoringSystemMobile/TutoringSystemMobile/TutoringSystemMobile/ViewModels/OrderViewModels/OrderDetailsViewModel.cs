@@ -76,7 +76,7 @@ namespace TutoringSystemMobile.ViewModels.OrderViewModels
 
         private void SetPaidStatus()
         {
-            PaidStatus = isPaid ? PickerConstans.IsPaid : PickerConstans.IsNotPaid;
+            PaidStatus = isPaid ? PickerConstans.OrderIsPaid : PickerConstans.OrderIsNotPaid;
         }
 
         private void SetOrderStatus()
