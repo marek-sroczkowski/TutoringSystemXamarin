@@ -60,6 +60,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
         public Command NextYearCommand { get; }
         public Command PrevMonthCommand { get; }
         public Command NextMonthCommand { get; }
+        public Command AddReservationCommand { get; }
         public Command<DisplayedSimpleReservationDto> ReservationTappedCommand { get; }
 
         public TutorReservationsViewModel()
@@ -73,7 +74,13 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             NextYearCommand = new Command(async () => await OnNextYear());
             PrevMonthCommand = new Command(async () => await OnPrevMonth());
             NextMonthCommand = new Command(async () => await OnNextMonth());
+            AddReservationCommand = new Command(async () => await OnAddReservation());
             ReservationTappedCommand = new Command<DisplayedSimpleReservationDto>(async (reservation) => await OnReservationTapped(reservation));
+        }
+
+        private async Task OnAddReservation()
+        {
+            await Shell.Current.GoToAsync($"{nameof(NewReservationTutorPage)}?{nameof(NewTutorReservationViewModel.StartDate)}={SelectedDate.ToShortDateString()}");
         }
 
         private async Task OnReservationTapped(DisplayedSimpleReservationDto reservation)

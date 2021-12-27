@@ -9,5 +9,10 @@ namespace TutoringSystemMobile.Models.SubjectDtos
         public string Description { get; set; }
         public SubjectPlace Place { get; set; }
         public SubjectCategory Category { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

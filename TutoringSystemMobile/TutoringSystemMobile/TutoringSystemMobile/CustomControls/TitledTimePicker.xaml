@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:TutoringSystemMobile.CustomControls"
+             x:Class="TutoringSystemMobile.CustomControls.TitledTimePicker">
+    
+  <ContentView.Content>
+        <Grid x:DataType="model:TitledTimePicker">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0"
+                   x:Name="LabelTitle"
+                   Text="{Binding Title}"
+                   Margin="0,0,0,-5"
+                   Style="{StaticResource LabelStyle}" />
+
+            <TimePicker Grid.Row="1"
+                        x:Name="TimePickerContent"
+                        Time="{Binding SelectedTime, Mode=TwoWay}"
+                        Format="HH:mm"
+                        FontSize="{Binding FontSize}" 
+                        Focused="TimePickerContent_Focused"
+                        Unfocused="TimePickerContent_Unfocused"
+                        IsEnabled="{Binding IsEditable}"/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

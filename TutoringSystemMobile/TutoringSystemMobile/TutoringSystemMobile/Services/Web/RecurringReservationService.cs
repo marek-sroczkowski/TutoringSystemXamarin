@@ -8,8 +8,11 @@ using TutoringSystemMobile.Models.Pagination;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReservationDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(RecurringReservationService))]
 namespace TutoringSystemMobile.Services.Web
 {
     public class RecurringReservationService : IRecurringReservationService

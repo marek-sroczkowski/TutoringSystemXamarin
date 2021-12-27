@@ -9,5 +9,8 @@
         public const string NoValue = "- ";
         public const string PlnPerHours = "zł za godzinę";
         public const string Pln = "zł";
+        public const string TutorEn = "Tutor";
+        public const string StudentEn = "Student";
+        public const string Online = "Online";
     }
 }

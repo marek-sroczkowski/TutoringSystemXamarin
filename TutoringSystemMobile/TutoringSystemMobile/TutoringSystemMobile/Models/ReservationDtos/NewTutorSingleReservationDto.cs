@@ -13,5 +13,20 @@ namespace TutoringSystemMobile.Models.ReservationDtos
 
         public long SubjectId { get; set; }
         public long StudentId { get; set; }
+
+        public NewTutorSingleReservationDto()
+        {
+        }
+
+        public NewTutorSingleReservationDto(double? cost, DateTime startTime, int duration, string description, ReservationPlace place, long subjectId, long studentId)
+        {
+            Cost = cost;
+            StartTime = startTime;
+            Duration = duration;
+            Description = description;
+            Place = place;
+            SubjectId = subjectId;
+            StudentId = studentId;
+        }
     }
 }
