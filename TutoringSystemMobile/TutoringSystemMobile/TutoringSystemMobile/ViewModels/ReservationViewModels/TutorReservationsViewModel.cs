@@ -25,6 +25,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
 
         public DateTime SelectedDate { get => selectedDate; set => SetValue(ref selectedDate, value); }
         public EventCollection Reservations { get; set; }
+        public List<ReservationDto> RepeatedReservations { get; set; }
         public CultureInfo Culture => new CultureInfo("pl-PL");
         public int Year { get => year; set => SetValue(ref year, value); }
         public int Month
@@ -69,7 +70,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             MonthLabel = months[Month - 1];
             Reservations = new EventCollection();
             LoadReservationCommand = new Command(async () => await OnLoadReservations());
-            PageAppearingCommand = new Command(OnAppearing);
+            PageAppearingCommand = new Command(async () => await OnAppearing());
             PrevYearCommand = new Command(async () => await OnPrevYear());
             NextYearCommand = new Command(async () => await OnNextYear());
             PrevMonthCommand = new Command(async () => await OnPrevMonth());
@@ -80,7 +81,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
 
         private async Task OnAddReservation()
         {
-            await Shell.Current.GoToAsync($"{nameof(NewReservationTutorPage)}?{nameof(NewTutorReservationViewModel.StartDate)}={SelectedDate.ToShortDateString()}");
+            await Shell.Current.GoToAsync($"{nameof(NewReservationTutorPage)}?{nameof(NewTutorReservationViewModel.StartDate)}={SelectedDate}");
         }
 
         private async Task OnReservationTapped(DisplayedSimpleReservationDto reservation)
@@ -88,7 +89,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             if (reservation is null)
                 return;
 
-            await Shell.Current.GoToAsync($"{nameof(ReservationDetailsTutorPage)}?{nameof(TutorReservationDetailsViewModel.Id)}={reservation.Id}");
+            await Shell.Current.GoToAsync($"{nameof(ReservationDetailsTutorPage)}?{nameof(TutorReservationDetailsViewModel.Id)}={reservation.Id}&{nameof(TutorReservationDetailsViewModel.StartTime)}={reservation.StartTime.ToShortTimeString()}&{nameof(TutorReservationDetailsViewModel.StartDate)}={reservation.StartTime.ToShortDateString()}");
         }
 
         private async Task OnNextMonth()
@@ -115,8 +116,9 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             await OnLoadReservations();
         }
 
-        private void OnAppearing()
+        private async Task OnAppearing()
         {
+            RepeatedReservations = await GetRepeatedReservationsAsync();
             IsBusy = true;
         }
 
@@ -128,13 +130,30 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             IsBusy = true;
             IsRefreshing = true;
 
-            var reservations = await GetReservationsAsync();
-            var displayedReservation = reservations.Select(reservation => new DisplayedSimpleReservationDto(reservation)).ToList();
+            var reservations = await GetSingleReservationsAsync();
+            RepeatedReservations.ForEach(reservation => AddRecurringReservations(reservation, reservations));
             Reservations.Clear();
-            reservations.ToList().ForEach(reservation => AddReservation(reservation, reservations));
+            reservations.ForEach(reservation => AddReservation(reservation, reservations));
 
             IsRefreshing = false;
             IsBusy = false;
+        }
+
+        private void AddRecurringReservations(ReservationDto reservation, List<ReservationDto> reservations)
+        {
+            if (reservations.FirstOrDefault(r => r.RepeatedReservationId.Equals(reservation.RepeatedReservationId)) != null)
+                return;
+
+            int i = 0;
+            var endDate = new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)).AddDays(14).Date;
+            while (reservation.StartTime.AddDays((int)reservation.Frequency * i).Date <= endDate)
+            {
+                reservations.Add(new ReservationDto(reservation)
+                {
+                    StartTime = reservation.StartTime.AddDays((int)reservation.Frequency * i)
+                });
+                i++;
+            }
         }
 
         private void AddReservation(ReservationDto reservation, IEnumerable<ReservationDto> reservations)
@@ -146,20 +165,33 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             }
         }
 
-        private async Task<IEnumerable<ReservationDto>> GetReservationsAsync()
+        private async Task<List<ReservationDto>> GetSingleReservationsAsync()
         {
-            var reservation = await DependencyService.Get<IReservationService>()
-                .GetReservationsByTutorAsync(new ReservationParameters
-                {
-                    StartDate = new DateTime(Year, Month, 1),
-                    EndDate = new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)),
-                    IsAtStudent = true,
-                    IsAtTutor = true,
-                    IsOnline = true,
-                    OrderBy = SortingConstans.SortByStartTimeAsc
-                });
+            var reservationCollection = await DependencyService.Get<ISingleReservationService>()
+                .GetReservationsByTutorAsync(GetReservationParameters());
 
-            return reservation.Reservations;
+            return reservationCollection.Reservations.ToList();
+        }
+
+        private async Task<List<ReservationDto>> GetRepeatedReservationsAsync()
+        {
+            var reservations = await DependencyService.Get<IRepeatedReservationService>()
+                .GetReservationsByTutorAsync();
+
+            return reservations.Select(reservation => new ReservationDto(reservation)).ToList();
+        }
+
+        private ReservationParameters GetReservationParameters()
+        {
+            return new ReservationParameters
+            {
+                StartDate = new DateTime(Year, Month, 1).AddDays(-7),
+                EndDate = new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)).AddDays(7),
+                IsAtStudent = true,
+                IsAtTutor = true,
+                IsOnline = true,
+                OrderBy = SortingConstans.SortByStartTimeAsc
+            };
         }
 
         private void SetMonths()

@@ -6,9 +6,6 @@ namespace TutoringSystemMobile.Models.ReservationDtos
 {
     public class DisplayedSimpleReservationDto
     {
-        private readonly DateTime startTime;
-        private readonly DateTime endTime;
-
         public long Id { get; set; }
         public string Cost { get; set; }
         public string LessonTime { get; set; }
@@ -18,20 +15,23 @@ namespace TutoringSystemMobile.Models.ReservationDtos
         public string Tutor { get; set; }
         public string Student { get; set; }
 
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+
         public DisplayedSimpleReservationDto()
         {
         }
 
         public DisplayedSimpleReservationDto(ReservationDto reservation)
         {
-            startTime = reservation.StartTime;
-            endTime = reservation.StartTime.AddMinutes(reservation.Duration);
+            StartTime = reservation.StartTime;
+            EndTime = reservation.StartTime.AddMinutes(reservation.Duration);
             Id = reservation.Id;
             Cost = $"{reservation.Cost} {GeneralConstans.Pln}";
             SubjectName = reservation.SubjectName;
             Tutor = reservation.Tutor;
             Student = reservation.Student;
-            LessonTime = $"{startTime.ToShortTimeString()} - {endTime.ToShortTimeString()}";
+            LessonTime = $"{StartTime.ToShortTimeString()} - {EndTime.ToShortTimeString()}";
             Duration = $"{reservation.Duration} {PickerConstans.MinutesShort}";
             SetPlace(reservation.Place);
         }

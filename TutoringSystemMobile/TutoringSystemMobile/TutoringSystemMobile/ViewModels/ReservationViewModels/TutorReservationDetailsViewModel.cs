@@ -16,6 +16,8 @@ using Xamarin.Forms;
 namespace TutoringSystemMobile.ViewModels.ReservationViewModels
 {
     [QueryProperty(nameof(Id), nameof(Id))]
+    [QueryProperty(nameof(StartTime), nameof(StartTime))]
+    [QueryProperty(nameof(StartDate), nameof(StartDate))]
     public class TutorReservationDetailsViewModel : BaseViewModel
     {
         private DateTime startTime;
@@ -35,6 +37,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
         private string paymentStatus;
         private ImageSource image;
         private string lessonDate;
+        private DateTime startDate;
 
         public long Id
         {
@@ -56,6 +59,9 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
         public string Student { get => student; set => SetValue(ref student, value); }
         public string PaymentStatus { get => paymentStatus; set => SetValue(ref paymentStatus, value); }
         public ImageSource Image { get => image; set => SetValue(ref image, value); }
+        public DateTime StartTime { get => startTime; set => SetValue(ref startTime, value); }
+        public DateTime StartDate { get => startDate; set => SetValue(ref startDate, value); }
+        public DateTime EndTime { get => endTime; set => SetValue(ref endTime, value); }
 
         public Command EditReservationCommand { get; }
         public Command RemoveReservationCommand { get; }
@@ -118,7 +124,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             bool removed = result == AlertConstans.OneLessonRemoving
                 ? await DependencyService.Get<IRecurringReservationService>().DeleteReservationAsync(Id, RecurringReservationRemovingMode.OneLesson)
                 : await DependencyService.Get<IRecurringReservationService>().DeleteReservationAsync(Id, RecurringReservationRemovingMode.OneLessonAndFuture);
-            
+
             if (removed)
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ReservationRemoved);
@@ -140,15 +146,14 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             IsBusy = true;
 
             var reservation = await DependencyService.Get<IReservationService>().GetReservationByIdAsync(id);
-            startTime = reservation.StartTime;
-            endTime = reservation.StartTime.AddMinutes(reservation.Duration);
+            EndTime = reservation.StartTime.AddMinutes(reservation.Duration);
             studentId = reservation.StudentId;
             reservationType = reservation.Type;
             Cost = $"{reservation.Cost} {GeneralConstans.Pln}";
             SubjectName = reservation.SubjectName;
             Student = reservation.Student;
-            LessonTime = $"{startTime.ToShortTimeString()} - {endTime.ToShortTimeString()}";
-            LessonDate = DateTime.Parse(reservation.StartTime.ToShortDateString(), new CultureInfo("pl-PL")).ToString("dd MMMM yyyy");
+            LessonTime = $"{StartTime.ToShortTimeString()} - {EndTime.ToShortTimeString()}";
+            LessonDate = DateTime.Parse(StartDate.ToShortDateString(), new CultureInfo("pl-PL")).ToString("dd MMMM yyyy");
             Duration = $"{reservation.Duration} {PickerConstans.MinutesShort}";
             Description = reservation.Description;
             SetPlace(reservation.Place);
