@@ -4,12 +4,11 @@ using Xamarin.Forms.Xaml;
 namespace TutoringSystemMobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ReservationsStudentPage : ContentPage
+    public partial class ReservationDetailsStudentPage : ContentPage
     {
-        public ReservationsStudentPage()
+        public ReservationDetailsStudentPage()
         {
             InitializeComponent();
-            calendar.SelectedDate = System.DateTime.Now;
         }
     }
 }
