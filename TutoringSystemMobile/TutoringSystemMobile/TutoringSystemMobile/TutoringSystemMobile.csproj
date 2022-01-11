@@ -110,6 +110,9 @@
     <EmbeddedResource Update="Views\AddressViews\EditAddressPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\AvailabilityViews\AvailabilitiesTutorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\OrdersViews\OrderSortingTutorPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -266,9 +269,5 @@
     <EmbeddedResource Update="Views\TutorsViews\TutorDetailsStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\AvailabilityViews\" />
   </ItemGroup>
 </Project>

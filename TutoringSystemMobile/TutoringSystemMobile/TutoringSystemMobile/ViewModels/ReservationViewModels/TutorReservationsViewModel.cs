@@ -7,6 +7,7 @@ using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.ReservationDtos;
 using TutoringSystemMobile.Services.Interfaces;
+using TutoringSystemMobile.ViewModels.AvailabilityViewModels;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 using Xamarin.Plugin.Calendar.Models;
@@ -62,6 +63,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
         public Command PrevMonthCommand { get; }
         public Command NextMonthCommand { get; }
         public Command AddReservationCommand { get; }
+        public Command AddAvailabilityCommand { get; }
         public Command<DisplayedSimpleReservationDto> ReservationTappedCommand { get; }
 
         public TutorReservationsViewModel()
@@ -76,7 +78,13 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             PrevMonthCommand = new Command(async () => await OnPrevMonth());
             NextMonthCommand = new Command(async () => await OnNextMonth());
             AddReservationCommand = new Command(async () => await OnAddReservation());
+            AddAvailabilityCommand = new Command(async () => await OnAddAvailability());
             ReservationTappedCommand = new Command<DisplayedSimpleReservationDto>(async (reservation) => await OnReservationTapped(reservation));
+        }
+
+        private async Task OnAddAvailability()
+        {
+            await Shell.Current.GoToAsync($"//{nameof(AvailabilitiesTutorPage)}?{nameof(AvailabilitiesViewModel.StartDate)}={SelectedDate}");
         }
 
         private async Task OnAddReservation()

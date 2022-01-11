@@ -16,6 +16,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="icon_add.png" Command="{Binding AddReservationCommand}" />
+        <ToolbarItem IconImageSource="icon_availability.png" Command="{Binding AddAvailabilityCommand}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Behaviors>
