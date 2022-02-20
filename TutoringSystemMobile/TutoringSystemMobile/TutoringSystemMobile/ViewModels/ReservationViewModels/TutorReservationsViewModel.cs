@@ -89,7 +89,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
 
         private async Task OnAddReservation()
         {
-            await Shell.Current.GoToAsync($"{nameof(NewReservationTutorPage)}?{nameof(NewTutorReservationViewModel.StartDate)}={SelectedDate}");
+            await Shell.Current.GoToAsync($"{nameof(NewReservationTutorPage)}?{nameof(NewTutorReservationViewModel.StartDate)}={SelectedDate.ToShortDateString()}");
         }
 
         private async Task OnReservationTapped(DisplayedSimpleReservationDto reservation)

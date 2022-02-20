@@ -165,7 +165,7 @@ namespace TutoringSystemMobile.ViewModels.ReservationViewModels
             else
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedReservation);
-                await Shell.Current.GoToAsync($"//{nameof(ReservationsTutorPage)}/{nameof(ReservationDetailsTutorPage)}?{nameof(TutorReservationDetailsViewModel.Id)}={newReservationId}");
+                await Shell.Current.GoToAsync($"{nameof(ReservationDetailsTutorPage)}?{nameof(TutorReservationDetailsViewModel.Id)}={newReservationId}&{nameof(TutorReservationDetailsViewModel.StartTime)}={StartTime}&{nameof(TutorReservationDetailsViewModel.StartDate)}={StartDate.ToShortDateString()}");
             }
         }
 
