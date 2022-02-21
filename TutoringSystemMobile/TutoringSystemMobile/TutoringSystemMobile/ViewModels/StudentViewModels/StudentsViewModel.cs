@@ -18,7 +18,6 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
         public Command NewStudentCommand { get; }
         public Command<DisplayedStudentDto> StudentTapped { get; }
         public Command PageAppearingCommand { get; }
-        public Command RemoveAllStudentsCommand { get; }
         public Command StudentRequestsCommand { get; }
 
         public readonly IStudentService studentService;
@@ -31,7 +30,6 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
             NewStudentCommand = new Command(async () => await OnNewStudent());
             StudentTapped = new Command<DisplayedStudentDto>(async (student) => await OnStudentSelected(student));
             PageAppearingCommand = new Command(OnAppearing);
-            RemoveAllStudentsCommand = new Command(async () => await OnRemoveAllStudent());
             StudentRequestsCommand = new Command(async () => await OnStudentRequests());
         }
 
@@ -61,28 +59,6 @@ namespace TutoringSystemMobile.ViewModels.StudentViewModels
                 return;
 
             await Shell.Current.GoToAsync($"{nameof(StudentDetailsTutorPage)}?{nameof(StudentDetailsViewModel.Id)}={student.Id}");
-        }
-
-        private async Task OnRemoveAllStudent()
-        {
-            var result = await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.ConfirmationAllStudentsDeletion, GeneralConstans.Yes, GeneralConstans.No);
-            if (result)
-                await RemoveStudentsAsync();
-        }
-
-        private async Task RemoveStudentsAsync()
-        {
-            var removed = await studentService.RemoveAllStudentsAsync();
-            if (removed)
-            {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.CleanedStudents);
-                await DependencyService.Get<IImageSynchronizer>().SynchronizeStudentImages();
-                Students.Clear();
-            }
-            else
-            {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
-            }
         }
 
         private async Task OnNewStudent()

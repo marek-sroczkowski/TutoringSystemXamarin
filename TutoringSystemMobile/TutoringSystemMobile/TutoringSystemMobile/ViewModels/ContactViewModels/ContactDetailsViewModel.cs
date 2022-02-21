@@ -21,38 +21,30 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
         private string email;
         private string discordName;
         private bool isTutorLoggedIn;
+        private bool isRefreshing;
 
         public long Id { get => id; set => SetValue(ref id, value); }
+
         public string Email
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(email))
-                    return email;
-                else
-                    return GeneralConstans.NoValue;
-            }
-
+            get => !string.IsNullOrEmpty(email) ? email : GeneralConstans.NoValue;
             set => SetValue(ref email, value);
         }
+
         public string DiscordName
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(discordName))
-                    return discordName;
-                else
-                    return GeneralConstans.NoValue;
-            }
-
+            get => !string.IsNullOrEmpty(discordName) ? discordName : GeneralConstans.NoValue;
             set => SetValue(ref discordName, value);
         }
+
         public string Owner { get => owner; set => SetValue(ref owner, value); }
         public bool IsTutorLoggedIn { get => isTutorLoggedIn; set => SetValue(ref isTutorLoggedIn, value); }
+        public bool IsRefreshing { get => isRefreshing; set => SetValue(ref isRefreshing, value); }
 
         public ObservableCollection<PhoneNumberDto> PhoneNumbers { get; }
 
         public Command PageAppearingCommand { get; }
+        public Command LoadContactCommand { get; }
         public Command<PhoneNumberDto> CallToStudentCommand { get; }
         public Command<PhoneNumberDto> EditPhoneNumberCommand { get; }
         public Command<PhoneNumberDto> RemovePhoneNumberCommand { get; }
@@ -71,6 +63,7 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             phoneNumberService = DependencyService.Get<IPhoneNumberService>();
 
             PageAppearingCommand = new Command(async () => await OnAppearing());
+            LoadContactCommand = new Command(async () => await OnLoadContact());
             CallToStudentCommand = new Command<PhoneNumberDto>(OnSelectNumberToCall);
             AddPhoneNumberCommand = new Command(async () => await OnAddNewPhone());
             RemovePhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnRemovePhone(phone));
@@ -80,6 +73,27 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
             {
                 await OnAppearing();
             });
+        }
+
+        private async Task OnLoadContact()
+        {
+            IsBusy = true;
+
+            Id = long.Parse(await SecureStorage.GetAsync(SecureStorageConstans.ContactId));
+            var contact = await contactService.GetContactByIdAsync(Id);
+
+            Email = contact.Email;
+            DiscordName = contact.DiscordName;
+            Owner = contact.Owner;
+
+            PhoneNumbers.Clear();
+            foreach (var phone in contact.PhoneNumbers)
+            {
+                PhoneNumbers.Add(phone);
+            }
+
+            IsBusy = false;
+            IsRefreshing = false;
         }
 
         private async void GetLoggedInUserRole()
@@ -115,23 +129,8 @@ namespace TutoringSystemMobile.ViewModels.ContactViewModels
 
         private async Task OnAppearing()
         {
-            IsBusy = true;
-
             await SecureStorage.SetAsync(SecureStorageConstans.CurrentPage, SecureStorageConstans.Contact);
-            Id = long.Parse(await SecureStorage.GetAsync(SecureStorageConstans.ContactId));
-            var contact = await contactService.GetContactByIdAsync(Id);
-
-            Email = contact.Email;
-            DiscordName = contact.DiscordName;
-            Owner = contact.Owner;
-
-            PhoneNumbers.Clear();
-            foreach (var phone in contact.PhoneNumbers)
-            {
-                PhoneNumbers.Add(phone);
-            }
-
-            IsBusy = false;
+            await OnLoadContact();
         }
 
         private void OnSelectNumberToCall(PhoneNumberDto phone)
