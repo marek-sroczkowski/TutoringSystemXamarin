@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Models.StudentRequestDtos;
+using TutoringSystemMobile.Models.Dtos.StudentRequest;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

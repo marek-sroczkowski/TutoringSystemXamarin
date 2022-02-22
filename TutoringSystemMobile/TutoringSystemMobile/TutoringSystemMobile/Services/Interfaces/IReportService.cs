@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Parameters;
-using TutoringSystemMobile.Models.ReportDtos;
+using TutoringSystemMobile.Models.Dtos.Report;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

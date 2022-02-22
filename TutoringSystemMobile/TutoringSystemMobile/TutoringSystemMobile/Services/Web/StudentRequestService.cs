@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Models.StudentRequestDtos;
+using TutoringSystemMobile.Models.Dtos.StudentRequest;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Pagination;
 using TutoringSystemMobile.Models.Parameters;
-using TutoringSystemMobile.Models.ReservationDtos;
+using TutoringSystemMobile.Models.Dtos.Reservation;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
@@ -138,8 +138,8 @@ namespace TutoringSystemMobile.Services.Web
                             new List<ReservationDto>();
 
             var pagination = response.StatusCode == 200 ?
-                JsonConvert.DeserializeObject<PaginationMetadataDto>(response.Headers.FirstOrDefault("X-Pagination")) :
-                new PaginationMetadataDto();
+                JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination")) :
+                new PaginationMetadata();
 
             return new ReservationsCollectionDto { Reservations = reservations, Pagination = pagination };
         }

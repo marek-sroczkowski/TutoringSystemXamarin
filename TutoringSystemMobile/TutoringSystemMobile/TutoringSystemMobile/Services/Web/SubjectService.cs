@@ -3,7 +3,7 @@ using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
-using TutoringSystemMobile.Models.SubjectDtos;
+using TutoringSystemMobile.Models.Dtos.Subject;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;

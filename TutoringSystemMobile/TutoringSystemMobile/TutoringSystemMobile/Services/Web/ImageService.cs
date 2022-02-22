@@ -2,7 +2,7 @@
 using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.ImagesDtos;
+using TutoringSystemMobile.Models.Dtos.Images;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;

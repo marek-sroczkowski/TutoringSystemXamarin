@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.MainReportTutorPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.Report"
+             xmlns:controls="clr-namespace:TutoringSystemMobile.CustomControls"
+             Title="Statystyki"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:MainReportViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_chart.png" Command="{Binding OpenMainChartCommand}" />
+        <ToolbarItem IconImageSource="icon_filtering.png" Command="{Binding OpenFilteringPopupCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20,20,20,0">
+
+            <StackLayout Spacing="15">
+                <Label Padding="0,0,0,10"
+                   Style="{StaticResource TitleLabelStyle}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Raport " />
+                            <Span Text="{Binding StartDate, StringFormat='{0:dd/MM/yyyy}'}" />
+                            <Span Text=" - " FontSize="19" FontAttributes="Bold"/>
+                            <Span Text="{Binding EndDate, StringFormat='{0:dd/MM/yyyy}'}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <BoxView Style="{StaticResource HorizontalLineStyle}" />
+
+                <Grid>
+                    <Label Grid.Column="0" 
+                           Text="Dochody z korepetycji" 
+                           VerticalOptions="Center"
+                           Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="1"
+                           Text="{Binding TutoringProfit}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+                </Grid>
+
+                <Grid>
+                    <Label Grid.Column="0" 
+                           Text="Dochody ze zleceń" 
+                           VerticalOptions="Center"
+                           Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="1"
+                           Text="{Binding OrderProfit}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+                </Grid>
+
+                <Grid>
+                    <Label Grid.Column="0" 
+                           Text="Łączny dochód" 
+                           VerticalOptions="Center"
+                           Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="1"
+                           Text="{Binding TotalProfit}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+                </Grid>
+
+                <Grid>
+                    <Label Grid.Column="0" 
+                           Text="Łączna liczba godzin" 
+                           VerticalOptions="Center"
+                           Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="1"
+                           Text="{Binding TotalHours}"
+                           Style="{StaticResource PropertyLabelStyle}" />
+                </Grid>
+
+                <BoxView Style="{StaticResource HorizontalLineStyle}" />
+            </StackLayout>
+
+            <StackLayout Spacing="15" Padding="0,20,0,0">
+
+                <Label Text="Szczegółowe statystyki"
+                   Style="{StaticResource TitleLabelStyle}" />
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+
+                    <controls:IconView Grid.Column="0" 
+                                   Source="icon_students.png"
+                                   Style="{StaticResource MenuItemIconStyle}" />
+
+                    <Label Grid.Column="1" 
+                       Text="Studenci"
+                       Style="{StaticResource ProfileMenuItemStyle}" />
+
+                    <controls:IconView Grid.Column="2" 
+                                   Source="icon_get_details.png"
+                                   Style="{StaticResource MenuDetailsIconStyle}" />
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"                           
+                                Command="{Binding StudentsReportCommand}">
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+
+                    <controls:IconView Grid.Column="0" 
+                                   Source="icon_subjects.png"
+                                   Style="{StaticResource MenuItemIconStyle}" />
+
+                    <Label Grid.Column="1" 
+                       Text="Przedmioty"
+                       Style="{StaticResource ProfileMenuItemStyle}" />
+
+                    <controls:IconView Grid.Column="2" 
+                                   Source="icon_get_details.png"
+                                   Style="{StaticResource MenuDetailsIconStyle}" />
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SubjectsReportCommand}">
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+
+                    <controls:IconView Grid.Column="0" 
+                                   Source="icon_subject_category.png"
+                                   Style="{StaticResource MenuItemIconStyle}" />
+
+                    <Label Grid.Column="1" 
+                       Text="Kategorie przedmiotów"
+                       Style="{StaticResource ProfileMenuItemStyle}" />
+
+                    <controls:IconView Grid.Column="2" 
+                                   Source="icon_get_details.png"
+                                   Style="{StaticResource MenuDetailsIconStyle}" />
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SubjectCategoriesReportCommand}">
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+
+                    <controls:IconView Grid.Column="0" 
+                                   Source="icon_place.png"
+                                   Style="{StaticResource MenuItemIconStyle}" />
+
+                    <Label Grid.Column="1"
+                       Text="Miejsce zajęć"
+                       Style="{StaticResource ProfileMenuItemStyle}" />
+
+                    <controls:IconView Grid.Column="2" 
+                                   Source="icon_get_details.png"
+                                   Style="{StaticResource MenuDetailsIconStyle}" />
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding PlacesReportCommand}">
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

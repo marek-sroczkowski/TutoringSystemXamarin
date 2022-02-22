@@ -1,7 +1,7 @@
 ﻿using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.ReservationDtos;
+using TutoringSystemMobile.Models.Dtos.Reservation;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;

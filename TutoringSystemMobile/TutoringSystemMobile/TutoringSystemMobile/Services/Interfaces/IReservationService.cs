@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Parameters;
-using TutoringSystemMobile.Models.ReservationDtos;
+using TutoringSystemMobile.Models.Dtos.Reservation;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

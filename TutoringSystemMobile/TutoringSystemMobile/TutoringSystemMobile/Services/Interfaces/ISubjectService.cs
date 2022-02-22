@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.SubjectDtos;
+using TutoringSystemMobile.Models.Dtos.Subject;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

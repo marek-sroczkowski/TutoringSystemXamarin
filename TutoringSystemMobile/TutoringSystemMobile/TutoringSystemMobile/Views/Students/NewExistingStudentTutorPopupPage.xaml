@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.NewExistingStudentTutorPopupPage"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.Student"
+             x:DataType="viewModel:AddExistingStudentViewModel">
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation DurationIn="400"
+                                   DurationOut="300"
+                                   EasingIn="SinOut"
+                                   EasingOut="SinIn"
+                                   HasBackgroundAnimation="True"
+                                   PositionIn="Center"
+                                   PositionOut="Center"
+                                   ScaleIn="1.2"
+                                   ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+
+    <ContentPage.Content>
+        <StackLayout Style="{StaticResource CenterPopupStyle}">
+
+            <Label Text="Nowy uczeń"
+               Style="{StaticResource TitleLabelStyle}"
+               Padding="0,0,0,15"/>
+
+            <custom:TitledEntry Text="{Binding HourRate}" 
+                                Placeholder="Stawka godzinowa"
+                                EntryKeyboard="Numeric"/>
+
+            <custom:TitledEntry Text="{Binding Note}" 
+                                Placeholder="Notka" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Color="Blue"/>
+
+            <Button VerticalOptions="Center" 
+                    Text="Dodaj ucznia"
+                    Margin="0,20,0,0"
+                    Style="{StaticResource PrimaryBlueButtonStyle}"
+                    Command="{Binding AddStudentCommand}"/>
+
+        </StackLayout>
+    </ContentPage.Content>
+</pages:PopupPage>

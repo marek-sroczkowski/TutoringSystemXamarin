@@ -38,49 +38,49 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\ContactViews\EditContactPopupPage.xaml.cs">
+    <Compile Update="Views\Contact\EditContactPopupPage.xaml.cs">
       <DependentUpon>EditContactPopupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\OrdersViews\EditOrderTutorPage.xaml.cs">
+    <Compile Update="Views\Orders\EditOrderTutorPage.xaml.cs">
       <DependentUpon>EditOrderTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\OrdersViews\NewOrderTutotPage.xaml.cs">
+    <Compile Update="Views\Orders\NewOrderTutotPage.xaml.cs">
       <DependentUpon>NewOrderTutotPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\OrdersViews\OrderDetailsTutorPage.xaml.cs">
+    <Compile Update="Views\Orders\OrderDetailsTutorPage.xaml.cs">
       <DependentUpon>OrderDetailsTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\OrdersViews\OrderFilteringTutorPopupPage.xaml.cs">
+    <Compile Update="Views\Orders\OrderFilteringTutorPopupPage.xaml.cs">
       <DependentUpon>OrderFilteringTutorPopupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\PhoneNumbersViews\NewPhoneNumberPopupPage.xaml.cs">
+    <Compile Update="Views\PhoneNumber\NewPhoneNumberPopupPage.xaml.cs">
       <DependentUpon>NewPhoneNumberPopupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ProfileViews\AppThemePopupPage.xaml.cs">
+    <Compile Update="Views\Profile\AppThemePopupPage.xaml.cs">
       <DependentUpon>AppThemePopupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ProfileViews\MyProfilePage.xaml.cs">
+    <Compile Update="Views\Profile\MyProfilePage.xaml.cs">
       <DependentUpon>MyProfilePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ReportViews\MainReportTutorPage.xaml.cs">
+    <Compile Update="Views\Report\MainReportTutorPage.xaml.cs">
       <DependentUpon>MainReportTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ReportViews\PlacesChartTutorPage.xaml.cs">
+    <Compile Update="Views\Report\PlacesChartTutorPage.xaml.cs">
       <DependentUpon>PlacesChartTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ReportViews\StudentsChartTutorPage.xaml.cs">
+    <Compile Update="Views\Report\StudentsChartTutorPage.xaml.cs">
       <DependentUpon>StudentsChartTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ReportViews\SubjectCategoriesReportTutorPage.xaml.cs">
+    <Compile Update="Views\Report\SubjectCategoriesReportTutorPage.xaml.cs">
       <DependentUpon>SubjectCategoriesReportTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ReportViews\SubjectsChartTutorPage.xaml.cs">
+    <Compile Update="Views\Report\SubjectsChartTutorPage.xaml.cs">
       <DependentUpon>SubjectsChartTutorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\StudentsViews\NewExistingStudentTutorPopupPage.xaml.cs">
+    <Compile Update="Views\Students\NewExistingStudentTutorPopupPage.xaml.cs">
       <DependentUpon>NewExistingStudentTutorPopupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TutorsViews\SearchTutorsStudentPage.xaml.cs">
+    <Compile Update="Views\Tutors\SearchTutorsStudentPage.xaml.cs">
       <DependentUpon>SearchTutorsStudentPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -98,115 +98,115 @@
     <EmbeddedResource Update="CustomControls\TitledTimePicker.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\AccountViews\AccountActivationPage.xaml">
+    <EmbeddedResource Update="Views\Account\AccountActivationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="CustomControls\TitledEntry.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\AddressViews\AddressDetailsPage.xaml">
+    <EmbeddedResource Update="Views\Address\AddressDetailsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\AddressViews\EditAddressPage.xaml">
+    <EmbeddedResource Update="Views\Address\EditAddressPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\AvailabilityViews\AvailabilitiesTutorPage.xaml">
+    <EmbeddedResource Update="Views\Availability\AvailabilitiesTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\OrderSortingTutorPopupPage.xaml">
+    <EmbeddedResource Update="Views\Orders\OrderSortingTutorPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\PhoneNumbersViews\EditPhonesPage.xaml">
+    <EmbeddedResource Update="Views\PhoneNumber\EditPhonesPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ProfileViews\AppThemePopupPage.xaml">
+    <EmbeddedResource Update="Views\Profile\AppThemePopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ContactViews\ContactDetailsPage.xaml">
+    <EmbeddedResource Update="Views\Contact\ContactDetailsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ContactViews\EditContactPopupPage.xaml">
+    <EmbeddedResource Update="Views\Contact\EditContactPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\PhoneNumbersViews\EditPhoneNumberPopupPage.xaml">
+    <EmbeddedResource Update="Views\PhoneNumber\EditPhoneNumberPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\PhoneNumbersViews\NewPhoneNumberPopupPage.xaml">
+    <EmbeddedResource Update="Views\PhoneNumber\NewPhoneNumberPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\EditOrderTutorPage.xaml">
+    <EmbeddedResource Update="Views\Orders\EditOrderTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\NewOrderTutotPage.xaml">
+    <EmbeddedResource Update="Views\Orders\NewOrderTutotPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\OrderDetailsTutorPage.xaml">
+    <EmbeddedResource Update="Views\Orders\OrderDetailsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\OrderFilteringTutorPopupPage.xaml">
+    <EmbeddedResource Update="Views\Orders\OrderFilteringTutorPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersViews\OrdersTutorPage.xaml">
+    <EmbeddedResource Update="Views\Orders\OrdersTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\AccountViews\RegisterTutorPage.xaml">
+    <EmbeddedResource Update="Views\Account\RegisterTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ProfileViews\ChangePasswordPopupPage.xaml">
+    <EmbeddedResource Update="Views\Profile\ChangePasswordPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ProfileViews\ProfilePicturePage.xaml">
+    <EmbeddedResource Update="Views\Profile\ProfilePicturePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\GeneralTimedChartTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\GeneralTimedChartTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\MainReportTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\MainReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\PlacesChartTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\PlacesChartTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\PlacesReportTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\PlacesReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\ReportFilteringPopupPage.xaml">
+    <EmbeddedResource Update="Views\Report\ReportFilteringPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\ReportSortingPopupPage.xaml">
+    <EmbeddedResource Update="Views\Report\ReportSortingPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\StudentsChartTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\StudentsChartTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\StudentsReportTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\StudentsReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\SubjectCategoriesChartPage.xaml">
+    <EmbeddedResource Update="Views\Report\SubjectCategoriesChartPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\SubjectCategoriesReportTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\SubjectCategoriesReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\SubjectsChartTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\SubjectsChartTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReportViews\SubjectsReportTutorPage.xaml">
+    <EmbeddedResource Update="Views\Report\SubjectsReportTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReservationViews\EditReservationTutorPage.xaml">
+    <EmbeddedResource Update="Views\Reservation\EditReservationTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReservationViews\NewReservationStudentPage.xaml">
+    <EmbeddedResource Update="Views\Reservation\NewReservationStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReservationViews\NewReservationTutorPage.xaml">
+    <EmbeddedResource Update="Views\Reservation\NewReservationTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReservationViews\ReservationDetailsStudentPage.xaml">
+    <EmbeddedResource Update="Views\Reservation\ReservationDetailsStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ReservationViews\ReservationDetailsTutorPage.xaml">
+    <EmbeddedResource Update="Views\Reservation\ReservationDetailsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ReservationViews\ReservationStudentPage.xaml">
@@ -215,58 +215,58 @@
     <EmbeddedResource Update="Views\ReservationViews\ReservationTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StartViews\StartStudentPage.xaml">
+    <EmbeddedResource Update="Views\Start\StartStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StartViews\StartTutorPage.xaml">
+    <EmbeddedResource Update="Views\Start\StartTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\CreatingNewStudentTutorPage.xaml">
+    <EmbeddedResource Update="Views\Students\CreatingNewStudentTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\EditStudentGeneralInformationTutorPage.xaml">
+    <EmbeddedResource Update="Views\Students\EditStudentGeneralInformationTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\NewExistingStudentTutorPopupPage.xaml">
+    <EmbeddedResource Update="Views\Students\NewExistingStudentTutorPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\SearchStudentPage.xaml">
+    <EmbeddedResource Update="Views\Students\SearchStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\StudentDetailsTutorPage.xaml">
+    <EmbeddedResource Update="Views\Students\StudentDetailsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\StudentRequestsTutorPage.xaml">
+    <EmbeddedResource Update="Views\Students\StudentRequestsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StudentsViews\StudentsTutorPage.xaml">
+    <EmbeddedResource Update="Views\Students\StudentsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SubjectViews\EditSubjectTutorPage.xaml">
+    <EmbeddedResource Update="Views\Subject\EditSubjectTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SubjectViews\NewSubjectTutorPage.xaml">
+    <EmbeddedResource Update="Views\Subject\NewSubjectTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SubjectViews\SubjectDetailsTutorPage.xaml">
+    <EmbeddedResource Update="Views\Subject\SubjectDetailsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SubjectViews\SubjectPlacePopupPage.xaml">
+    <EmbeddedResource Update="Views\Subject\SubjectPlacePopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SubjectViews\SubjectsTutorPage.xaml">
+    <EmbeddedResource Update="Views\Subject\SubjectsTutorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ProfileViews\EditGeneralUserInfoPage.xaml">
+    <EmbeddedResource Update="Views\Profile\EditGeneralUserInfoPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ProfileViews\MyProfilePage.xaml">
+    <EmbeddedResource Update="Views\Profile\MyProfilePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\TutorsViews\SearchTutorsStudentPage.xaml">
+    <EmbeddedResource Update="Views\Tutors\SearchTutorsStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\TutorsViews\TutorDetailsStudentPage.xaml">
+    <EmbeddedResource Update="Views\Tutors\TutorDetailsStudentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.PhoneNumberDtos;
+using TutoringSystemMobile.Models.Dtos.PhoneNumber;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

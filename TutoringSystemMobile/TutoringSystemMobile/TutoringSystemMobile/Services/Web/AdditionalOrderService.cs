@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
-using TutoringSystemMobile.Models.AdditionalOrderDtos;
+using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Pagination;
 using TutoringSystemMobile.Models.Parameters;
@@ -83,8 +83,8 @@ namespace TutoringSystemMobile.Services.Web
                             new List<OrderDto>();
 
             var pagination = response.StatusCode == 200 ?
-                JsonConvert.DeserializeObject<PaginationMetadataDto>(response.Headers.FirstOrDefault("X-Pagination")) :
-                new PaginationMetadataDto();
+                JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination")) :
+                new PaginationMetadata();
 
             return new OrdersCollectionDto { Orders = orders, Pagination = pagination };
         }

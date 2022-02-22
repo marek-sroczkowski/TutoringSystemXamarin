@@ -3,7 +3,7 @@ using Flurl.Http;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.AccountDtos;
+using TutoringSystemMobile.Models.Dtos.Account;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
