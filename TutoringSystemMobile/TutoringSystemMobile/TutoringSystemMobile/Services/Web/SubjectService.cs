@@ -3,7 +3,8 @@ using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
-using TutoringSystemMobile.Models.SubjectDtos;
+using TutoringSystemMobile.Models.Dtos.Subject;
+using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
@@ -29,12 +30,7 @@ namespace TutoringSystemMobile.Services.Web
                 .WithOAuthBearerToken(token)
                 .PostJsonAsync(newSubjectModel);
 
-            if (response.StatusCode != 201)
-                return -1;
-
-            string location = response.Headers.FirstOrDefault("location");
-
-            return location is null ? -1 : location.GetIdByLocation();
+            return await GetAddedResultAsync(response);
         }
 
         public async Task<bool> DeleteSubjectAsync(long subjectId)
@@ -84,7 +80,7 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<SubjectDto>>() : new List<SubjectDto>();
         }
 
-        public async Task<bool> UpdateSubjectAsync(UpdatedSubjectDto updatedSubject)
+        public async Task<long> UpdateSubjectAsync(UpdatedSubjectDto updatedSubject)
         {
             string token = await SecureStorage.GetAsync("token");
             var response = await baseUrl
@@ -92,7 +88,39 @@ namespace TutoringSystemMobile.Services.Web
                 .WithOAuthBearerToken(token)
                 .PutJsonAsync(updatedSubject);
 
-            return response.StatusCode == 204;
+            return await GetUpdatedResultAsync(response);
+        }
+
+        private static async Task<long> GetAddedResultAsync(IFlurlResponse response)
+        {
+            var content = await response.GetJsonAsync<ResponseError<SubjectErrors>>();
+            if (content?.Errors?.Name != null)
+            {
+                return -2;
+            }
+            else if (response.StatusCode != 201)
+            {
+                return -1;
+            }
+
+            string location = response.Headers.FirstOrDefault("location");
+
+            return location is null ? -1 : location.GetIdByLocation();
+        }
+
+        private static async Task<long> GetUpdatedResultAsync(IFlurlResponse response)
+        {
+            var content = await response.GetJsonAsync<ResponseError<SubjectErrors>>();
+            if (content?.Errors?.Name != null)
+            {
+                return -2;
+            }
+            else if (response.StatusCode != 204)
+            {
+                return -1;
+            }
+
+            return 1;
         }
     }
 }

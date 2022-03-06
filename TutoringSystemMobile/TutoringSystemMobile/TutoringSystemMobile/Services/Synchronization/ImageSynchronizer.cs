@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Models.ImagesDtos;
+using TutoringSystemMobile.Models.Dtos.Images;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.SQLite;
 using TutoringSystemMobile.Services.Synchronization;

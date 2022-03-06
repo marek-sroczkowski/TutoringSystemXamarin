@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.ReservationsStudentPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.Dtos.Reservation"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.Reservation"
+             xmlns:plugin="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
+             xmlns:controls="clr-namespace:TutoringSystemMobile.CustomControls"
+             Title="Rezerwacje"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:StudentReservationsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_add.png" Command="{Binding AddReservationCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <RefreshView x:DataType="viewModel:StudentReservationsViewModel"
+                 Command="{Binding LoadReservationCommand}"
+                 IsRefreshing="{Binding IsBusy}"        
+                 RefreshColor="Blue">
+
+        <ContentView>
+            <ScrollView>
+
+                <plugin:Calendar x:Name="calendar"
+                             Culture="{Binding Culture}"
+                             Events="{Binding Reservations}"
+                             EventIndicatorColor="#2196F3"
+                             EventIndicatorSelectedColor="White"
+                             TodayOutlineColor="#2196F3"
+                             OtherMonthDayColor="{AppThemeBinding Dark=#b2b2b2, Light=#6d6d6d}"
+                             DaysTitleColor="{AppThemeBinding Dark=#efefef, Light=Black}"
+                             DeselectedDayTextColor="{AppThemeBinding Dark=#efefef, Light=Black}"
+                             EventIndicatorTextColor="{AppThemeBinding Dark=#efefef, Light=Black}"
+                             ArrowsColor="{AppThemeBinding Dark=White, Light=Black}"
+                             Year="{Binding Year}"
+                             Month="{Binding Month}"
+                             SelectedDate="{Binding SelectedDate}"
+                             SelectedDateTextFormat="dd MMMM yyyy">
+
+                    <plugin:Calendar.HeaderSectionTemplate>
+                        <DataTemplate>
+
+                            <Grid Margin="0,-10,0,10"
+                              RowDefinitions="Auto,Auto">
+
+                                <Grid Grid.Row="0"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Start"
+                                  ColumnDefinitions="Auto,Auto,Auto">
+
+                                    <Frame Grid.Column="0"
+                                       Padding="0"
+                                       CornerRadius="18"
+                                       HeightRequest="36"
+                                       WidthRequest="36"
+                                       VerticalOptions="Center">
+
+                                        <controls:IconView Source="icon_prev.png"
+                                               BackgroundColor="#2196F3"
+                                               Foreground="WhiteSmoke"/>
+
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentReservationsViewModel}}, Path=PrevMonthCommand}">
+                                            </TapGestureRecognizer>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+
+                                    <Label Grid.Column="1"
+                                       Margin="40,0,40,0"
+                                       FontAttributes="Bold"
+                                       FontSize="Medium"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Text="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentReservationsViewModel}}, Path=MonthLabel}"
+                                       Style="{StaticResource LabelStyle}" />
+
+                                    <Frame Grid.Column="2"
+                                       Padding="0"
+                                       CornerRadius="18"
+                                       HeightRequest="36"
+                                       HorizontalOptions="CenterAndExpand"
+                                       VerticalOptions="CenterAndExpand"
+                                       WidthRequest="36">
+
+                                        <controls:IconView Source="icon_next.png"
+                                               BackgroundColor="#2196F3"
+                                               Foreground="White"/>
+
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentReservationsViewModel}}, Path=NextMonthCommand}">
+                                            </TapGestureRecognizer>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                </Grid>
+
+                                <Grid Grid.Row="1"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Start"
+                                  ColumnDefinitions="Auto,Auto,Auto">
+
+                                    <Frame Grid.Column="0"
+                                       Padding="0"
+                                       CornerRadius="18"
+                                       HeightRequest="36"
+                                       HorizontalOptions="CenterAndExpand"
+                                       VerticalOptions="Center"
+                                       WidthRequest="36">
+
+                                        <controls:IconView Source="icon_prev.png"
+                                               BackgroundColor="#2196F3"
+                                               Foreground="White"/>
+
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentReservationsViewModel}}, Path=PrevYearCommand}">
+                                            </TapGestureRecognizer>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+
+                                    <Label Grid.Column="1"
+                                       Margin="40,0,40,0"
+                                       FontAttributes="Bold"
+                                       FontSize="Medium"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Text="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentReservationsViewModel}}, Path=Year}"
+                                       Style="{StaticResource LabelStyle}" />
+
+                                    <Frame Grid.Column="2"
+                                       Padding="0"
+                                       CornerRadius="18"
+                                       HeightRequest="36"
+                                       HorizontalOptions="CenterAndExpand"
+                                       VerticalOptions="CenterAndExpand"
+                                       WidthRequest="36">
+
+                                        <controls:IconView Source="icon_next.png"
+                                               BackgroundColor="#2196F3"
+                                               Foreground="White"/>
+
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentReservationsViewModel}}, Path=NextYearCommand}">
+                                            </TapGestureRecognizer>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </plugin:Calendar.HeaderSectionTemplate>
+
+                    <plugin:Calendar.EmptyTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Label Text="Brak zaplanowanych zajęć"
+                                   Margin="0,10,0,0"
+                                   HorizontalTextAlignment="Center"
+                                   Style="{StaticResource LabelStyle}"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </plugin:Calendar.EmptyTemplate>
+
+                    <plugin:Calendar.EventTemplate>
+                        <DataTemplate>
+                            <ScrollView>
+                                <StackLayout x:DataType="model:DisplayedSimpleReservationDto"
+                                         Padding="3">
+
+                                    <Grid RowDefinitions="Auto">
+
+                                        <BoxView Grid.Row="0"
+                                         Margin="1"
+                                         Style="{StaticResource ListBoxView}"/>
+
+                                        <Grid Grid.Row="0"
+                                      Padding="10"
+                                      ColumnDefinitions="Auto,Auto,*,20">
+
+                                            <Grid Grid.Column="0"
+                                          Margin="5,0,0,0"
+                                          VerticalOptions="Center"
+                                          RowDefinitions="Auto,Auto">
+
+                                                <Label Grid.Row="0"
+                                               Text="{Binding LessonTime}"
+                                               FontAttributes="Bold"
+                                               FontSize="16"
+                                               HorizontalOptions="Center"
+                                               Style="{StaticResource LabelStyle}"/>
+
+                                                <Label Grid.Row="1"
+                                               Text="{Binding Duration}"
+                                               FontAttributes="Italic"
+                                               FontSize="15"
+                                               HorizontalOptions="Center"
+                                               Style="{StaticResource LabelStyle}"/>
+                                            </Grid>
+
+                                            <Grid Grid.Column="1">
+                                                <BoxView HeightRequest="35"
+                                                 Margin="10,5,10,5"
+                                                 Style="{StaticResource VerticalLineStyle}" />
+                                            </Grid>
+
+                                            <Grid Grid.Column="2"
+                                          RowDefinitions="Auto,Auto,Auto">
+
+                                                <Label Grid.Row="0"
+                                               Text="{Binding Tutor}"
+                                               LineBreakMode="WordWrap"
+                                               FontAttributes="Bold"
+                                               FontSize="19"
+                                               Style="{StaticResource LabelStyle}"/>
+
+                                                <Label Grid.Row="1"
+                                               Text="{Binding SubjectName}"
+                                               LineBreakMode="WordWrap"
+                                               FontAttributes="Bold"
+                                               FontSize="16"
+                                               Style="{StaticResource LabelStyle}"/>
+
+                                                <Label Grid.Row="2"
+                                               Margin="0,10,0,0"
+                                               Text="{Binding Place}"
+                                               FontAttributes="Italic"
+                                               FontSize="15"
+                                               Style="{StaticResource LabelStyle}"/>
+                                            </Grid>
+
+                                            <Grid Grid.Column="3">
+                                                <Image Source="icon_get_details.png" />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:StudentReservationsViewModel}}, Path=ReservationTappedCommand}"		
+                                        CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                            </ScrollView>
+                        </DataTemplate>
+                    </plugin:Calendar.EventTemplate>
+
+                </plugin:Calendar>
+            </ScrollView>
+        </ContentView>
+    </RefreshView>
+</ContentPage>

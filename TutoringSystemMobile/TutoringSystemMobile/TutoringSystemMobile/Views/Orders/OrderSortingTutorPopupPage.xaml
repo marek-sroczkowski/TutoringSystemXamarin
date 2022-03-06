@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.OrderSortingTutorPopupPage"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.Order"
+             x:DataType="viewModel:OrderSortingViewModel">
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </pages:PopupPage.Animation>
+
+    <StackLayout VerticalOptions="EndAndExpand" 
+                 HorizontalOptions="FillAndExpand">
+        
+        <Frame x:Name="BottomPopup"
+               Style="{StaticResource BottomPopupStyle}">
+            
+            <StackLayout Spacing="15">
+                
+                <BoxView Style="{StaticResource BoxViewBottomPopupStyle}" />
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByNameAsc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Po nazwie rosnąco"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByNameAscCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByNameDesc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Po nazwie malejąco"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByNameDescCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByPriceAsc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Po cenie rosnąco"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByPriceAscCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByPriceDesc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Po cenie malejąco"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByPriceDescCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByDeadlineAsc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Od najstarszego terminu"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByDeadlineAscCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByDeadlineDesc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Od najmłodszego terminu"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByDeadlineDescCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByCreatedDateAsc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Od najstarszej daty stworzenia"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByCreatedDateAscCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*">
+                    
+                    <RadioButton Grid.Column="0"
+                                 IsChecked="{Binding IsSortingByCreatedDateDesc}" />
+                    
+                    <Label Grid.Column="1"
+                           Text="Od najmłodszej daty stworzenia"
+                           VerticalOptions="Center"
+                           Style="{StaticResource FilteringLabelStyle}"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding SortByCreatedDateDescCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </StackLayout>
+            
+            <Frame.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
+            </Frame.GestureRecognizers>
+        </Frame>
+    </StackLayout>
+</pages:PopupPage>

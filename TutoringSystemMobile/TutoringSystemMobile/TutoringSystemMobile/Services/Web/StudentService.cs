@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Pagination;
 using TutoringSystemMobile.Models.Parameters;
-using TutoringSystemMobile.Models.StudentDtos;
+using TutoringSystemMobile.Models.Dtos.Student;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
@@ -65,8 +65,8 @@ namespace TutoringSystemMobile.Services.Web
                 new List<StudentSimpleDto>();
 
             var pagination = response.StatusCode == 200 ?
-                JsonConvert.DeserializeObject<PaginationMetadataDto>(response.Headers.FirstOrDefault("X-Pagination")) :
-                new PaginationMetadataDto();
+                JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination")) :
+                new PaginationMetadata();
 
             return new StudentsCollectionDto { Students = tutors, Pagination = pagination };
         }

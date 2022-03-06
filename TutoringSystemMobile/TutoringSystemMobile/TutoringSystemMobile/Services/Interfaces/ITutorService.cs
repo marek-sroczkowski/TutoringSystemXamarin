@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
-using TutoringSystemMobile.Models.TutorDtos;
+using TutoringSystemMobile.Models.Dtos.Tutor;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

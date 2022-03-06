@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.AvailabilityDtos;
+using TutoringSystemMobile.Models.Dtos.Availability;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 

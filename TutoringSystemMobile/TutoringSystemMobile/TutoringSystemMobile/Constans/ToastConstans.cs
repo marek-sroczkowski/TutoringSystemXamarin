@@ -37,5 +37,6 @@
         public const string StudentRequestRemoved = "Usunięto prośbę";
         public const string ReservationRemoved = "Usunięto lekcję";
         public const string AddedReservation = "Zaplanowano lekcję";
+        public const string SubjectNameTaken = "Nazwa przedmiotu jest już użyta";
     }
 }

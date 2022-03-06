@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.ReservationDtos;
+using TutoringSystemMobile.Models.Dtos.Reservation;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

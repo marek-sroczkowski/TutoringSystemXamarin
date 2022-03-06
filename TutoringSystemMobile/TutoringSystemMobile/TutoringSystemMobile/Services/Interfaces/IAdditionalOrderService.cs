@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TutoringSystemMobile.Models.AdditionalOrderDtos;
+using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
 

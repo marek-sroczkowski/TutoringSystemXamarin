@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
-using TutoringSystemMobile.ViewModels.ProfileViewModels;
+using TutoringSystemMobile.ViewModels.Profile;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 

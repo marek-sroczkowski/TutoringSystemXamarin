@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.EditPhonesPage"
+             xmlns:model="clr-namespace:TutoringSystemMobile.Models.Dtos.PhoneNumber"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.PhoneNumber"
+             Title="Edycja telefonów"
+             Style="{StaticResource PageStyle}">
+
+    <ContentPage.BindingContext>
+        <viewModel:EditPhonesViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="15" Padding="20">
+
+            <Grid ColumnDefinitions="Auto, Auto">
+
+                <Label Grid.Column="0" Text="Moje telefony" 
+                       VerticalOptions="Center"
+                       FontSize="17"
+                       FontAttributes="Bold"
+                       Style="{StaticResource ContentLabelStyle}"/>
+
+                <ImageButton Grid.Column="1" Source="icon_add2.png"
+                             BackgroundColor="Transparent"
+                             HeightRequest="40"
+                             WidthRequest="40"
+                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:EditPhonesViewModel}}, Path=AddPhoneNumberCommand}"/>
+            </Grid>
+
+            <CollectionView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewModel:EditPhonesViewModel}}, Path=PhoneNumbers}" 
+                            x:DataType="model:PhoneNumberDto"
+                            SelectionMode="None">
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        
+                        <Grid Padding="0,0,0,5">
+                            
+                            <BoxView Grid.Row="0" Style="{StaticResource PhoneListBoxView}"/>
+
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="*,40,40">
+
+                                <Grid Grid.Column="0"
+                                      Padding="10"
+                                      RowDefinitions="Auto,Auto">
+
+                                    <Label Grid.Row="0"
+                                           Text="{Binding Owner}" 
+                                           Style="{StaticResource LabelStyle}"
+                                           FontAttributes="Bold"
+                                           FontSize="16" />
+
+                                    <Label Grid.Row="1"
+                                           Text="{Binding Number}" 
+                                           Style="{StaticResource LabelStyle}"
+                                           FontSize="16" />
+                                </Grid>
+
+                                <Grid Grid.Column="1">
+                                    <ImageButton Source="icon_edit2.png"
+                                                 BackgroundColor="Transparent"
+                                                 Margin="0,0,5,0"
+                                                 Padding="2"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:EditPhonesViewModel}}, Path=EditPhoneNumberCommand}" 
+                                                 CommandParameter="{Binding .}" />
+                                </Grid>
+
+                                <Grid Grid.Column="2">
+                                    <ImageButton Source="icon_remove2.png"
+                                                 BackgroundColor="Transparent"
+                                                 Margin="0,0,5,0"
+                                                 Padding="2"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:EditPhonesViewModel}}, Path=RemovePhoneNumberCommand}" 
+                                                 CommandParameter="{Binding .}" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

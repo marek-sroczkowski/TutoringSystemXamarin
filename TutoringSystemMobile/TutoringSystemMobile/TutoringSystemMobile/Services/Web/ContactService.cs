@@ -1,6 +1,6 @@
 ﻿using Flurl.Http;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.ContactDtos;
+using TutoringSystemMobile.Models.Dtos.Contact;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;

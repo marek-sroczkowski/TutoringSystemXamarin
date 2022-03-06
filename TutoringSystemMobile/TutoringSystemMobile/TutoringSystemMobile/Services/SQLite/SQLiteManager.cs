@@ -3,7 +3,7 @@ using SQLiteNetExtensions.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TutoringSystemMobile.Models.ImagesDtos;
+using TutoringSystemMobile.Models.Dtos.Images;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Services.SQLite

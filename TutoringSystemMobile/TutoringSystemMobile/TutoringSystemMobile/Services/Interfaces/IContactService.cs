@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TutoringSystemMobile.Models.ContactDtos;
+using TutoringSystemMobile.Models.Dtos.Contact;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

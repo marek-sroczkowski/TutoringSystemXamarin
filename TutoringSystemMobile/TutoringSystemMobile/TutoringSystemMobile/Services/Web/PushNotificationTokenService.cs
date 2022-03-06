@@ -1,7 +1,7 @@
 ﻿using Flurl.Http;
 using Plugin.FirebasePushNotification;
 using System.Threading.Tasks;
-using TutoringSystemMobile.Models.PushNotificationTokenDtos;
+using TutoringSystemMobile.Models.Dtos.PushNotificationToken;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;

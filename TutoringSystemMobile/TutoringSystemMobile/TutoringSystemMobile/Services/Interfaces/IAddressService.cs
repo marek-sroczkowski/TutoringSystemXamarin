@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TutoringSystemMobile.Models.AddressDtos;
+using TutoringSystemMobile.Models.Dtos.Address;
 
 namespace TutoringSystemMobile.Services.Interfaces
 {

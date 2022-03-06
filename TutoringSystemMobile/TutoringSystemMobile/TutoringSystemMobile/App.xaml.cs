@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Models.PushNotificationTokenDtos;
+using TutoringSystemMobile.Models.Dtos.PushNotificationToken;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;

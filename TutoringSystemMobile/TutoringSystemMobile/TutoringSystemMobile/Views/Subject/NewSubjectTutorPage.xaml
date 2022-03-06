@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TutoringSystemMobile.Views.NewSubjectTutorPage"
+             xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
+             xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.Subject"
+             Title="Nowy przedmiot"
+             Style="{StaticResource PageStyle}"
+             x:DataType="viewModel:NewSubjectViewModel">
+
+    <ContentPage.Content>
+        <StackLayout Padding="15,20,15,0"
+                     HorizontalOptions="Start">
+
+            <custom:TitledEntry Text="{Binding Name}" 
+                                Placeholder="Nazwa" />
+
+            <Label Text="Kategoria"
+                   Margin="0,0,0,-5"
+                   IsVisible="{Binding IsCategoryLabelVisible}"
+                   Style="{StaticResource LabelStyle}"/>
+
+            <Picker Title="Kategoria"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory}"/>
+
+            <Label Text="Miejsce zajęć"
+                   Margin="0,0,0,-5"
+                   IsVisible="{Binding IsPlaceLabelVisible}"
+                   Style="{StaticResource LabelStyle}"/>
+
+            <Entry Text="{Binding SelectedPlace}"
+                   Placeholder="Miejsce zajęć"
+                   Focused="SelectedPlaceEntry_Focused" />
+
+            <custom:TitledEntry Text="{Binding Description}" 
+                                Placeholder="Opis" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"  
+                               IsVisible="{Binding IsBusy}"
+                               Color="Blue"/>
+
+            <Button VerticalOptions="Center" 
+                    Text="Dodaj przedmiot" 
+                    Margin="0,20,0,0"
+                    Style="{StaticResource PrimaryBlueButtonStyle}"
+                    Command="{Binding AddNewSubjectCommand}" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
