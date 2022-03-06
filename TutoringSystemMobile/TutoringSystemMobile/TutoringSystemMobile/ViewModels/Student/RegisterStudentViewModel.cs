@@ -61,7 +61,7 @@ namespace TutoringSystemMobile.ViewModels.Student
             }
         }
 
-        private string GetErrorsMessage(RegisterErrorTypes errors)
+        private string GetErrorsMessage(RegisterErrors errors)
         {
             StringBuilder builder = new StringBuilder($"{ToastConstans.RegistrationFailed}\n");
             if (errors.Username != null)

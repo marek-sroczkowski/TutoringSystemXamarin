@@ -118,6 +118,7 @@ namespace TutoringSystemMobile.ViewModels.Subject
             {
                 Place = sender.Place;
             });
+
             AddNewSubjectCommand = new Command(async () => await OnAddNewSubject(), CanAddNewSubject);
             PropertyChanged += (_, __) => AddNewSubjectCommand.ChangeCanExecute();
             SetCategories();
@@ -134,13 +135,16 @@ namespace TutoringSystemMobile.ViewModels.Subject
         private async Task OnAddNewSubject()
         {
             IsBusy = true;
-            long newOrderId = await DependencyService.Get<ISubjectService>()
-                .AddSubjectAsync(new NewSubjectDto(Name, Description, Place.Value, Category));
+            long newOrderId = await DependencyService.Get<ISubjectService>().AddSubjectAsync(new NewSubjectDto(Name, Description, Place.Value, Category));
             IsBusy = false;
 
             if (newOrderId == -1)
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
+            else if(newOrderId == -2)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SubjectNameTaken);
             }
             else
             {

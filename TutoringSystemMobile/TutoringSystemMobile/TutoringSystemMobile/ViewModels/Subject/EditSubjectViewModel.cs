@@ -140,13 +140,17 @@ namespace TutoringSystemMobile.ViewModels.Subject
         private async Task OnEditSubject()
         {
             IsBusy = true;
-            bool updated = await subjectService.UpdateSubjectAsync(new UpdatedSubjectDto(Id, Name, Description, Place.Value, Category));
+            var result = await subjectService.UpdateSubjectAsync(new UpdatedSubjectDto(Id, Name, Description, Place.Value, Category));
             IsBusy = false;
 
-            if (updated)
+            if (result == 1)
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
                 await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}/{nameof(SubjectDetailsTutorPage)}?{nameof(Id)}={Id}");
+            }
+            else if(result == -2)
+            {
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SubjectNameTaken);
             }
             else
             {

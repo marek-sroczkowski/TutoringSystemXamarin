@@ -77,7 +77,7 @@ namespace TutoringSystemMobile.ViewModels.Account
             }
         }
 
-        public string GetErrorsMessage(RegisterErrorTypes errors)
+        public string GetErrorsMessage(RegisterErrors errors)
         {
             StringBuilder builder = new StringBuilder($"{ToastConstans.RegistrationFailed}\n");
             if (errors.Email != null)

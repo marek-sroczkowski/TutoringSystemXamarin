@@ -11,6 +11,6 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<SubjectDetailsDto> GetSubjectByIdAsync(long subjectId);
         Task<IEnumerable<SubjectDto>> GetSubjectByTutorId(long tutorId);
         Task<IEnumerable<SubjectDto>> GetSubjectsAsync();
-        Task<bool> UpdateSubjectAsync(UpdatedSubjectDto updatedSubject);
+        Task<long> UpdateSubjectAsync(UpdatedSubjectDto updatedSubject);
     }
 }
