@@ -3,31 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:custom="clr-namespace:TutoringSystemMobile.CustomControls"
              xmlns:viewModel="clr-namespace:TutoringSystemMobile.ViewModels.Account"
-             x:Class="TutoringSystemMobile.Views.RegisterTutorPage"
+             x:Class="TutoringSystemMobile.Views.RegisterStudentPage"
              Shell.NavBarIsVisible="True"
              Title="Rejestracja"
              Style="{StaticResource PageStyle}">
 
     <ContentPage.BindingContext>
-        <viewModel:RegisterTutorViewModel />
+        <viewModel:RegisterStudentViewModel />
     </ContentPage.BindingContext>
-
+    
     <ContentPage.Content>
-        <StackLayout Padding="15,15,15,0">
+        <StackLayout Padding="15,0,15,0">
 
-            <custom:TitledEntry Text="{Binding FirstName}" 
-                                Placeholder="Imię"
-                                EntryKeyboard="Text"/>
+            <Label Text="Przed rozpoczęciem korzystania z aplikacji musisz aktywość konto poprzez adres e-mail oraz ustawić hasło"
+                   Style="{StaticResource LabelStyle}"/>
 
-            <custom:TitledEntry Text="{Binding LastName}" 
-                                Placeholder="Nazwisko"
-                                EntryKeyboard="Text"/>
-
-            <custom:TitledEntry Text="{Binding Username}"
-                                IsTitleVisible="{Binding IsUsernameLabelVisible}"
-                                Placeholder="Login"/>
-
-            <custom:TitledEntry Text="{Binding Email}" 
+            <custom:TitledEntry Text="{Binding Email}"
                                 Placeholder="Email"
                                 EntryKeyboard="Email" />
 
