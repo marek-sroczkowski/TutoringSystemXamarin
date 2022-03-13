@@ -13,10 +13,11 @@
         {
         }
 
-        public RegisteredTutorDto(string username, string firstName, string email, string password, string confirmPassword)
+        public RegisteredTutorDto(string username, string firstName, string lastName, string email, string password, string confirmPassword)
         {
             Username = username;
             FirstName = firstName;
+            LastName = lastName;
             Email = email;
             Password = password;
             ConfirmPassword = confirmPassword;

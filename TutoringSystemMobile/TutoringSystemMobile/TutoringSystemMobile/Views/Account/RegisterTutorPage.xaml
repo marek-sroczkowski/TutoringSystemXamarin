@@ -13,15 +13,19 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <StackLayout Padding="15,0,15,0" 
-                     VerticalOptions="Center">
-            
-            <custom:TitledEntry Text="{Binding Username}" 
-                                Placeholder="Login"/>
+        <StackLayout Padding="15,15,15,0">
 
             <custom:TitledEntry Text="{Binding FirstName}" 
                                 Placeholder="Imię"
                                 EntryKeyboard="Text"/>
+
+            <custom:TitledEntry Text="{Binding LastName}" 
+                                Placeholder="Nazwisko"
+                                EntryKeyboard="Text"/>
+
+            <custom:TitledEntry Text="{Binding Username}"
+                                IsTitleVisible="{Binding IsUsernameLabelVisible}"
+                                Placeholder="Login"/>
 
             <custom:TitledEntry Text="{Binding Email}" 
                                 Placeholder="Email"
