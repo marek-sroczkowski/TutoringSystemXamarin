@@ -33,21 +33,21 @@ namespace TutoringSystemMobile.ViewModels.Account
         public async Task OnRegisterFormClick()
         {
             if (!IsBusy)
+            {
                 await Shell.Current.GoToAsync($"{nameof(RegisterTutorPage)}");
+            }
         }
 
         public bool CanLogin()
         {
-            return !Username.IsEmpty() &&
-                !Password.IsEmpty() &&
-                !IsBusy;
+            return !Username.IsEmpty()
+                && !IsBusy;
         }
 
         private async Task OnLogin()
         {
             IsBusy = true;
-            var loginResult = await DependencyService.Get<IUserService>()
-                .TryLoginAsync(new LoginUserDto(Username, Password));
+            var loginResult = await DependencyService.Get<IUserService>().TryLoginAsync(new LoginUserDto(Username, Password));
             IsBusy = false;
 
             switch (loginResult.LoginStatus)
@@ -57,6 +57,9 @@ namespace TutoringSystemMobile.ViewModels.Account
                     break;
                 case LoginStatus.InactiveAccount:
                     await InactiveAccount();
+                    break;
+                case LoginStatus.UnregisteredStudent:
+                    await UnregisteredStudent();
                     break;
                 case LoginStatus.InvalidUsernameOrPassword:
                     await InvalidUsernameOrPassword();
@@ -75,7 +78,7 @@ namespace TutoringSystemMobile.ViewModels.Account
                     await LoggedAsTutor();
                     break;
                 case Role.Student:
-                    await LoggedAdStudent();
+                    await LoggedAsStudent();
                     break;
             }
         }
@@ -84,6 +87,12 @@ namespace TutoringSystemMobile.ViewModels.Account
         {
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.InactiveAccount.ToString());
             await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
+        }
+
+        private async Task UnregisteredStudent()
+        {
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.InactiveAccount.ToString());
+            await Shell.Current.GoToAsync($"{nameof(RegisterStudentPage)}");
         }
 
         private async Task InvalidUsernameOrPassword()
@@ -99,7 +108,7 @@ namespace TutoringSystemMobile.ViewModels.Account
             await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
         }
 
-        private async Task LoggedAdStudent()
+        private async Task LoggedAsStudent()
         {
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
             DependencyService.Get<IFlyoutItemService>().EnableStudentFlyoutItems();

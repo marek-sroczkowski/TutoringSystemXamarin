@@ -19,8 +19,12 @@ namespace TutoringSystemMobile.ViewModels.Account
         public Command ActivateAccountCommand { get; }
         public Command NewActivationCodeCommand { get; }
 
+        private readonly IUserService userService;
+
         public AccountActivationViewModel()
         {
+            userService = DependencyService.Get<IUserService>();
+
             ActivateAccountCommand = new Command(async () => await OnActivateAccount(), CanActivateAccount);
             PropertyChanged += (_, __) => ActivateAccountCommand.ChangeCanExecute();
             NewActivationCodeCommand = new Command(async () => await OnNewActivationCode(), CanNewActivationCode);
@@ -29,23 +33,20 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         public bool CanActivateAccount()
         {
-            return !ActivationToken.IsEmpty() &&
-                ActivationToken.Length == 6 &&
-                !IsBusy;
+            return !ActivationToken.IsEmpty()
+                && ActivationToken.Length == 6
+                && !IsBusy;
         }
 
         private async Task OnActivateAccount()
         {
             IsBusy = true;
-            var activated = await DependencyService.Get<IUserService>()
-                .ActivateUserByTokenAsync(ActivationToken);
+            var activated = await userService.ActivateUserByTokenAsync(ActivationToken);
             IsBusy = false;
 
             if (activated)
             {
-                DependencyService.Get<IFlyoutItemService>().EnableTutorFlyoutItems();
-                await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
-                await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
+                await RedirectToStartPage();
             }
             else
             {
@@ -61,13 +62,45 @@ namespace TutoringSystemMobile.ViewModels.Account
         private async Task OnNewActivationCode()
         {
             IsBusy = true;
-            var sent = await DependencyService.Get<IUserService>().SendNewActivationTokenAsync();
+            var sent = await userService.SendNewActivationTokenAsync();
             IsBusy = false;
 
             if (sent)
+            {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SentActivationCode);
+            }
             else
+            {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorActivationCodeSending);
+            }
+        }
+
+        private async Task RedirectToStartPage()
+        {
+            var role = await userService.GetUserRole();
+
+            if (role == Role.Tutor)
+            {
+                await LogInAsTutor();
+            }
+            else
+            {
+                await LogInAsStudent();
+            }
+        }
+
+        private async Task LogInAsTutor()
+        {
+            DependencyService.Get<IFlyoutItemService>().EnableTutorFlyoutItems();
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
+            await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
+        }
+
+        private async Task LogInAsStudent()
+        {
+            DependencyService.Get<IFlyoutItemService>().EnableStudentFlyoutItems();
+            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
+            await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
         }
     }
 }

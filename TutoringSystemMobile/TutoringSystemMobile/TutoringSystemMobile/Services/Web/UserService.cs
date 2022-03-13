@@ -72,7 +72,7 @@ namespace TutoringSystemMobile.Services.Web
             return userRole;
         }
 
-        public async Task<RegisterErrors> RegisterStudentAsync(RegisterStudentDto student)
+        public async Task<RegisterErrors> RegisterStudentAsync(RegisteredStudentDto student)
         {
             string token = await SecureStorage.GetAsync("token");
             var response = await baseUrl
@@ -86,7 +86,21 @@ namespace TutoringSystemMobile.Services.Web
             return content?.Errors;
         }
 
-        public async Task<RegisterErrors> RegisterTutorAsync(RegisterTutorDto tutor)
+        public async Task<RegisterErrors> CreateStudentAsync(NewStudentDto student)
+        {
+            string token = await SecureStorage.GetAsync("token");
+            var response = await baseUrl
+                .AppendPathSegments("create", "student")
+                .WithOAuthBearerToken(token)
+                .AllowAnyHttpStatus()
+                .PostJsonAsync(student);
+
+            var content = await response.GetJsonAsync<ResponseError<RegisterErrors>>();
+
+            return content?.Errors;
+        }
+
+        public async Task<RegisterErrors> RegisterTutorAsync(RegisteredTutorDto tutor)
         {
             var response = await baseUrl
                 .AppendPathSegments("register", "tutor")
