@@ -20,65 +20,12 @@ namespace TutoringSystemMobile.ViewModels.Order
         private DateTime deadlineStart = DateTime.Now.AddDays(-14);
         private DateTime deadlineEnd = DateTime.Now.AddMonths(1);
 
-        public bool IsPaid
-        {
-            get => isPaid;
-            set
-            {
-                if (!value && !IsNotPaid)
-                    IsNotPaid = true;
-                SetValue(ref isPaid, value);
-            }
-        }
-        public bool IsNotPaid
-        {
-            get => isNotPaid;
-            set
-            {
-                if (!value && !IsPaid)
-                    IsPaid = true;
-                SetValue(ref isNotPaid, value);
-            }
-        }
-        public bool IsInProgress
-        {
-            get => isInProgress;
-            set
-            {
-                if (!value && !IsPending && !IsRealized)
-                {
-                    DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
-                    IsPending = true;
-                }
-                SetValue(ref isInProgress, value);
-            }
-        }
-        public bool IsPending
-        {
-            get => isPending;
-            set
-            {
-                if (!value && !IsInProgress && !IsRealized)
-                {
-                    DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
-                    IsInProgress = true;
-                }
-                SetValue(ref isPending, value);
-            }
-        }
-        public bool IsRealized
-        {
-            get => isRealized;
-            set
-            {
-                if (!value && !IsInProgress && !IsPending)
-                {
-                    DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
-                    IsInProgress = true;
-                }
-                SetValue(ref isRealized, value);
-            }
-        }
+        public bool IsPaid { get => isPaid; set => SetIsPaid(value); }
+        public bool IsNotPaid { get => isNotPaid; set => SetIsNotPaid(value); }
+        public bool IsInProgress { get => isInProgress; set => SetIsInProgress(value); }
+        public bool IsPending { get => isPending; set => SetIsPending(value); }
+        public bool IsRealized { get => isRealized; set => SetIsRealized(value); }
+
         public DateTime ReceiptStartDate { get => receiptStartDate; set => SetValue(ref receiptStartDate, value); }
         public DateTime ReceiptEndDate { get => receiptEndDate; set => SetValue(ref receiptEndDate, value); }
         public DateTime DeadlineStart { get => deadlineStart; set => SetValue(ref deadlineStart, value); }
@@ -105,6 +52,56 @@ namespace TutoringSystemMobile.ViewModels.Order
         {
             MessagingCenter.Send(this, MessagingCenterConstans.OrderFiltering);
             await PopupNavigation.Instance.PopAsync();
+        }
+
+        private void SetIsPaid(bool value)
+        {
+            if (!value && !IsNotPaid)
+            {
+                IsNotPaid = true;
+            }
+
+            SetValue(ref isPaid, value);
+        }
+
+        private void SetIsNotPaid(bool value)
+        {
+            if (!value && !IsPaid)
+            {
+                IsPaid = true;
+            }
+
+            SetValue(ref isNotPaid, value);
+        }
+
+        private void SetIsInProgress(bool value)
+        {
+            if (!value && !IsPending && !IsRealized)
+            {
+                DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
+                IsPending = true;
+            }
+            SetValue(ref isInProgress, value);
+        }
+
+        private void SetIsPending(bool value)
+        {
+            if (!value && !IsInProgress && !IsRealized)
+            {
+                DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
+                IsInProgress = true;
+            }
+            SetValue(ref isPending, value);
+        }
+
+        private void SetIsRealized(bool value)
+        {
+            if (!value && !IsInProgress && !IsPending)
+            {
+                DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
+                IsInProgress = true;
+            }
+            SetValue(ref isRealized, value);
         }
     }
 }

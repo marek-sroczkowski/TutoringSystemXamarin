@@ -82,7 +82,9 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
             var contact = await contactService.GetContactByIdAsync(contactId);
             PhoneNumbers.Clear();
             foreach (var phone in contact.PhoneNumbers)
+            {
                 PhoneNumbers.Add(phone);
+            }
 
             IsBusy = false;
         }

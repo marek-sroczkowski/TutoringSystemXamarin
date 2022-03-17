@@ -51,8 +51,8 @@ namespace TutoringSystemMobile.ViewModels.Address
         private async Task OnEditAddress()
         {
             IsBusy = true;
-            var updated = await addressService
-                .UpdateAddressAsync(new UpdatedAddressDto(Id, Street, HouseAndFlatNumber, City, PostalCode, Description));
+            var updatedAddress = new UpdatedAddressDto(Id, Street, HouseAndFlatNumber, City, PostalCode, Description);
+            var updated = await addressService.UpdateAddressAsync(updatedAddress);
             IsBusy = false;
 
             if (updated)

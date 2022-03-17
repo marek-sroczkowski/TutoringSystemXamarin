@@ -26,27 +26,30 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public Command AddNewOrderCommand { get; }
 
+        private readonly IAdditionalOrderService orderService;
+
         public NewOrderViewModel()
         {
+            orderService = DependencyService.Get<IAdditionalOrderService>();
             AddNewOrderCommand = new Command(async () => await OnAddNewOrder(), CanAddNewOrder);
             PropertyChanged += (_, __) => AddNewOrderCommand.ChangeCanExecute();
         }
 
         public bool CanAddNewOrder()
         {
-            return !Name.IsEmpty() &&
-                !Cost.IsEmpty() &&
-                double.TryParse(Cost, out double cost) &&
-                cost > 0 &&
-                Deadline.HasValue &&
-                !IsBusy;
+            return !Name.IsEmpty()
+                && !Cost.IsEmpty()
+                && double.TryParse(Cost, out double cost)
+                && cost > 0
+                && Deadline.HasValue
+                && !IsBusy;
         }
 
         private async Task OnAddNewOrder()
         {
             IsBusy = true;
-            long newOrderId = await DependencyService.Get<IAdditionalOrderService>()
-                .AddAdditionalOrderAsync(new NewOrderDto(Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid));
+            var newOrder = new NewOrderDto(Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid);
+            long newOrderId = await orderService.AddAdditionalOrderAsync(newOrder);
             IsBusy = false;
 
             if (newOrderId == -1)

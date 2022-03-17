@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -68,31 +69,10 @@ namespace TutoringSystemMobile.ViewModels.Order
             ReceiptDate = order.ReceiptDate;
             Description = order.Description;
 
-            SetPaidStatus();
-            SetOrderStatus();
+            PaidStatus = StatusHelper.GetOrderPaymentStatus(IsPaid);
+            OrderStatus = StatusHelper.GetOrderStatus(Status);
 
             IsBusy = false;
-        }
-
-        private void SetPaidStatus()
-        {
-            PaidStatus = isPaid ? PickerConstans.OrderIsPaid : PickerConstans.OrderIsNotPaid;
-        }
-
-        private void SetOrderStatus()
-        {
-            switch (Status)
-            {
-                case AdditionalOrderStatus.Pending:
-                    OrderStatus = PickerConstans.PendingOrder;
-                    break;
-                case AdditionalOrderStatus.InProgress:
-                    OrderStatus = PickerConstans.InProgressOrder;
-                    break;
-                case AdditionalOrderStatus.Realized:
-                    OrderStatus = PickerConstans.RealizedOrder;
-                    break;
-            }
         }
 
         private async Task OnRedirectToOrderEditPage()

@@ -23,8 +23,11 @@ namespace TutoringSystemMobile.ViewModels.Account
         public Command LoginCommand { get; }
         public Command RegisterTutorFormCommand { get; }
 
+        private readonly IUserService userService;
+
         public LoginViewModel()
         {
+            userService = DependencyService.Get<IUserService>();
             LoginCommand = new Command(async () => await OnLogin(), CanLogin);
             PropertyChanged += (_, __) => LoginCommand.ChangeCanExecute();
             RegisterTutorFormCommand = new Command(async () => await OnRegisterFormClick());
@@ -47,7 +50,8 @@ namespace TutoringSystemMobile.ViewModels.Account
         private async Task OnLogin()
         {
             IsBusy = true;
-            var loginResult = await DependencyService.Get<IUserService>().TryLoginAsync(new LoginUserDto(Username, Password));
+            var loginUser = new LoginUserDto(Username, Password);
+            var loginResult = await userService.TryLoginAsync(loginUser);
             IsBusy = false;
 
             switch (loginResult.LoginStatus)

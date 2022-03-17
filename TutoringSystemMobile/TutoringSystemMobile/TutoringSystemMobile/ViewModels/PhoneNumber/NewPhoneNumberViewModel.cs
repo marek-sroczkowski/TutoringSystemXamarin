@@ -21,25 +21,28 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
 
         public Command AddPhoneNumberCommand { get; }
 
+        private readonly IPhoneNumberService phoneNumberService;
+
         public NewPhoneNumberViewModel(long contactId)
         {
             ContactId = contactId;
+            phoneNumberService = DependencyService.Get<IPhoneNumberService>();
             AddPhoneNumberCommand = new Command(async () => await OnAddPhoneNumber(), CanAddPhoneNumber);
             PropertyChanged += (_, __) => AddPhoneNumberCommand.ChangeCanExecute();
         }
 
         public bool CanAddPhoneNumber()
         {
-            return !Owner.IsEmpty() &&
-                !Number.IsEmpty() &&
-                !IsBusy;
+            return !Owner.IsEmpty()
+                && !Number.IsEmpty()
+                && !IsBusy;
         }
 
         private async Task OnAddPhoneNumber()
         {
             IsBusy = true;
-            var added = await DependencyService.Get<IPhoneNumberService>()
-                .AddPhoneNumberAsync(ContactId, new NewPhoneNumberDto(Owner, Number));
+            var newPhone = new NewPhoneNumberDto(Owner, Number);
+            var added = await phoneNumberService.AddPhoneNumberAsync(ContactId, newPhone);
             IsBusy = false;
 
             if (added)

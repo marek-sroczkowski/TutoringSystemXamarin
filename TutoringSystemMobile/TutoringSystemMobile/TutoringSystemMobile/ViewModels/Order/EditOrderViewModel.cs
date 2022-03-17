@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
@@ -40,18 +41,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             set
             {
                 SetValue(ref selectedStatus, value);
-                switch (selectedStatus)
-                {
-                    case PickerConstans.PendingOrder:
-                        Status = AdditionalOrderStatus.Pending;
-                        break;
-                    case PickerConstans.InProgressOrder:
-                        Status = AdditionalOrderStatus.InProgress;
-                        break;
-                    case PickerConstans.RealizedOrder:
-                        Status = AdditionalOrderStatus.Realized;
-                        break;
-                }
+                Status = StatusHelper.GetOrderStatus(selectedStatus);
             }
         }
 
@@ -70,7 +60,7 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public EditOrderViewModel()
         {
-            SetOrderStatuses();
+            Statuses = StatusHelper.GetOrderStatusesCollection();
             orderService = DependencyService.Get<IAdditionalOrderService>();
             EditOrderCommand = new Command(async () => await OnEditOrder(), CanEditOrder);
             PropertyChanged += (_, __) => EditOrderCommand.ChangeCanExecute();
@@ -78,19 +68,19 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public bool CanEditOrder()
         {
-            return !Name.IsEmpty() &&
-                   !Cost.IsEmpty() &&
-                   double.TryParse(Cost, out double cost) &&
-                   cost > 0 &&
-                   Deadline.HasValue &&
-                   !IsBusy;
+            return !Name.IsEmpty()
+                && !Cost.IsEmpty()
+                && double.TryParse(Cost, out double cost)
+                && cost > 0
+                && Deadline.HasValue
+                && !IsBusy;
         }
 
         private async Task OnEditOrder()
         {
             IsBusy = true;
-            bool updated = await orderService
-                .UpdateAdditionalOrderAsync(new UpdatedOrderDto(Id, Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid, Status));
+            var updatedOrder = new UpdatedOrderDto(Id, Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid, Status);
+            bool updated = await orderService.UpdateAdditionalOrderAsync(updatedOrder);
             IsBusy = false;
 
             if (updated)
@@ -104,16 +94,6 @@ namespace TutoringSystemMobile.ViewModels.Order
             }
         }
 
-        private void SetOrderStatuses()
-        {
-            Statuses = new List<string>
-            {
-                PickerConstans.PendingOrder,
-                PickerConstans.InProgressOrder,
-                PickerConstans.RealizedOrder
-            };
-        }
-
         private async void LoadOrderById(long orderId)
         {
             var order = await orderService.GetAdditionalOrderByIdAsync(orderId);
@@ -124,23 +104,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             IsPaid = order.IsPaid;
             Status = order.Status;
             Description = order.Description;
-            SetSelectedStatus();
-        }
-
-        public void SetSelectedStatus()
-        {
-            switch (Status)
-            {
-                case AdditionalOrderStatus.Pending:
-                    SelectedStatus = PickerConstans.PendingOrder;
-                    break;
-                case AdditionalOrderStatus.InProgress:
-                    SelectedStatus = PickerConstans.InProgressOrder;
-                    break;
-                case AdditionalOrderStatus.Realized:
-                    SelectedStatus = PickerConstans.RealizedOrder;
-                    break;
-            }
+            SelectedStatus = StatusHelper.GetOrderStatus(Status);
         }
     }
 }

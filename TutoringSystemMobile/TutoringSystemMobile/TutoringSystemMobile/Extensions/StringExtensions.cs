@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using Xamarin.Essentials;
 
@@ -42,6 +44,23 @@ namespace TutoringSystemMobile.Extensions
             return string.IsNullOrEmpty(status)
                 ? AccountStatus.LoggedOut
                 : (AccountStatus)Enum.Parse(typeof(AccountStatus), status);
+        }
+
+        public static bool IsValidEmail(this string email)
+        {
+            if (email.Trim().EndsWith("."))
+            {
+                return false;
+            }
+
+            try
+            {
+                return new MailAddress(email).Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

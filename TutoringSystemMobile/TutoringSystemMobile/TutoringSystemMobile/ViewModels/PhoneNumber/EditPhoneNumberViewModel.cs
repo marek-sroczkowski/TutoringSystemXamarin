@@ -38,16 +38,16 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
 
         public bool CanEditPhoneNumber()
         {
-            return !Owner.IsEmpty() &&
-                   !Number.IsEmpty() &&
-                   !IsBusy;
+            return !Owner.IsEmpty()
+                && !Number.IsEmpty()
+                && !IsBusy;
         }
 
         private async Task OnEditPhoneNumber()
         {
             IsBusy = true;
-            var updated = await phoneNumberService
-                .UpdatePhoneNumberAsync(ContactId, new UpdatedPhoneNumberDto(PhoneNumberId, Owner, Number));
+            var updatedPhone = new UpdatedPhoneNumberDto(PhoneNumberId, Owner, Number);
+            var updated = await phoneNumberService.UpdatePhoneNumberAsync(ContactId, updatedPhone);
             IsBusy = false;
 
             if (updated)

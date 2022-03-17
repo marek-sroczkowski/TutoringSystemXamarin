@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
-using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -43,24 +43,7 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public OrdersViewModel()
         {
-            MessagingCenter.Subscribe<OrderSortingViewModel>(this, MessagingCenterConstans.OrderSorting, async (sender) =>
-            {
-                SortBy = sender.SortBy;
-                await OnLoadOrders();
-            });
-            MessagingCenter.Subscribe<OrderFilteringViewModel>(this, MessagingCenterConstans.OrderFiltering, async (sender) =>
-            {
-                OrderParameters.DeadlineEnd = sender.DeadlineEnd;
-                OrderParameters.DeadlineStart = sender.DeadlineStart;
-                OrderParameters.IsInProgress = sender.IsInProgress;
-                OrderParameters.IsNotPaid = sender.IsNotPaid;
-                OrderParameters.IsPaid = sender.IsPaid;
-                OrderParameters.IsPending = sender.IsPending;
-                OrderParameters.IsRealized = sender.IsRealized;
-                OrderParameters.ReceiptEndDate = sender.ReceiptEndDate;
-                OrderParameters.ReceiptStartDate = sender.ReceiptStartDate;
-                await OnLoadOrders();
-            });
+            SubscribeEvents();
             OrderParameters = new AdditionalOrderParameters();
 
             orderService = DependencyService.Get<IAdditionalOrderService>();
@@ -79,10 +62,35 @@ namespace TutoringSystemMobile.ViewModels.Order
             SortBy = SortingConstans.SortByReceiptDateDesc;
         }
 
+        private void SubscribeEvents()
+        {
+            MessagingCenter.Subscribe<OrderSortingViewModel>(this, MessagingCenterConstans.OrderSorting, async (sender) =>
+            {
+                SortBy = sender.SortBy;
+                await OnLoadOrders();
+            });
+
+            MessagingCenter.Subscribe<OrderFilteringViewModel>(this, MessagingCenterConstans.OrderFiltering, async (sender) =>
+            {
+                OrderParameters.DeadlineEnd = sender.DeadlineEnd;
+                OrderParameters.DeadlineStart = sender.DeadlineStart;
+                OrderParameters.IsInProgress = sender.IsInProgress;
+                OrderParameters.IsNotPaid = sender.IsNotPaid;
+                OrderParameters.IsPaid = sender.IsPaid;
+                OrderParameters.IsPending = sender.IsPending;
+                OrderParameters.IsRealized = sender.IsRealized;
+                OrderParameters.ReceiptEndDate = sender.ReceiptEndDate;
+                OrderParameters.ReceiptStartDate = sender.ReceiptStartDate;
+                await OnLoadOrders();
+            });
+        }
+
         private async Task OnLoadOrders()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
@@ -90,12 +98,16 @@ namespace TutoringSystemMobile.ViewModels.Order
             OrderParameters.PageNumber = 1;
             OrderParameters.PageSize = 20;
             OrderParameters.OrderBy = SortBy;
+
             var ordersCollection = await orderService.GetAdditionalOrdersAsync(OrderParameters);
             CurrentPage = ordersCollection.Pagination.CurrentPage;
             HasNext = ordersCollection.Pagination.HasNext;
             Orders.Clear();
+
             foreach (var order in ordersCollection.Orders)
+            {
                 Orders.Add(order);
+            }
 
             IsRefreshing = false;
             IsBusy = false;
@@ -104,16 +116,22 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async Task OrdersTresholdReached()
         {
             if (IsBusy || !HasNext)
+            {
                 return;
+            }
 
             IsBusy = true;
             OrderParameters.PageNumber = ++CurrentPage;
             OrderParameters.PageSize = 20;
             OrderParameters.OrderBy = SortBy;
+
             var ordersCollection = await orderService.GetAdditionalOrdersAsync(OrderParameters);
             HasNext = ordersCollection.Pagination.HasNext;
+
             foreach (var order in ordersCollection.Orders)
+            {
                 Orders.Add(order);
+            }
 
             IsBusy = false;
         }
@@ -126,7 +144,9 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async Task OnOrderSelected(OrderDto order)
         {
             if (order == null)
+            {
                 return;
+            }
 
             await Shell.Current.GoToAsync($"{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={order.Id}");
         }
@@ -149,13 +169,17 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async Task OnChangeOrderStatus(OrderDto order)
         {
             if (order is null)
+            {
                 return;
+            }
 
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderStatus, GeneralConstans.Cancel, null, PickerConstans.PendingOrder, PickerConstans.InProgressOrder, PickerConstans.RealizedOrder);
             if (result is null || result == GeneralConstans.Cancel)
+            {
                 return;
+            }
 
-            var status = GetOrderStatus(result);
+            var status = StatusHelper.GetOrderStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
@@ -170,13 +194,17 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async Task OnChangePaymentStatus(OrderDto order)
         {
             if (order is null)
+            {
                 return;
+            }
 
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderPaymentStatus, GeneralConstans.Cancel, null, PickerConstans.OrderIsPaid, PickerConstans.OrderIsNotPaid);
             if (result is null || result == GeneralConstans.Cancel)
+            {
                 return;
+            }
 
-            var status = GetPaymentStatus(result);
+            var status = StatusHelper.GetOrderPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
@@ -185,33 +213,6 @@ namespace TutoringSystemMobile.ViewModels.Order
             else
             {
                 DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
-            }
-        }
-
-        private AdditionalOrderStatus GetOrderStatus(string statusString)
-        {
-            switch (statusString)
-            {
-                case PickerConstans.PendingOrder:
-                    return AdditionalOrderStatus.Pending;
-                case PickerConstans.InProgressOrder:
-                    return AdditionalOrderStatus.InProgress;
-                case PickerConstans.RealizedOrder:
-                    return AdditionalOrderStatus.Realized;
-                default:
-                    return AdditionalOrderStatus.Pending;
-            }
-        }
-
-        private bool GetPaymentStatus(string paymentStatusString)
-        {
-            switch (paymentStatusString)
-            {
-                case PickerConstans.OrderIsPaid:
-                    return true;
-                case PickerConstans.OrderIsNotPaid:
-                default:
-                    return false;
             }
         }
     }

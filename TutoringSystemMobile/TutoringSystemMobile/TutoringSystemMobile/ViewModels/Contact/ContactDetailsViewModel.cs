@@ -27,13 +27,13 @@ namespace TutoringSystemMobile.ViewModels.Contact
 
         public string Email
         {
-            get => !string.IsNullOrEmpty(email) ? email : GeneralConstans.NoValue;
+            get => string.IsNullOrEmpty(email) ? GeneralConstans.NoValue : email;
             set => SetValue(ref email, value);
         }
 
         public string DiscordName
         {
-            get => !string.IsNullOrEmpty(discordName) ? discordName : GeneralConstans.NoValue;
+            get => string.IsNullOrEmpty(discordName) ? GeneralConstans.NoValue : discordName;
             set => SetValue(ref discordName, value);
         }
 
@@ -113,8 +113,8 @@ namespace TutoringSystemMobile.ViewModels.Contact
             var removed = await phoneNumberService.DeletePhoneNumberAsync(Id, phone.Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
                 PhoneNumbers.Remove(phone);
+                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
             }
             else
             {

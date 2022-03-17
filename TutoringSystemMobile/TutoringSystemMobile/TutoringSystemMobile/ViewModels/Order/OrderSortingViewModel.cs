@@ -1,7 +1,6 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
-using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Helpers;
 using Xamarin.Forms;
 
@@ -212,7 +211,9 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async Task SortOrdersAsync(OrderSortingRadioButtonsActivity buttonsActivity)
         {
             if (IsBusy || PopupNavigation.Instance.PopupStack.Count == 0)
+            {
                 return;
+            }
 
             IsBusy = true;
             SetButtonsActivity(buttonsActivity);

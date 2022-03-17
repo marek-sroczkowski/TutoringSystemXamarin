@@ -39,7 +39,8 @@ namespace TutoringSystemMobile.ViewModels.Contact
         private async Task OnEditContact()
         {
             IsBusy = true;
-            var updated = await contactService.UpdateContactAsync(new UpdatedContactDto(Id, DiscordName));
+            var updatedContact = new UpdatedContactDto(Id, DiscordName);
+            var updated = await contactService.UpdateContactAsync(updatedContact);
             IsBusy = false;
 
             if (updated)
