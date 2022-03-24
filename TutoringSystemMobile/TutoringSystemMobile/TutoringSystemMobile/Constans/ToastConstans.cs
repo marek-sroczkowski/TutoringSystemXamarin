@@ -28,7 +28,7 @@
         public const string ChangedPassword = "Zmieniono hasło";
         public const string PasswordChangeFailed = "Zmiana hasła nie powiodła się!";
         public const string PasswordsVary = "Hasła różnią się";
-        public const string TooShortPassword = "Nowe hasło jest zbyt krótkie";
+        public const string NotMeetRequirementsPassword = "Nowe hasło powinno zawierać minimum 4 znaki i składać się z minimum 1 litery i cyfry";
         public const string DuplicateOfOldPassword = "Nowe hasło musi się różnić od starego";
         public const string InvalidOldPassword = "Niepoprawne stare hasło";
         public const string InternalError = "Wewnętrzny błąd aplikacji, spróbuj ponownie później!";

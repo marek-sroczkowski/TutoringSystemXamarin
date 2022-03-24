@@ -46,6 +46,11 @@ namespace TutoringSystemMobile.Extensions
                 : (AccountStatus)Enum.Parse(typeof(AccountStatus), status);
         }
 
+        public static WrongPasswordStatus GetPasswordChangeError(this string error)
+        {
+            return (WrongPasswordStatus)Enum.Parse(typeof(WrongPasswordStatus), error);
+        }
+
         public static bool IsValidEmail(this string email)
         {
             if (email.Trim().EndsWith("."))

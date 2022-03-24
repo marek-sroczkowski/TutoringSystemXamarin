@@ -36,7 +36,7 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200;
         }
 
-        public async Task<IEnumerable<WrongPasswordStatus>> ChangePasswordAsync(PasswordDto passwordModel)
+        public async Task<PasswordChangeError> ChangePasswordAsync(PasswordDto passwordModel)
         {
             string token = await SecureStorage.GetAsync("token");
             var response = await baseUrl
@@ -45,7 +45,7 @@ namespace TutoringSystemMobile.Services.Web
                 .AllowAnyHttpStatus()
                 .PatchJsonAsync(passwordModel);
 
-            return response.StatusCode == 400 ? await response.GetJsonAsync<IEnumerable<WrongPasswordStatus>>() : null;
+            return await GetPasswordChangeError(response);
         }
 
         public async Task<bool> DeactivateUserAsync()
@@ -165,6 +165,27 @@ namespace TutoringSystemMobile.Services.Web
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<ShortUserDto>() : new ShortUserDto();
+        }
+
+        private async Task<PasswordChangeError> GetPasswordChangeError(IFlurlResponse response)
+        {
+            if (response.StatusCode != 400)
+            {
+                return null;
+            }
+
+            PasswordChangeError result;
+            try
+            {
+                var content = await response.GetJsonAsync<ResponseError<PasswordChangeError>>();
+                result = content.Errors;
+            }
+            catch (Exception)
+            {
+                result = new PasswordChangeError { PasswordErrors = new List<string>() { WrongPasswordStatus.InternalError.ToString() } };
+            }
+
+            return result;
         }
     }
 }
