@@ -1,12 +1,9 @@
 ﻿using Rg.Plugins.Popup.Services;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Dtos.Account;
-using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
@@ -18,8 +15,8 @@ namespace TutoringSystemMobile.ViewModels.Profile
         private string oldPassword;
         private string newPassword = "";
         private string confirmPassword = "";
-        private bool isNewPasswordIncorrect = false;
-        private bool isConfirmPasswordIncorrect = false;
+        private bool isNewPasswordIncorrect;
+        private bool isConfirmPasswordIncorrect;
 
         public string OldPassword { get => oldPassword; set => SetValue(ref oldPassword, value); }
         public string NewPassword { get => newPassword; set => SetValue(ref newPassword, value); }
@@ -29,30 +26,31 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
         public Command ChangePasswordCommand { get; set; }
 
+        private readonly IUserService userService;
+
         public ChangePasswordViewModel()
         {
+            userService = DependencyService.Get<IUserService>();
             ChangePasswordCommand = new Command(async () => await OnChangePassword(), CanChangePassword);
             PropertyChanged += (_, __) => ChangePasswordCommand.ChangeCanExecute();
         }
 
         public bool CanChangePassword()
         {
-            IsNewPasswordIncorrect = !NewPassword.IsEmpty()
-                && !Regex.IsMatch(NewPassword, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$");
-            IsConfirmPasswordIncorrect = !ConfirmPassword.IsEmpty() &&
-                !NewPassword.Equals(ConfirmPassword);
+            IsNewPasswordIncorrect = !NewPassword.IsEmpty() && !Regex.IsMatch(NewPassword, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$");
+            IsConfirmPasswordIncorrect = !ConfirmPassword.IsEmpty() && !NewPassword.Equals(ConfirmPassword);
 
-            return !OldPassword.IsEmpty() &&
-                Regex.IsMatch(NewPassword, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$") &&
-                NewPassword.Equals(ConfirmPassword) &&
-                !IsBusy;
+            return !OldPassword.IsEmpty()
+                && Regex.IsMatch(NewPassword, @"^(?=.*[0-9])(?=.*[A-Za-z]).{6,32}$")
+                && NewPassword.Equals(ConfirmPassword)
+                && !IsBusy;
         }
 
         private async Task OnChangePassword()
         {
             IsBusy = true;
-            var errors = await DependencyService.Get<IUserService>()
-                .ChangePasswordAsync(new PasswordDto(NewPassword, ConfirmPassword, OldPassword));
+            var password = new PasswordDto(NewPassword, ConfirmPassword, OldPassword);
+            var errors = await userService.ChangePasswordAsync(password);
             IsBusy = false;
 
             if (errors is null)
@@ -62,37 +60,8 @@ namespace TutoringSystemMobile.ViewModels.Profile
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, GetErrorsMessage(errors), GeneralConstans.Ok);
+                await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, errors.ToString(), GeneralConstans.Ok);
             }
-        }
-
-        private string GetErrorsMessage(IEnumerable<WrongPasswordStatus> errors)
-        {
-            StringBuilder builder = new StringBuilder($"{ToastConstans.PasswordChangeFailed}\n");
-            foreach (var error in errors)
-            {
-                switch (error)
-                {
-                    case WrongPasswordStatus.PasswordsVary:
-                        builder.AppendLine(ToastConstans.PasswordsVary);
-                        break;
-                    case WrongPasswordStatus.TooShort:
-                        builder.AppendLine(ToastConstans.TooShortPassword);
-                        break;
-                    case WrongPasswordStatus.DuplicateOfOld:
-                        builder.AppendLine(ToastConstans.DuplicateOfOldPassword);
-                        break;
-                    case WrongPasswordStatus.InvalidOldPassword:
-                        builder.AppendLine(ToastConstans.InvalidOldPassword);
-                        break;
-                    case WrongPasswordStatus.InternalError:
-                    default:
-                        builder.AppendLine(ToastConstans.InternalError);
-                        break;
-                }
-            }
-
-            return builder.ToString();
         }
     }
 }
