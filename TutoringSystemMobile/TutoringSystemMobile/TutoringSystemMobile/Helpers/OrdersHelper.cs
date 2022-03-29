@@ -4,9 +4,9 @@ using TutoringSystemMobile.Models.Enums;
 
 namespace TutoringSystemMobile.Helpers
 {
-    public class StatusHelper
+    public class OrdersHelper
     {
-        public static List<string> GetOrderStatusesCollection()
+        public static List<string> GetStatusesCollection()
         {
             return new List<string>
             {
@@ -16,7 +16,7 @@ namespace TutoringSystemMobile.Helpers
             };
         }
 
-        public static AdditionalOrderStatus GetOrderStatus(string status)
+        public static AdditionalOrderStatus GetStatus(string status)
         {
             return status switch
             {
@@ -27,7 +27,7 @@ namespace TutoringSystemMobile.Helpers
             };
         }
 
-        public static string GetOrderStatus(AdditionalOrderStatus status)
+        public static string GetStatus(AdditionalOrderStatus status)
         {
             return status switch
             {
@@ -38,12 +38,12 @@ namespace TutoringSystemMobile.Helpers
             };
         }
 
-        public static string GetOrderPaymentStatus(bool isPaid)
+        public static string GetPaymentStatus(bool isPaid)
         {
             return isPaid ? PickerConstans.OrderIsPaid : PickerConstans.OrderIsNotPaid;
         }
 
-        public static bool GetOrderPaymentStatus(string paymentStatus)
+        public static bool GetPaymentStatus(string paymentStatus)
         {
             return paymentStatus switch
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Dtos.Subject;
 using TutoringSystemMobile.Services.Interfaces;
@@ -16,6 +17,8 @@ namespace TutoringSystemMobile.ViewModels.Subject
         public Command<SubjectDto> SubjectTapped { get; }
         public Command PageAppearingCommand { get; }
 
+        private readonly ISubjectService subjectService = DependencyService.Get<ISubjectService>();
+
         public SubjectsViewModel()
         {
             Subjects = new ObservableCollection<SubjectDto>();
@@ -30,9 +33,8 @@ namespace TutoringSystemMobile.ViewModels.Subject
             IsBusy = true;
 
             Subjects.Clear();
-            var subjects = await DependencyService.Get<ISubjectService>().GetSubjectsAsync();
-            foreach (var subject in subjects)
-                Subjects.Add(subject);
+            var subjects = await subjectService.GetSubjectsAsync();
+            subjects.ToList().ForEach(subject => Subjects.Add(subject));
 
             IsBusy = false;
         }
@@ -45,7 +47,9 @@ namespace TutoringSystemMobile.ViewModels.Subject
         private async Task OnSubjectSelected(SubjectDto subject)
         {
             if (subject == null)
+            {
                 return;
+            }
 
             await Shell.Current.GoToAsync($"{nameof(SubjectDetailsTutorPage)}?{nameof(SubjectDetailsViewModel.Id)}={subject.Id}");
         }

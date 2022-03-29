@@ -36,7 +36,7 @@ namespace TutoringSystemMobile.ViewModels.Report
         public Command OpenStudentsChartCommand { get; }
         public Command PageAppearingCommand { get; }
 
-        private readonly IReportService reportService;
+        private readonly IReportService reportService = DependencyService.Get<IReportService>();
 
         public StudentsReportViewModel()
         {
@@ -47,6 +47,7 @@ namespace TutoringSystemMobile.ViewModels.Report
                 IsIncludeZeroProfit = sender.IsIncludeZeroProfit;
                 await OnLoadReport();
             });
+
             MessagingCenter.Subscribe<ReportSortingViewModel>(this, MessagingCenterConstans.ReportSorting, async (sender) =>
             {
                 SortBy = sender.SortBy;
@@ -54,7 +55,6 @@ namespace TutoringSystemMobile.ViewModels.Report
             });
 
             SortBy = SortingConstans.SortByTotalProfitDesc;
-            reportService = DependencyService.Get<IReportService>();
             StudentReports = new ObservableCollection<StudentSummaryDto>();
             LoadReportCommand = new Command(async () => await OnLoadReport());
             OpenFilteringPopupCommand = new Command(async () => await OnOpenFilteringPopup());
@@ -86,21 +86,29 @@ namespace TutoringSystemMobile.ViewModels.Report
         private async Task OnLoadReport()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
-
-            StudentReports.Clear();
-            var reports = await reportService.GetStudentsReportAsync(new ReportParameters(StartDate, EndDate, SortBy));
-            if (!IsIncludeZeroProfit)
-                reports = reports.Where(r => r.TotalProfit > 0 && r.TotalHours > 0 && r.ReservationsCount > 0);
-            var formattedReports = reports.Select(r => new StudentSummaryDto(r.Username, r.StudentName, r.ReservationsCount, r.TotalHours, r.TotalProfit));
-            foreach (var report in formattedReports)
-                StudentReports.Add(report);
-
+            await GetReportAsync();
             IsBusy = false;
             IsRefreshing = false;
+        }
+
+        private async Task GetReportAsync()
+        {
+            StudentReports.Clear();
+
+            var reports = await reportService.GetStudentsReportAsync(new ReportParameters(StartDate, EndDate, SortBy));
+            if (!IsIncludeZeroProfit)
+            {
+                reports = reports.Where(r => r.TotalProfit > 0 && r.TotalHours > 0 && r.ReservationsCount > 0);
+            }
+
+            var formattedReports = reports.Select(r => new StudentSummaryDto(r.Username, r.StudentName, r.ReservationsCount, r.TotalHours, r.TotalProfit));
+            formattedReports.ToList().ForEach(report => StudentReports.Add(report));
         }
     }
 }

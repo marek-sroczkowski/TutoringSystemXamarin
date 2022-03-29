@@ -11,7 +11,7 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<AddStudentToTutorStatus> AddStudentToTutorAsync(NewExistingStudentDto student);
         Task<StudentDetailsDto> GetStudentByIdAsync(long studentId);
         Task<IEnumerable<StudentDto>> GetStudentsAsync();
-        Task<StudentsCollectionDto> GetTutorsByParamsAsync(SearchedUserParameters parameters);
+        Task<StudentsCollectionDto> GetStudentsByParamsAsync(SearchedUserParameters parameters);
         Task<bool> RemoveAllStudentsAsync();
         Task<bool> RemoveStudentAsync(long studentId);
         Task<bool> UpdateStudentAsync(UpdatedStudentDto student);

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Account;
-using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -31,6 +29,8 @@ namespace TutoringSystemMobile.ViewModels.Student
 
         public Command CreateStudentCommand { get; }
 
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
+
         public NewStudentViewModel()
         {
             CreateStudentCommand = new Command(async () => await OnCreateStudent(), CanCreateStudent);
@@ -40,34 +40,19 @@ namespace TutoringSystemMobile.ViewModels.Student
         private async Task OnCreateStudent()
         {
             IsBusy = true;
-            var errors = await DependencyService.Get<IUserService>().CreateStudentAsync(new NewStudentDto(FirstName, LastName, double.Parse(HourRate), Note, Username));
+            var student = new NewStudentDto(FirstName, LastName, double.Parse(HourRate), Note, Username);
+            var errors = await userService.CreateStudentAsync(student);
             IsBusy = false;
 
             if (errors is null)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SuccessfulRegistration);
+                ToastHelper.MakeLongToast(ToastConstans.SuccessfulRegistration);
                 await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, GetErrorsMessage(errors), GeneralConstans.Ok);
+                await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, errors.ToString(), GeneralConstans.Ok);
             }
-        }
-
-        private string GetErrorsMessage(RegisterErrors errors)
-        {
-            StringBuilder builder = new StringBuilder($"{ToastConstans.RegistrationFailed}\n");
-
-            if (errors.Username != null)
-            {
-                builder.AppendLine(ToastConstans.TakenLogin);
-            }
-            if (errors.Password != null)
-            {
-                builder.AppendLine(ToastConstans.IncorrectPassword);
-            }
-
-            return builder.ToString();
         }
 
         public bool CanCreateStudent()

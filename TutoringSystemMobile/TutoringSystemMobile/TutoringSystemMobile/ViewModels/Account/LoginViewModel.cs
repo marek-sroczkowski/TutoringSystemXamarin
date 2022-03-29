@@ -23,13 +23,14 @@ namespace TutoringSystemMobile.ViewModels.Account
         public Command LoginCommand { get; }
         public Command RegisterTutorFormCommand { get; }
 
-        private readonly IUserService userService;
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
+        private readonly IFlyoutService flyoutService = DependencyService.Get<IFlyoutService>();
 
         public LoginViewModel()
         {
-            userService = DependencyService.Get<IUserService>();
             LoginCommand = new Command(async () => await OnLogin(), CanLogin);
             PropertyChanged += (_, __) => LoginCommand.ChangeCanExecute();
+
             RegisterTutorFormCommand = new Command(async () => await OnRegisterFormClick());
         }
 
@@ -108,14 +109,14 @@ namespace TutoringSystemMobile.ViewModels.Account
         private async Task LoggedAsTutor()
         {
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
-            DependencyService.Get<IFlyoutItemService>().EnableTutorFlyoutItems();
+            flyoutService.EnableTutorFlyoutItems();
             await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
         }
 
         private async Task LoggedAsStudent()
         {
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
-            DependencyService.Get<IFlyoutItemService>().EnableStudentFlyoutItems();
+            flyoutService.EnableStudentFlyoutItems();
             await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
         }
     }

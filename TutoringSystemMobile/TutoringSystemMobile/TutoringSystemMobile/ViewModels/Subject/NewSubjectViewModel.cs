@@ -1,5 +1,4 @@
 ﻿using Rg.Plugins.Popup.Services;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
@@ -7,9 +6,9 @@ using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Dtos.Subject;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Subject
 {
@@ -35,30 +34,7 @@ namespace TutoringSystemMobile.ViewModels.Subject
             {
                 SetValue(ref place, value);
                 IsPlaceLabelVisible = true;
-                switch (place)
-                {
-                    case SubjectPlace.AtTutor:
-                        SelectedPlace = PickerConstans.AtTutor;
-                        break;
-                    case SubjectPlace.AtStudent:
-                        SelectedPlace = PickerConstans.AtStudent;
-                        break;
-                    case SubjectPlace.Online:
-                        SelectedPlace = PickerConstans.Online;
-                        break;
-                    case SubjectPlace.AtTutorAndAtStudent:
-                        SelectedPlace = PickerConstans.AtTutorAndAtStudent;
-                        break;
-                    case SubjectPlace.AtTutorAndOnline:
-                        SelectedPlace = PickerConstans.AtTutorAndOnline;
-                        break;
-                    case SubjectPlace.AtStudentAndOnline:
-                        SelectedPlace = PickerConstans.AtStudentAndOnline;
-                        break;
-                    case SubjectPlace.All:
-                        SelectedPlace = PickerConstans.AllPlaces;
-                        break;
-                }
+                SelectedPlace = SubjectHelper.GetPlace(place.Value);
             }
         }
         public string SelectedCategory
@@ -68,39 +44,7 @@ namespace TutoringSystemMobile.ViewModels.Subject
             {
                 SetValue(ref selectedCategory, value);
                 IsCategoryLabelVisible = true;
-                switch (selectedCategory)
-                {
-                    case PickerConstans.OtherSubjectCategory:
-                        Category = SubjectCategory.Other;
-                        break;
-                    case PickerConstans.Math:
-                        Category = SubjectCategory.Math;
-                        break;
-                    case PickerConstans.Informatics:
-                        Category = SubjectCategory.Informatics;
-                        break;
-                    case PickerConstans.ForeignLanguage:
-                        Category = SubjectCategory.ForeignLanguage;
-                        break;
-                    case PickerConstans.NativeLanguage:
-                        Category = SubjectCategory.NativeLanguage;
-                        break;
-                    case PickerConstans.Physics:
-                        Category = SubjectCategory.Physics;
-                        break;
-                    case PickerConstans.Biology:
-                        Category = SubjectCategory.Biology;
-                        break;
-                    case PickerConstans.Chemistry:
-                        Category = SubjectCategory.Chemistry;
-                        break;
-                    case PickerConstans.Music:
-                        Category = SubjectCategory.Music;
-                        break;
-                    case PickerConstans.Geography:
-                        Category = SubjectCategory.Geography;
-                        break;
-                }
+                Category = SubjectHelper.GetCategory(selectedCategory);
             }
         }
 
@@ -112,6 +56,8 @@ namespace TutoringSystemMobile.ViewModels.Subject
 
         public Command AddNewSubjectCommand { get; }
 
+        private readonly ISubjectService subjectService = DependencyService.Get<ISubjectService>();
+
         public NewSubjectViewModel()
         {
             MessagingCenter.Subscribe<SubjectPlaceViewModel>(this, MessagingCenterConstans.SubjectPlaceSelected, (sender) =>
@@ -121,8 +67,8 @@ namespace TutoringSystemMobile.ViewModels.Subject
 
             AddNewSubjectCommand = new Command(async () => await OnAddNewSubject(), CanAddNewSubject);
             PropertyChanged += (_, __) => AddNewSubjectCommand.ChangeCanExecute();
-            SetCategories();
-            SetPlaces();
+            Categories = SubjectHelper.GetCategories();
+            Places = SubjectHelper.GetPlaces();
             IsCategoryLabelVisible = false;
             IsPlaceLabelVisible = false;
         }
@@ -135,62 +81,32 @@ namespace TutoringSystemMobile.ViewModels.Subject
         private async Task OnAddNewSubject()
         {
             IsBusy = true;
-            long newOrderId = await DependencyService.Get<ISubjectService>().AddSubjectAsync(new NewSubjectDto(Name, Description, Place.Value, Category));
+            var subject = new NewSubjectDto(Name, Description, Place.Value, Category);
+            long newOrderId = await subjectService.AddSubjectAsync(subject);
             IsBusy = false;
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             else if(newOrderId == -2)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SubjectNameTaken);
+                ToastHelper.MakeLongToast(ToastConstans.SubjectNameTaken);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedSubject);
+                ToastHelper.MakeLongToast(ToastConstans.AddedSubject);
                 await Shell.Current.GoToAsync($"//{nameof(SubjectsTutorPage)}/{nameof(SubjectDetailsTutorPage)}?{nameof(SubjectDetailsViewModel.Id)}={newOrderId}");
             }
         }
 
         public bool CanAddNewSubject()
         {
-            return !Name.IsEmpty() &&
-                   !SelectedCategory.IsEmpty() &&
-                   !SelectedPlace.IsEmpty() &&
-                   Place.HasValue &&
-                   !IsBusy;
-        }
-
-        private void SetCategories()
-        {
-            Categories = new List<string>
-            {
-                PickerConstans.OtherSubjectCategory,
-                PickerConstans.Math,
-                PickerConstans.Informatics,
-                PickerConstans.ForeignLanguage,
-                PickerConstans.NativeLanguage,
-                PickerConstans.Physics,
-                PickerConstans.Biology,
-                PickerConstans.Chemistry,
-                PickerConstans.Music,
-                PickerConstans.Geography,
-            };
-        }
-
-        private void SetPlaces()
-        {
-            Places = new List<string>
-            {
-                PickerConstans.AllPlaces,
-                PickerConstans.AtTutor,
-                PickerConstans.AtStudent,
-                PickerConstans.Online,
-                PickerConstans.AtTutorAndAtStudent,
-                PickerConstans.AtTutorAndOnline,
-                PickerConstans.AtStudentAndOnline,
-            };
+            return !Name.IsEmpty()
+                && !SelectedCategory.IsEmpty()
+                && !SelectedPlace.IsEmpty()
+                && Place.HasValue
+                && !IsBusy;
         }
     }
 }

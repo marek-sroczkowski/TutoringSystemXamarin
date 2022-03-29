@@ -32,13 +32,13 @@ namespace TutoringSystemMobile.ViewModels.Student
         public Command ItemTresholdReachedCommand { get; }
         public Command<StudentSimpleDto> StudentTappedCommand { get; }
 
-        private readonly IStudentService studentService;
+        private readonly IStudentService studentService = DependencyService.Get<IStudentService>();
 
         public SearchStudentsViewModel()
         {
-            studentService = DependencyService.Get<IStudentService>();
             Students = new ObservableCollection<StudentSimpleDto>();
             SearchedUserParameters = new SearchedUserParameters();
+
             SearchStudentsCommand = new Command(async () => await OnSearchStudents(), CanSearchStudents);
             PropertyChanged += (_, __) => SearchStudentsCommand.ChangeCanExecute();
             LoadStudentsCommand = new Command(async () => await OnLoadStudents());
@@ -59,35 +59,42 @@ namespace TutoringSystemMobile.ViewModels.Student
         private async Task OnLoadStudents()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
+            await GetStudentsAsync();
+            IsRefreshing = false;
+            IsBusy = false;
+        }
 
+        private async Task GetStudentsAsync()
+        {
             SearchedUserParameters.PageNumber = 1;
             SearchedUserParameters.PageSize = 50;
             SearchedUserParameters.Params = SearchedParams;
-            var studentsCollection = await studentService.GetTutorsByParamsAsync(SearchedUserParameters);
+            var studentsCollection = await studentService.GetStudentsByParamsAsync(SearchedUserParameters);
             CurrentPage = studentsCollection.Pagination.CurrentPage;
             HasNext = studentsCollection.Pagination.HasNext;
             Students.Clear();
             studentsCollection.Students.ToList().ForEach(student => Students.Add(student));
-
-            IsRefreshing = false;
-            IsBusy = false;
         }
 
         private async Task StudentsTresholdReached()
         {
             if (IsBusy || !HasNext)
+            {
                 return;
+            }
 
             IsBusy = true;
 
             SearchedUserParameters.PageNumber = ++CurrentPage;
             SearchedUserParameters.PageSize = 50;
             SearchedUserParameters.Params = SearchedParams;
-            var studentsCollection = await studentService.GetTutorsByParamsAsync(SearchedUserParameters);
+            var studentsCollection = await studentService.GetStudentsByParamsAsync(SearchedUserParameters);
             HasNext = studentsCollection.Pagination.HasNext;
             studentsCollection.Students.ToList().ForEach(student => Students.Add(student));
 
@@ -97,7 +104,9 @@ namespace TutoringSystemMobile.ViewModels.Student
         private async Task OnStudentSelected(StudentSimpleDto student)
         {
             if (student is null)
+            {
                 return;
+            }
 
             await PopupNavigation.Instance.PushAsync(new NewExistingStudentTutorPopupPage(student.Id));
         }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Dtos.Student;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -20,12 +19,11 @@ namespace TutoringSystemMobile.ViewModels.Student
         public Command PageAppearingCommand { get; }
         public Command StudentRequestsCommand { get; }
 
-        public readonly IStudentService studentService;
+        public readonly IStudentService studentService = DependencyService.Get<IStudentService>();
 
         public StudentsViewModel()
         {
             Students = new ObservableCollection<DisplayedStudentDto>();
-            studentService = DependencyService.Get<IStudentService>();
             LoadStudentsCommand = new Command(async () => await LoadStudentsAsync());
             NewStudentCommand = new Command(async () => await OnNewStudent());
             StudentTapped = new Command<DisplayedStudentDto>(async (student) => await OnStudentSelected(student));
@@ -45,18 +43,17 @@ namespace TutoringSystemMobile.ViewModels.Student
             var students = await studentService.GetStudentsAsync();
             var disyplayedStudents = students.Select(s => new DisplayedStudentDto(s));
             Students.Clear();
-            foreach (var student in disyplayedStudents)
-            {
-                Students.Add(student);
-            }
+            disyplayedStudents.ToList().ForEach(student => Students.Add(student));
 
             IsBusy = false;
         }
 
         private async Task OnStudentSelected(DisplayedStudentDto student)
         {
-            if (student == null)
+            if (student is null)
+            {
                 return;
+            }
 
             await Shell.Current.GoToAsync($"{nameof(StudentDetailsTutorPage)}?{nameof(StudentDetailsViewModel.Id)}={student.Id}");
         }

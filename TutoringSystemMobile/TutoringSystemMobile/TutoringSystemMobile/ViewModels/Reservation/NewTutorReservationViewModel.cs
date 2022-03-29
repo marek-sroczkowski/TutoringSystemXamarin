@@ -3,14 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
-using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Dtos.Reservation;
 using TutoringSystemMobile.Models.Dtos.Student;
 using TutoringSystemMobile.Models.Dtos.Subject;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Reservation
 {
@@ -109,6 +108,7 @@ namespace TutoringSystemMobile.ViewModels.Reservation
                 IsFrequencyLabelVisible = isRecurring && !string.IsNullOrEmpty(SelectedFrequency);
             }
         }
+
         public bool IsCostVisible { get => isCostVisible; set => SetValue(ref isCostVisible, value); }
         public bool IsPlaceVisible { get => isPlaceVisible; set => SetValue(ref isPlaceVisible, value); }
         public bool IsStudentLabelVisible { get => isStudentLabelVisible; set => SetValue(ref isStudentLabelVisible, value); }
@@ -121,13 +121,18 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         public Command PageAppearingCommand { get; }
         public Command AddNewReservationCommand { get; }
 
+        private readonly IStudentService studentService = DependencyService.Get<IStudentService>();
+        private readonly ISubjectService subjectService = DependencyService.Get<ISubjectService>();
+        private readonly ISingleReservationService singleReservationService = DependencyService.Get<ISingleReservationService>();
+        private readonly IRecurringReservationService recurringReservationService = DependencyService.Get<IRecurringReservationService>();
+
         public NewTutorReservationViewModel()
         {
             DisplayedStudents = new ObservableCollection<StudentDto>();
             DisplayedSubjects = new ObservableCollection<SubjectDto>();
             SubjectPlaces = new ObservableCollection<string>();
-            SetFrequencies();
-            SetDurations();
+            Frequencies = ReservationHelper.GetFrequencies();
+            Durations = ReservationHelper.GetDurations();
             PageAppearingCommand = new Command(async () => await OnAppearing());
             AddNewReservationCommand = new Command(async () => await OnAddNewReservation(), CanAddNewReservation);
             PropertyChanged += (_, __) => AddNewReservationCommand.ChangeCanExecute();
@@ -135,15 +140,15 @@ namespace TutoringSystemMobile.ViewModels.Reservation
 
         public bool CanAddNewReservation()
         {
-            return StartTime.HasValue &&
-                int.TryParse(Duration, out int duration) &&
-                duration > 0 &&
-                double.TryParse(Cost, out double cost) &&
-                cost > 0 &&
-                !string.IsNullOrEmpty(SelectedPlace) &&
-                SelectedStudent != null &&
-                SelectedSubject != null &&
-                (!IsRecurring || !string.IsNullOrEmpty(SelectedFrequency));
+            return StartTime.HasValue
+                && int.TryParse(Duration, out int duration)
+                && duration > 0
+                && double.TryParse(Cost, out double cost)
+                && cost > 0
+                && !string.IsNullOrEmpty(SelectedPlace)
+                && SelectedStudent != null
+                && SelectedSubject != null
+                && (!IsRecurring || !string.IsNullOrEmpty(SelectedFrequency));
         }
 
         private async Task OnAppearing()
@@ -160,11 +165,11 @@ namespace TutoringSystemMobile.ViewModels.Reservation
 
             if (newReservationId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedReservation);
+                ToastHelper.MakeLongToast(ToastConstans.AddedReservation);
                 await Shell.Current.GoToAsync($"{nameof(ReservationDetailsTutorPage)}?{nameof(TutorReservationDetailsViewModel.Id)}={newReservationId}&{nameof(TutorReservationDetailsViewModel.StartTime)}={StartTime}&{nameof(TutorReservationDetailsViewModel.StartDate)}={StartDate.ToShortDateString()}");
             }
         }
@@ -184,12 +189,12 @@ namespace TutoringSystemMobile.ViewModels.Reservation
                 Duration = int.Parse(Duration),
                 StartTime = new DateTime(StartDate.Year, StartDate.Month, StartDate.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds),
                 Description = Description,
-                Place = GetPlace(),
+                Place = ReservationHelper.GetPlace(SelectedPlace),
                 StudentId = SelectedStudent.Id,
                 SubjectId = SelectedSubject.Id
             };
 
-            return await DependencyService.Get<ISingleReservationService>().AddReservationByTutorAsync(newReservation);
+            return await singleReservationService.AddReservationByTutorAsync(newReservation);
         }
 
         private async Task<long> AddRecurringReservationAsync()
@@ -200,42 +205,24 @@ namespace TutoringSystemMobile.ViewModels.Reservation
                 Duration = int.Parse(Duration),
                 StartTime = new DateTime(StartDate.Year, StartDate.Month, StartDate.Day, StartTime.Value.Hours, StartTime.Value.Minutes, StartTime.Value.Seconds),
                 Description = Description,
-                Place = GetPlace(),
-                Frequency = GetFrequency(),
+                Place = ReservationHelper.GetPlace(SelectedPlace),
+                Frequency = ReservationHelper.GetFrequency(SelectedFrequency),
                 StudentId = SelectedStudent.Id,
                 SubjectId = SelectedSubject.Id
             };
 
-            return await DependencyService.Get<IRecurringReservationService>().AddReservationByTutorAsync(newReservation);
-        }
-
-        private void SetFrequencies()
-        {
-            Frequencies = new ObservableCollection<string>
-            {
-                PickerConstans.WeeklyReservation,
-                PickerConstans.OnceTwoWeeksReservation,
-                PickerConstans.MonthlyReservation
-            };
-        }
-
-        private void SetDurations()
-        {
-            Durations = new ObservableCollection<string>
-            {
-                "30", "45", "60", "90", "120", "135", "150", "180", "210", "225", "240"
-            };
+            return await recurringReservationService.AddReservationByTutorAsync(newReservation);
         }
 
         private async Task GetStudents()
         {
-            var students = await DependencyService.Get<IStudentService>().GetStudentsAsync();
+            var students = await studentService.GetStudentsAsync();
             students.ToList().ForEach(student => DisplayedStudents.Add(student));
         }
 
         private async Task GetSubjects()
         {
-            var subjects = await DependencyService.Get<ISubjectService>().GetSubjectsAsync();
+            var subjects = await subjectService.GetSubjectsAsync();
             subjects.ToList().ForEach(subject => DisplayedSubjects.Add(subject));
         }
 
@@ -244,35 +231,19 @@ namespace TutoringSystemMobile.ViewModels.Reservation
             SubjectPlaces.Clear();
 
             if (SelectedSubject.Place.ToString().Contains(GeneralConstans.TutorEn))
+            {
                 SubjectPlaces.Add(PickerConstans.AtTutor);
+            }
 
             if (SelectedSubject.Place.ToString().Contains(GeneralConstans.StudentEn))
+            {
                 SubjectPlaces.Add(PickerConstans.AtStudent);
+            }
 
             if (SelectedSubject.Place.ToString().Contains(GeneralConstans.Online))
+            {
                 SubjectPlaces.Add(PickerConstans.Online);
-        }
-
-        private ReservationPlace GetPlace()
-        {
-            return SelectedPlace switch
-            {
-                PickerConstans.AtTutor => ReservationPlace.AtTutor,
-                PickerConstans.AtStudent => ReservationPlace.AtStudent,
-                PickerConstans.Online => ReservationPlace.Online,
-                _ => ReservationPlace.AtTutor
-            };
-        }
-
-        private ReservationFrequency GetFrequency()
-        {
-            return SelectedFrequency switch
-            {
-                PickerConstans.WeeklyReservation => ReservationFrequency.Weekly,
-                PickerConstans.OnceTwoWeeksReservation => ReservationFrequency.OnceTwoWeeks,
-                PickerConstans.MonthlyReservation => ReservationFrequency.Monthly,
-                _ => ReservationFrequency.Weekly
-            };
+            }
         }
     }
 }

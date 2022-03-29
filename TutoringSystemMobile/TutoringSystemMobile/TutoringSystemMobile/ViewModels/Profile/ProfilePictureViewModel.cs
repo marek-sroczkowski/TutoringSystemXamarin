@@ -15,20 +15,23 @@ namespace TutoringSystemMobile.ViewModels.Profile
     public class ProfilePictureViewModel : BaseViewModel
     {
         private long userId;
-        private ImageSource profileImage;
         private bool hasUserPhoto;
+        private ImageSource profileImage;
 
         public long UserId { get => userId; set => SetValue(ref userId, value); }
-        public ImageSource ProfileImage { get => profileImage; set => SetValue(ref profileImage, value); }
         public bool HasUserPhoto { get => hasUserPhoto; set => SetValue(ref hasUserPhoto, value); }
+        public ImageSource ProfileImage { get => profileImage; set => SetValue(ref profileImage, value); }
 
         public Command PageAppearingCommand { get; }
         public Command RemoveImageCommand { get; }
         public Command SetImageCommand { get; }
 
+        private readonly IImageService imageService = DependencyService.Get<IImageService>();
+
         public ProfilePictureViewModel()
         {
             HasUserPhoto = false;
+
             PageAppearingCommand = new Command(async () => await OnAppearing());
             RemoveImageCommand = new Command(async () => await OnRemoveImage());
             SetImageCommand = new Command(async () => await OnSetImage());
@@ -37,6 +40,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
         private async Task OnSetImage()
         {
             var result = await Shell.Current.DisplayActionSheet(string.Empty, GeneralConstans.Cancel, null, AlertConstans.Galerry, AlertConstans.Camera);
+            
             if (result == AlertConstans.Galerry)
             {
                 await LoadImageFromGallery();
@@ -50,22 +54,24 @@ namespace TutoringSystemMobile.ViewModels.Profile
         private async Task OnRemoveImage()
         {
             if (!HasUserPhoto)
+            {
                 return;
+            }
 
             IsBusy = true;
-            var removed = await DependencyService.Get<IImageService>().RemoveProfileImageAsync();
+            var removed = await imageService.RemoveProfileImageAsync();
 
             if (removed)
             {
                 await FirebaseStorageManager.RemoveImageFirebase($"{userId}.jpg");
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
+                ToastHelper.MakeLongToast(ToastConstans.Removed);
                 ProfileImage = ResourceConstans.DefaultUserPicture;
                 MessagingCenter.Send(this, MessagingCenterConstans.PhotoChanged);
                 HasUserPhoto = false;
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
 
             IsBusy = false;
@@ -73,7 +79,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
         private async Task OnAppearing()
         {
-            var image = await DependencyService.Get<IImageService>()?.GetProfileImageAsync();
+            var image = await imageService.GetProfileImageAsync();
             UserId = image.UserId;
 
             if (string.IsNullOrEmpty(image.ProfilePictureFirebaseUrl))
@@ -98,11 +104,11 @@ namespace TutoringSystemMobile.ViewModels.Profile
             }
             catch (PermissionException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.NoGalleryPermission);
+                ToastHelper.MakeLongToast(ToastConstans.NoGalleryPermission);
             }
             catch (Exception)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             finally
             {
@@ -118,11 +124,11 @@ namespace TutoringSystemMobile.ViewModels.Profile
             }
             catch (PermissionException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.NoCameraPermission);
+                ToastHelper.MakeLongToast(ToastConstans.NoCameraPermission);
             }
             catch (Exception)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             finally
             {
@@ -156,9 +162,10 @@ namespace TutoringSystemMobile.ViewModels.Profile
         {
             using var stream = photo.GetStreamWithImageRotatedForExternalStorage();
             var imageUrl = await FirebaseStorageManager.StoreImage(stream, $"{userId}.jpg");
+
             if (!string.IsNullOrEmpty(imageUrl))
             {
-                var set = await DependencyService.Get<IImageService>().SetProfileImageAsync(new ProfileImageDto(imageUrl));
+                var set = await imageService.SetProfileImageAsync(new ProfileImageDto(imageUrl));
 
                 if (set)
                 {
@@ -169,7 +176,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
                 else
                 {
                     await FirebaseStorageManager.RemoveImageFirebase($"{userId}.jpg");
-                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                    ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
                     HasUserPhoto = false;
                 }
             }

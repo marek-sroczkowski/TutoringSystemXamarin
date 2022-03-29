@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -19,14 +19,14 @@ namespace TutoringSystemMobile.ViewModels.Account
         public Command ActivateAccountCommand { get; }
         public Command NewActivationCodeCommand { get; }
 
-        private readonly IUserService userService;
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
+        private readonly IFlyoutService flyoutService = DependencyService.Get<IFlyoutService>();
 
         public AccountActivationViewModel()
         {
-            userService = DependencyService.Get<IUserService>();
-
             ActivateAccountCommand = new Command(async () => await OnActivateAccount(), CanActivateAccount);
             PropertyChanged += (_, __) => ActivateAccountCommand.ChangeCanExecute();
+
             NewActivationCodeCommand = new Command(async () => await OnNewActivationCode(), CanNewActivationCode);
             PropertyChanged += (_, __) => NewActivationCodeCommand.ChangeCanExecute();
         }
@@ -67,11 +67,11 @@ namespace TutoringSystemMobile.ViewModels.Account
 
             if (sent)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SentActivationCode);
+                ToastHelper.MakeLongToast(ToastConstans.SentActivationCode);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorActivationCodeSending);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorActivationCodeSending);
             }
         }
 
@@ -91,14 +91,14 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         private async Task LogInAsTutor()
         {
-            DependencyService.Get<IFlyoutItemService>().EnableTutorFlyoutItems();
+            flyoutService.EnableTutorFlyoutItems();
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
             await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
         }
 
         private async Task LogInAsStudent()
         {
-            DependencyService.Get<IFlyoutItemService>().EnableStudentFlyoutItems();
+            flyoutService.EnableStudentFlyoutItems();
             await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
             await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
         }

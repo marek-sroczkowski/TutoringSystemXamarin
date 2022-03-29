@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -26,11 +26,10 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public Command AddNewOrderCommand { get; }
 
-        private readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
 
         public NewOrderViewModel()
         {
-            orderService = DependencyService.Get<IAdditionalOrderService>();
             AddNewOrderCommand = new Command(async () => await OnAddNewOrder(), CanAddNewOrder);
             PropertyChanged += (_, __) => AddNewOrderCommand.ChangeCanExecute();
         }
@@ -54,11 +53,11 @@ namespace TutoringSystemMobile.ViewModels.Order
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedOrder);
+                ToastHelper.MakeLongToast(ToastConstans.AddedOrder);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={newOrderId}");
             }
         }

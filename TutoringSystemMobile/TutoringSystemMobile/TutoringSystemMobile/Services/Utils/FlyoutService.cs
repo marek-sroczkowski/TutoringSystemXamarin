@@ -3,10 +3,10 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(FlyoutItemService))]
+[assembly: Dependency(typeof(FlyoutService))]
 namespace TutoringSystemMobile.Services.Utils
 {
-    public class FlyoutItemService : IFlyoutItemService
+    public class FlyoutService : IFlyoutService
     {
         public void EnableTutorFlyoutItems()
         {

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -16,7 +17,6 @@ namespace TutoringSystemMobile.ViewModels.Profile
     public class MyProfileViewModel : BaseViewModel
     {
         private bool isDeactiveAccoutTabVisible;
-
         public bool IsDeactiveAccoutTabVisible { get => isDeactiveAccoutTabVisible; set => SetValue(ref isDeactiveAccoutTabVisible, value); }
 
         public Command EditGeneralInformationsCommand { get; }
@@ -29,9 +29,12 @@ namespace TutoringSystemMobile.ViewModels.Profile
         public Command RateAppCommand { get; }
         public Command LogoutCommand { get; }
 
+        private readonly IAddressService addressService = DependencyService.Get<IAddressService>();
+        private readonly IContactService contactService = DependencyService.Get<IContactService>();
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
+
         public MyProfileViewModel()
         {
-            OnAppearing();
             EditGeneralInformationsCommand = new Command(async () => await OnEditGeneralInformations());
             EditAddressCommand = new Command(async () => await OnEditAddress());
             EditContactCommand = new Command(async () => await OnEditContact());
@@ -41,6 +44,8 @@ namespace TutoringSystemMobile.ViewModels.Profile
             DarkModeCommand = new Command(async () => await OnDarkMode());
             RateAppCommand = new Command(async () => await OnRateApp());
             LogoutCommand = new Command(async () => await OnLogout());
+
+            OnAppearing();
         }
 
         private async void OnAppearing()
@@ -59,21 +64,22 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
         private async Task OnEditAddress()
         {
-            var address = await DependencyService.Get<IAddressService>().GetAddressOfLoggedInUserAsync();
+            var address = await addressService.GetAddressOfLoggedInUserAsync();
             await Shell.Current.GoToAsync($"{nameof(EditAddressPage)}?{nameof(EditAddressViewModel.Id)}={address.Id}");
         }
 
         private async Task OnEditContact()
         {
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.InformationToUpdate, GeneralConstans.Cancel, null, AlertConstans.GeneralContactDetails, AlertConstans.PhoneNumbers);
+
             if (result == AlertConstans.GeneralContactDetails)
             {
-                var contact = await DependencyService.Get<IContactService>().GetContactByLoggedInUserAsync();
+                var contact = await contactService.GetContactByLoggedInUserAsync();
                 await PopupNavigation.Instance.PushAsync(new EditContactPopupPage(contact.Id));
             }
             else if (result == AlertConstans.PhoneNumbers)
             {
-                var contact = await DependencyService.Get<IContactService>().GetContactByLoggedInUserAsync();
+                var contact = await contactService.GetContactByLoggedInUserAsync();
                 await Shell.Current.GoToAsync($"{nameof(EditPhonesPage)}?{nameof(EditPhonesViewModel.ContactId)}={contact.Id}");
             }
         }
@@ -91,13 +97,24 @@ namespace TutoringSystemMobile.ViewModels.Profile
         private async Task OnDeactivateAccount()
         {
             var result = await Shell.Current.DisplayAlert(AlertConstans.Confirmation, AlertConstans.AccountDeletionConfirmation, GeneralConstans.Yes, GeneralConstans.No);
+            
             if (result)
             {
-                var removed = await DependencyService.Get<IUserService>().DeactivateUserAsync();
-                if (removed)
-                    await OnLogout();
-                else
-                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                await TryDeactivateUserAsync();
+            }
+        }
+
+        private async Task TryDeactivateUserAsync()
+        {
+            var removed = await userService.DeactivateUserAsync();
+
+            if (removed)
+            {
+                await OnLogout();
+            }
+            else
+            {
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 

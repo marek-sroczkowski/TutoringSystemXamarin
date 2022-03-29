@@ -74,7 +74,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
             }
 
             Settings.Theme = mode;
-            TheTheme.SetTheme();
+            ThemeHelper.SetTheme();
         }
 
         private void SetAutomaticMode()

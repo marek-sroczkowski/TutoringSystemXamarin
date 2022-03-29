@@ -36,8 +36,7 @@ namespace TutoringSystemMobile.ViewModels.Report
         public Command OpenStudentsChartCommand { get; }
         public Command PageAppearingCommand { get; }
 
-        private readonly IReportService reportService;
-
+        private readonly IReportService reportService = DependencyService.Get<IReportService>();
 
         public PlacesReportViewModel()
         {
@@ -48,6 +47,7 @@ namespace TutoringSystemMobile.ViewModels.Report
                 IsIncludeZeroProfit = sender.IsIncludeZeroProfit;
                 await OnLoadReport();
             });
+
             MessagingCenter.Subscribe<ReportSortingViewModel>(this, MessagingCenterConstans.ReportSorting, async (sender) =>
             {
                 SortBy = sender.SortBy;
@@ -55,7 +55,6 @@ namespace TutoringSystemMobile.ViewModels.Report
             });
 
             SortBy = SortingConstans.SortByTotalProfitDesc;
-            reportService = DependencyService.Get<IReportService>();
             PlaceReport = new ObservableCollection<PlaceSummaryDto>();
             LoadReportCommand = new Command(async () => await OnLoadReport());
             OpenFilteringPopupCommand = new Command(async () => await OnOpenFilteringPopup());
@@ -87,21 +86,29 @@ namespace TutoringSystemMobile.ViewModels.Report
         private async Task OnLoadReport()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
+            await GetReportAsync();
+            IsRefreshing = false;
+            IsBusy = false;
+        }
 
+        private async Task GetReportAsync()
+        {
             PlaceReport.Clear();
+
             var reports = await reportService.GetPlaceReportAsync(new ReportParameters(StartDate, EndDate, SortBy));
             if (!IsIncludeZeroProfit)
+            {
                 reports = reports.Where(r => r.TotalProfit > 0 && r.TotalHours > 0 && r.ReservationsCount > 0);
-            var formattedReports = reports.Select(r => new PlaceSummaryDto(r.Place, r.ReservationsCount, r.TotalHours, r.TotalProfit));
-            foreach (var report in formattedReports)
-                PlaceReport.Add(report);
+            }
 
-            IsBusy = false;
-            IsRefreshing = false;
+            var formattedReports = reports.Select(r => new PlaceSummaryDto(r.Place, r.ReservationsCount, r.TotalHours, r.TotalProfit));
+            formattedReports.ToList().ForEach(report => PlaceReport.Add(report));
         }
     }
 }

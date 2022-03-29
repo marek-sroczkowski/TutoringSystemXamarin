@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PhoneNumber;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -25,13 +25,15 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
         public Command PageAppearingCommand { get; }
         public Command EditPhoneNumberCommand { get; }
 
-        private readonly IPhoneNumberService phoneNumberService;
+        private readonly IPhoneNumberService phoneNumberService = DependencyService.Get<IPhoneNumberService>();
+        private readonly IReloadContactService reloadContactService = DependencyService.Get<IReloadContactService>();
 
         public EditPhoneNumberViewModel(long phoneNumberId)
         {
             PhoneNumberId = phoneNumberId;
-            phoneNumberService = DependencyService.Get<IPhoneNumberService>();
+
             PageAppearingCommand = new Command(async () => await OnAppearing());
+
             EditPhoneNumberCommand = new Command(async () => await OnEditPhoneNumber(), CanEditPhoneNumber);
             PropertyChanged += (_, __) => EditPhoneNumberCommand.ChangeCanExecute();
         }
@@ -52,13 +54,13 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                ToastHelper.MakeLongToast(ToastConstans.Updated);
                 await PopupNavigation.Instance.PopAsync();
-                DependencyService.Get<IReloadContactService>().ReloadContact();
+                reloadContactService.ReloadContact();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 

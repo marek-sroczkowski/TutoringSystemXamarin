@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Account;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.Profile
@@ -26,11 +26,10 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
         public Command ChangePasswordCommand { get; set; }
 
-        private readonly IUserService userService;
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
 
         public ChangePasswordViewModel()
         {
-            userService = DependencyService.Get<IUserService>();
             ChangePasswordCommand = new Command(async () => await OnChangePassword(), CanChangePassword);
             PropertyChanged += (_, __) => ChangePasswordCommand.ChangeCanExecute();
         }
@@ -55,7 +54,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
             if (errors is null)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedPassword);
+                ToastHelper.MakeLongToast(ToastConstans.ChangedPassword);
                 await PopupNavigation.Instance.PopAsync();
             }
             else

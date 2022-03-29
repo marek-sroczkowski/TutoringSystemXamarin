@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Account;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -29,11 +29,10 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         public Command RegisterCommand { get; }
 
-        private readonly IUserService userService;
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
 
         public RegisterStudentViewModel()
         {
-            userService = DependencyService.Get<IUserService>();
             RegisterCommand = new Command(async () => await OnRegister(), CanRegister);
             PropertyChanged += (_, __) => RegisterCommand.ChangeCanExecute();
         }
@@ -60,7 +59,7 @@ namespace TutoringSystemMobile.ViewModels.Account
 
             if (errors is null)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.SuccessfulRegistration);
+                ToastHelper.MakeLongToast(ToastConstans.SuccessfulRegistration);
                 await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
             }
             else

@@ -2,8 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Parameters;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.Order
@@ -78,9 +78,10 @@ namespace TutoringSystemMobile.ViewModels.Order
         {
             if (!value && !IsPending && !IsRealized)
             {
-                DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
+                ToastHelper.MakeShortToast(ToastConstans.Min1Status);
                 IsPending = true;
             }
+
             SetValue(ref isInProgress, value);
         }
 
@@ -88,9 +89,10 @@ namespace TutoringSystemMobile.ViewModels.Order
         {
             if (!value && !IsInProgress && !IsRealized)
             {
-                DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
+                ToastHelper.MakeShortToast(ToastConstans.Min1Status);
                 IsInProgress = true;
             }
+
             SetValue(ref isPending, value);
         }
 
@@ -98,9 +100,10 @@ namespace TutoringSystemMobile.ViewModels.Order
         {
             if (!value && !IsInProgress && !IsPending)
             {
-                DependencyService.Get<IToast>()?.MakeShortToast(ToastConstans.Min1Status);
+                ToastHelper.MakeShortToast(ToastConstans.Min1Status);
                 IsInProgress = true;
             }
+
             SetValue(ref isRealized, value);
         }
     }

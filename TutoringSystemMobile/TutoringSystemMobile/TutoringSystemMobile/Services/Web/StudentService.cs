@@ -50,7 +50,7 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200 ? await response.GetJsonAsync<StudentDetailsDto>() : new StudentDetailsDto();
         }
 
-        public async Task<StudentsCollectionDto> GetTutorsByParamsAsync(SearchedUserParameters parameters)
+        public async Task<StudentsCollectionDto> GetStudentsByParamsAsync(SearchedUserParameters parameters)
         {
             string token = await SecureStorage.GetAsync("token");
             var response = await baseUrl

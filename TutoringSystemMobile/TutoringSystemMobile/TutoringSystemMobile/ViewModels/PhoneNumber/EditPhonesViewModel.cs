@@ -1,7 +1,9 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PhoneNumber;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -31,15 +33,12 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
         public Command<PhoneNumberDto> RemovePhoneNumberCommand { get; }
         public Command AddPhoneNumberCommand { get; }
 
-        private readonly IContactService contactService;
-        private readonly IPhoneNumberService phoneNumberService;
+        private readonly IContactService contactService = DependencyService.Get<IContactService>();
+        private readonly IPhoneNumberService phoneNumberService = DependencyService.Get<IPhoneNumberService>();
 
         public EditPhonesViewModel()
         {
             PhoneNumbers = new ObservableCollection<PhoneNumberDto>();
-
-            contactService = DependencyService.Get<IContactService>();
-            phoneNumberService = DependencyService.Get<IPhoneNumberService>();
 
             AddPhoneNumberCommand = new Command(async () => await OnAddNewPhone());
             RemovePhoneNumberCommand = new Command<PhoneNumberDto>(async (phone) => await OnRemovePhone(phone));
@@ -61,12 +60,12 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
             var removed = await phoneNumberService.DeletePhoneNumberAsync(ContactId, phone.Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
+                ToastHelper.MakeLongToast(ToastConstans.Removed);
                 PhoneNumbers.Remove(phone);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -81,10 +80,7 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
 
             var contact = await contactService.GetContactByIdAsync(contactId);
             PhoneNumbers.Clear();
-            foreach (var phone in contact.PhoneNumbers)
-            {
-                PhoneNumbers.Add(phone);
-            }
+            contact.PhoneNumbers.ToList().ForEach(phone => PhoneNumbers.Add(phone));
 
             IsBusy = false;
         }

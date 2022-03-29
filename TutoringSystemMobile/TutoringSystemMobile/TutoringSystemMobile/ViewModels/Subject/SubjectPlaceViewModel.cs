@@ -1,4 +1,5 @@
 ﻿using Rg.Plugins.Popup.Services;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
@@ -23,33 +24,7 @@ namespace TutoringSystemMobile.ViewModels.Subject
             set
             {
                 SetValue(ref place, value);
-                if (!place.HasValue)
-                    return;
-
-                switch (place)
-                {
-                    case SubjectPlace.All:
-                        SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, true, true));
-                        break;
-                    case SubjectPlace.AtTutor:
-                        SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(false, true, false));
-                        break;
-                    case SubjectPlace.AtStudent:
-                        SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(false, false, true));
-                        break;
-                    case SubjectPlace.Online:
-                        SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, false, false));
-                        break;
-                    case SubjectPlace.AtTutorAndAtStudent:
-                        SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(false, true, true));
-                        break;
-                    case SubjectPlace.AtTutorAndOnline:
-                        SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, true, false));
-                        break;
-                    case SubjectPlace.AtStudentAndOnline:
-                        SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, false, true));
-                        break;
-                }
+                SetSetCheckBoxByPlace();
             }
         }
 
@@ -75,8 +50,10 @@ namespace TutoringSystemMobile.ViewModels.Subject
 
         private async Task OnSetSubjectPlace()
         {
-            if (PopupNavigation.Instance.PopupStack.Count == 0)
+            if (!PopupNavigation.Instance.PopupStack.Any())
+            {
                 return;
+            }
 
             SetPlace();
             MessagingCenter.Send(this, MessagingCenterConstans.SubjectPlaceSelected);
@@ -87,19 +64,33 @@ namespace TutoringSystemMobile.ViewModels.Subject
         private void SetPlace()
         {
             if (IsTaughtAtTutor && IsTaughtAtStudent && IsTaughtOnline)
+            {
                 Place = SubjectPlace.All;
+            }
             else if (!IsTaughtAtTutor && IsTaughtAtStudent && IsTaughtOnline)
+            {
                 Place = SubjectPlace.AtStudentAndOnline;
+            }
             else if (IsTaughtAtTutor && !IsTaughtAtStudent && IsTaughtOnline)
+            {
                 Place = SubjectPlace.AtTutorAndOnline;
+            }
             else if (IsTaughtAtTutor && IsTaughtAtStudent && !IsTaughtOnline)
+            {
                 Place = SubjectPlace.AtTutorAndAtStudent;
+            }
             else if (!IsTaughtAtTutor && !IsTaughtAtStudent && IsTaughtOnline)
+            {
                 Place = SubjectPlace.Online;
+            }
             else if (IsTaughtAtTutor && !IsTaughtAtStudent && !IsTaughtOnline)
+            {
                 Place = SubjectPlace.AtTutor;
+            }
             else if (!IsTaughtAtTutor && IsTaughtAtStudent && !IsTaughtOnline)
+            {
                 Place = SubjectPlace.AtStudent;
+            }
         }
 
         private void OnTaughtOnline()
@@ -122,6 +113,39 @@ namespace TutoringSystemMobile.ViewModels.Subject
             IsTaughtOnline = activity.IsTaughtOnline;
             IsTaughtAtTutor = activity.IsTaughtAtTutor;
             IsTaughtAtStudent = activity.IsTaughtAtStudent;
+        }
+
+        private void SetSetCheckBoxByPlace()
+        {
+            if (!place.HasValue)
+            {
+                return;
+            }
+
+            switch (place)
+            {
+                case SubjectPlace.All:
+                    SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, true, true));
+                    break;
+                case SubjectPlace.AtTutor:
+                    SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(false, true, false));
+                    break;
+                case SubjectPlace.AtStudent:
+                    SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(false, false, true));
+                    break;
+                case SubjectPlace.Online:
+                    SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, false, false));
+                    break;
+                case SubjectPlace.AtTutorAndAtStudent:
+                    SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(false, true, true));
+                    break;
+                case SubjectPlace.AtTutorAndOnline:
+                    SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, true, false));
+                    break;
+                case SubjectPlace.AtStudentAndOnline:
+                    SetCheckBoxActivity(new SubjectPlaceCheckBoxActivity(true, false, true));
+                    break;
+            }
         }
     }
 }

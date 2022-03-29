@@ -1,9 +1,9 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Contact;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.Contact
@@ -19,16 +19,16 @@ namespace TutoringSystemMobile.ViewModels.Contact
         public Command PageAppearingCommand { get; }
         public Command EditContactCommand { get; }
 
-        private readonly IContactService contactService;
+        private readonly IContactService contactService = DependencyService.Get<IContactService>();
+        private readonly IReloadContactService reloadContactService = DependencyService.Get<IReloadContactService>();
 
         public EditContactViewModel(long contactId)
         {
             Id = contactId;
-            contactService = DependencyService.Get<IContactService>();
+
             PageAppearingCommand = new Command(async () => await OnAppearing());
             EditContactCommand = new Command(async () => await OnEditContact(), CanEditContact);
             PropertyChanged += (_, __) => EditContactCommand.ChangeCanExecute();
-
         }
 
         public bool CanEditContact()
@@ -45,13 +45,13 @@ namespace TutoringSystemMobile.ViewModels.Contact
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                ToastHelper.MakeLongToast(ToastConstans.Updated);
                 await PopupNavigation.Instance.PopAsync();
-                DependencyService.Get<IReloadContactService>().ReloadContact();
+                reloadContactService.ReloadContact();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 

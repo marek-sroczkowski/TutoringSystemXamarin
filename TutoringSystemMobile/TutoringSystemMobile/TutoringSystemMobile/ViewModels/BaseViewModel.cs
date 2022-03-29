@@ -41,9 +41,13 @@ namespace TutoringSystemMobile.ViewModels
             await Task.Run(async () =>
             {
                 if (Settings.Theme == AppThemeMode.Dark)
+                {
                     TabBackgroundColor = Color.FromHex("1f1f1f");
+                }
                 else if (Settings.Theme == AppThemeMode.Light)
+                {
                     TabBackgroundColor = Color.FromHex("dedede");
+                }
 
                 await Task.Delay(100);
                 TabBackgroundColor = Color.Transparent;

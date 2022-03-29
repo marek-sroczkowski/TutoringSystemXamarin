@@ -44,12 +44,12 @@ namespace TutoringSystemMobile.ViewModels.Address
         public Command PageAppearingCommand { get; }
         public Command NavigateToStudentCommand { get; }
 
-        private readonly IAddressService addressService;
+        private readonly IAddressService addressService = DependencyService.Get<IAddressService>();
 
         public AddressDetailsViewModel()
         {
-            addressService = DependencyService.Get<IAddressService>();
             PageAppearingCommand = new Command(async () => await OnAppearing());
+
             NavigateToStudentCommand = new Command(async () => await OnNavigateToStudent(), CanNavigateToStudent);
             PropertyChanged += (_, __) => NavigateToStudentCommand.ChangeCanExecute();
         }

@@ -11,6 +11,8 @@ using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
+using System.Linq;
 
 namespace TutoringSystemMobile.ViewModels.Contact
 {
@@ -50,17 +52,14 @@ namespace TutoringSystemMobile.ViewModels.Contact
         public Command<PhoneNumberDto> RemovePhoneNumberCommand { get; }
         public Command AddPhoneNumberCommand { get; }
 
-        private readonly IContactService contactService;
-        private readonly IPhoneNumberService phoneNumberService;
+        private readonly IContactService contactService = DependencyService.Get<IContactService>();
+        private readonly IPhoneNumberService phoneNumberService = DependencyService.Get<IPhoneNumberService>();
 
         public ContactDetailsViewModel()
         {
             GetLoggedInUserRole();
 
             PhoneNumbers = new ObservableCollection<PhoneNumberDto>();
-
-            contactService = DependencyService.Get<IContactService>();
-            phoneNumberService = DependencyService.Get<IPhoneNumberService>();
 
             PageAppearingCommand = new Command(async () => await OnAppearing());
             LoadContactCommand = new Command(async () => await OnLoadContact());
@@ -78,7 +77,13 @@ namespace TutoringSystemMobile.ViewModels.Contact
         private async Task OnLoadContact()
         {
             IsBusy = true;
+            await GetContactAsync();
+            IsBusy = false;
+            IsRefreshing = false;
+        }
 
+        private async Task GetContactAsync()
+        {
             Id = long.Parse(await SecureStorage.GetAsync(SecureStorageConstans.ContactId));
             var contact = await contactService.GetContactByIdAsync(Id);
 
@@ -87,13 +92,7 @@ namespace TutoringSystemMobile.ViewModels.Contact
             Owner = contact.Owner;
 
             PhoneNumbers.Clear();
-            foreach (var phone in contact.PhoneNumbers)
-            {
-                PhoneNumbers.Add(phone);
-            }
-
-            IsBusy = false;
-            IsRefreshing = false;
+            contact.PhoneNumbers.ToList().ForEach(phone => PhoneNumbers.Add(phone));
         }
 
         private async void GetLoggedInUserRole()
@@ -114,11 +113,11 @@ namespace TutoringSystemMobile.ViewModels.Contact
             if (removed)
             {
                 PhoneNumbers.Remove(phone);
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Removed);
+                ToastHelper.MakeLongToast(ToastConstans.Removed);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -141,15 +140,15 @@ namespace TutoringSystemMobile.ViewModels.Contact
             }
             catch (ArgumentNullException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.InvalidPhoneNumber);
+                ToastHelper.MakeLongToast(ToastConstans.InvalidPhoneNumber);
             }
             catch (FeatureNotSupportedException)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.FeatureNotSupported);
+                ToastHelper.MakeLongToast(ToastConstans.FeatureNotSupported);
             }
             catch (Exception)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.CanNotMakeCall);
+                ToastHelper.MakeLongToast(ToastConstans.CanNotMakeCall);
             }
         }
     }

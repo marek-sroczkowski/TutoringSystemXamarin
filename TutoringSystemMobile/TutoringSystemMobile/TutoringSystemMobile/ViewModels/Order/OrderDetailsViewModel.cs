@@ -4,7 +4,6 @@ using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -47,11 +46,10 @@ namespace TutoringSystemMobile.ViewModels.Order
         public Command EditOrderCommand { get; }
         public Command RemoveOrderCommand { get; }
 
-        private readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
 
         public OrderDetailsViewModel()
         {
-            orderService = DependencyService.Get<IAdditionalOrderService>();
             EditOrderCommand = new Command(async () => await OnRedirectToOrderEditPage());
             RemoveOrderCommand = new Command(async () => await OnRemoveRequest());
         }
@@ -69,8 +67,8 @@ namespace TutoringSystemMobile.ViewModels.Order
             ReceiptDate = order.ReceiptDate;
             Description = order.Description;
 
-            PaidStatus = StatusHelper.GetOrderPaymentStatus(IsPaid);
-            OrderStatus = StatusHelper.GetOrderStatus(Status);
+            PaidStatus = OrdersHelper.GetPaymentStatus(IsPaid);
+            OrderStatus = OrdersHelper.GetStatus(Status);
 
             IsBusy = false;
         }
@@ -94,12 +92,12 @@ namespace TutoringSystemMobile.ViewModels.Order
             var removed = await orderService.DeleteAdditionalOrderAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.OrderRemoved);
+                ToastHelper.MakeLongToast(ToastConstans.OrderRemoved);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

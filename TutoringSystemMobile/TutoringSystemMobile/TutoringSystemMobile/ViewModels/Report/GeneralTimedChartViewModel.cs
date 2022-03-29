@@ -8,6 +8,9 @@ using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.Dtos.Report;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace TutoringSystemMobile.ViewModels.Report
 {
@@ -46,37 +49,40 @@ namespace TutoringSystemMobile.ViewModels.Report
 
         public Chart Chart { get => chart; set => SetValue(ref chart, value); }
 
+        private readonly IReportService reportService = DependencyService.Get<IReportService>();
+
         public GeneralTimedChartViewModel()
         {
-            GeneralTimedReport = new ObservableCollection<GeneralTimedReportDto>();
-            SetMonths();
+            Months = DateTimeHelper.GetMonthNames();
             SetYears();
-            SetChartDataSource();
+            GeneralTimedReport = new ObservableCollection<GeneralTimedReportDto>();
+            ChartDataSources = ChartHelper.GetProfitNames();
             PageAppearingCommand = new Command(OnLoadReport);
         }
 
         private async void OnLoadReport()
         {
             if (IsBusy)
-                return;
-
-            IsBusy = true;
-
-            var reports = await DependencyService.Get<IReportService>().GetGeneralTimedReport(GetReportParameters());
-            GeneralTimedReport.Clear();
-            foreach (var report in reports)
             {
-                GeneralTimedReport.Add(report);
+                return;
             }
 
+            IsBusy = true;
+            await GetReportAsync();
             InitData();
-
             IsBusy = false;
+        }
+
+        private async Task GetReportAsync()
+        {
+            GeneralTimedReport.Clear();
+            var reports = await reportService.GetGeneralTimedReport(GetReportParameters());
+            reports.ToList().ForEach(report => GeneralTimedReport.Add(report));
         }
 
         private void InitData()
         {
-            IEnumerable<ChartEntry> entries = GetEntries();
+            var entries = GetEntries();
 
             Chart = new LineChart
             {
@@ -89,24 +95,13 @@ namespace TutoringSystemMobile.ViewModels.Report
 
         private IEnumerable<ChartEntry> GetEntries()
         {
-            IEnumerable<ChartEntry> entries;
-
-            switch (SelectedDataSource)
+            IEnumerable<ChartEntry> entries = SelectedDataSource switch
             {
-                case PickerConstans.TotalProfit:
-                default:
-                    entries = GetTotalProfitEntries();
-                    break;
-                case PickerConstans.TutoringProfit:
-                    entries = GetTutoringProfitEntries();
-                    break;
-                case PickerConstans.OrderProfit:
-                    entries = GetOrdersProfitEntries();
-                    break;
-                case PickerConstans.TotalHours:
-                    entries = GetTotalHoursEntries();
-                    break;
-            }
+                PickerConstans.TutoringProfit => GetTutoringProfitEntries(),
+                PickerConstans.OrderProfit => GetOrdersProfitEntries(),
+                PickerConstans.TotalHours => GetTotalHoursEntries(),
+                _ => GetTotalProfitEntries(),
+            };
 
             return entries;
         }
@@ -192,39 +187,10 @@ namespace TutoringSystemMobile.ViewModels.Report
         private void SetYears()
         {
             Years = new List<int>();
-            for (int i = 2015; i <= DateTime.Now.Year; i++)
+            for (int i = DateTime.Now.Year - 6; i <= DateTime.Now.Year; i++)
+            {
                 Years.Add(i);
-        }
-
-        private void SetChartDataSource()
-        {
-            ChartDataSources = new List<string>
-            {
-                PickerConstans.TotalProfit,
-                PickerConstans.TutoringProfit,
-                PickerConstans.OrderProfit,
-                PickerConstans.TotalHours
-            };
-        }
-
-
-        private void SetMonths()
-        {
-            Months = new List<string>
-            {
-                PickerConstans.January,
-                PickerConstans.February,
-                PickerConstans.March,
-                PickerConstans.April,
-                PickerConstans.May,
-                PickerConstans.June,
-                PickerConstans.July,
-                PickerConstans.August,
-                PickerConstans.September,
-                PickerConstans.October,
-                PickerConstans.November,
-                PickerConstans.October
-            };
+            }
         }
     }
 }

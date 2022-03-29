@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PhoneNumber;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.PhoneNumber
@@ -21,12 +21,13 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
 
         public Command AddPhoneNumberCommand { get; }
 
-        private readonly IPhoneNumberService phoneNumberService;
+        private readonly IPhoneNumberService phoneNumberService = DependencyService.Get<IPhoneNumberService>();
+        private readonly IReloadContactService reloadContactService = DependencyService.Get<IReloadContactService>();
 
         public NewPhoneNumberViewModel(long contactId)
         {
             ContactId = contactId;
-            phoneNumberService = DependencyService.Get<IPhoneNumberService>();
+
             AddPhoneNumberCommand = new Command(async () => await OnAddPhoneNumber(), CanAddPhoneNumber);
             PropertyChanged += (_, __) => AddPhoneNumberCommand.ChangeCanExecute();
         }
@@ -48,11 +49,11 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
             if (added)
             {
                 await PopupNavigation.Instance.PopAsync();
-                DependencyService.Get<IReloadContactService>().ReloadContact();
+                reloadContactService.ReloadContact();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

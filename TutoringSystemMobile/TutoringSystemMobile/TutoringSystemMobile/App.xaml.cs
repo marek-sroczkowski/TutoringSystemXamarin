@@ -13,13 +13,13 @@ namespace TutoringSystemMobile
 {
     public partial class App : Application
     {
-        private readonly IFlyoutItemService flyoutItemService;
+        private readonly IFlyoutService flyoutItemService;
 
         public App()
         {
             InitializeComponent();
-            TheTheme.SetTheme();
-            flyoutItemService = DependencyService.Get<IFlyoutItemService>();
+            ThemeHelper.SetTheme();
+            flyoutItemService = DependencyService.Get<IFlyoutService>();
             MainPage = new AppShell();
 
             //CrossFirebasePushNotification.Current.OnTokenRefresh += async (s, p) =>
@@ -55,7 +55,7 @@ namespace TutoringSystemMobile
 
         protected override void OnResume()
         {
-            TheTheme.SetTheme();
+            ThemeHelper.SetTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
 
@@ -63,7 +63,7 @@ namespace TutoringSystemMobile
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                TheTheme.SetTheme();
+                ThemeHelper.SetTheme();
             });
         }
 

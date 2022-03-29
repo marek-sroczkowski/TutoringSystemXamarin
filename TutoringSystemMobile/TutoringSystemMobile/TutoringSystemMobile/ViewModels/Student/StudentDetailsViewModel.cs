@@ -1,9 +1,9 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Student;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.Address;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
@@ -40,11 +40,10 @@ namespace TutoringSystemMobile.ViewModels.Student
         public Command EditStudentCommand { get; }
         public Command RemoveStudentCommand { get; }
 
-        private readonly IStudentService studentService;
+        private readonly IStudentService studentService = DependencyService.Get<IStudentService>();
 
         public StudentDetailsViewModel()
         {
-            studentService = DependencyService.Get<IStudentService>();
             PageAppearingCommand = new Command(async () => await OnAppearing());
             EditStudentCommand = new Command(async () => await OnEditStudent());
             RemoveStudentCommand = new Command(async () => await OnRemoveStudent());
@@ -75,7 +74,9 @@ namespace TutoringSystemMobile.ViewModels.Student
         {
             var result = await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, $"{AlertConstans.ConfirmationRemovePrefix} {Username} {AlertConstans.FromStudentList}", GeneralConstans.Yes, GeneralConstans.No);
             if (result)
+            {
                 await RemoveStudentAsync();
+            }
         }
 
         private async Task RemoveStudentAsync()
@@ -83,13 +84,13 @@ namespace TutoringSystemMobile.ViewModels.Student
             var removed = await studentService.RemoveStudentAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.StudentRemoved);
+                ToastHelper.MakeLongToast(ToastConstans.StudentRemoved);
                 await DependencyService.Get<IImageSynchronizer>().SynchronizeStudentImages();
                 await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 

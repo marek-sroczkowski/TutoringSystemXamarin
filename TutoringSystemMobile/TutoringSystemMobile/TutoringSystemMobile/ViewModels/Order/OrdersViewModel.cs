@@ -1,5 +1,6 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Helpers;
@@ -39,15 +40,14 @@ namespace TutoringSystemMobile.ViewModels.Order
         public Command<OrderDto> ChangeOrderStatusCommand { get; }
         public Command<OrderDto> ChangePaymentStatusCommand { get; }
 
-        private readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
 
         public OrdersViewModel()
         {
             SubscribeEvents();
             OrderParameters = new AdditionalOrderParameters();
-
-            orderService = DependencyService.Get<IAdditionalOrderService>();
             Orders = new ObservableCollection<OrderDto>();
+            SortBy = SortingConstans.SortByReceiptDateDesc;
 
             LoadOrdersCommand = new Command(async () => await OnLoadOrders());
             ItemTresholdReachedCommand = new Command(async () => await OrdersTresholdReached());
@@ -58,8 +58,6 @@ namespace TutoringSystemMobile.ViewModels.Order
             PageAppearingCommand = new Command(async () => await OnAppearing());
             ChangeOrderStatusCommand = new Command<OrderDto>(async (order) => await OnChangeOrderStatus(order));
             ChangePaymentStatusCommand = new Command<OrderDto>(async (order) => await OnChangePaymentStatus(order));
-
-            SortBy = SortingConstans.SortByReceiptDateDesc;
         }
 
         private void SubscribeEvents()
@@ -94,7 +92,13 @@ namespace TutoringSystemMobile.ViewModels.Order
 
             IsBusy = true;
             IsRefreshing = true;
+            await GetOrdersAsync();
+            IsRefreshing = false;
+            IsBusy = false;
+        }
 
+        private async Task GetOrdersAsync()
+        {
             OrderParameters.PageNumber = 1;
             OrderParameters.PageSize = 20;
             OrderParameters.OrderBy = SortBy;
@@ -103,14 +107,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             CurrentPage = ordersCollection.Pagination.CurrentPage;
             HasNext = ordersCollection.Pagination.HasNext;
             Orders.Clear();
-
-            foreach (var order in ordersCollection.Orders)
-            {
-                Orders.Add(order);
-            }
-
-            IsRefreshing = false;
-            IsBusy = false;
+            ordersCollection.Orders.ToList().ForEach(order => Orders.Add(order));
         }
 
         private async Task OrdersTresholdReached()
@@ -127,11 +124,7 @@ namespace TutoringSystemMobile.ViewModels.Order
 
             var ordersCollection = await orderService.GetAdditionalOrdersAsync(OrderParameters);
             HasNext = ordersCollection.Pagination.HasNext;
-
-            foreach (var order in ordersCollection.Orders)
-            {
-                Orders.Add(order);
-            }
+            ordersCollection.Orders.ToList().ForEach(order => Orders.Add(order));
 
             IsBusy = false;
         }
@@ -179,15 +172,15 @@ namespace TutoringSystemMobile.ViewModels.Order
                 return;
             }
 
-            var status = StatusHelper.GetOrderStatus(result);
+            var status = OrdersHelper.GetStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedOrderStatus);
+                ToastHelper.MakeLongToast(ToastConstans.ChangedOrderStatus);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -204,15 +197,15 @@ namespace TutoringSystemMobile.ViewModels.Order
                 return;
             }
 
-            var status = StatusHelper.GetOrderPaymentStatus(result);
+            var status = OrdersHelper.GetPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedOrderPaymentStatus);
+                ToastHelper.MakeLongToast(ToastConstans.ChangedOrderPaymentStatus);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

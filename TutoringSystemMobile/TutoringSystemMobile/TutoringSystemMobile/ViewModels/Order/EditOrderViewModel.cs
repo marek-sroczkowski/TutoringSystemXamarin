@@ -7,7 +7,6 @@ using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -41,7 +40,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             set
             {
                 SetValue(ref selectedStatus, value);
-                Status = StatusHelper.GetOrderStatus(selectedStatus);
+                Status = OrdersHelper.GetStatus(selectedStatus);
             }
         }
 
@@ -56,12 +55,12 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public Command EditOrderCommand { get; }
 
-        private readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
 
         public EditOrderViewModel()
         {
-            Statuses = StatusHelper.GetOrderStatusesCollection();
-            orderService = DependencyService.Get<IAdditionalOrderService>();
+            Statuses = OrdersHelper.GetStatusesCollection();
+
             EditOrderCommand = new Command(async () => await OnEditOrder(), CanEditOrder);
             PropertyChanged += (_, __) => EditOrderCommand.ChangeCanExecute();
         }
@@ -85,12 +84,12 @@ namespace TutoringSystemMobile.ViewModels.Order
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                ToastHelper.MakeLongToast(ToastConstans.Updated);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={Id}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -104,7 +103,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             IsPaid = order.IsPaid;
             Status = order.Status;
             Description = order.Description;
-            SelectedStatus = StatusHelper.GetOrderStatus(Status);
+            SelectedStatus = OrdersHelper.GetStatus(Status);
         }
     }
 }

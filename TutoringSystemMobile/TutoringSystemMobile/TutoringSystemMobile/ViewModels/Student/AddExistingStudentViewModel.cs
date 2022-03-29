@@ -4,9 +4,9 @@ using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Dtos.Student;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Student
 {
@@ -22,9 +22,12 @@ namespace TutoringSystemMobile.ViewModels.Student
 
         public Command AddStudentCommand { get; }
 
+        private readonly IStudentService studentService = DependencyService.Get<IStudentService>();
+
         public AddExistingStudentViewModel(long studentId)
         {
             StudentId = studentId;
+
             AddStudentCommand = new Command(async () => await OnAddStudent(), CanAddStudent);
             PropertyChanged += (_, __) => AddStudentCommand.ChangeCanExecute();
         }
@@ -32,17 +35,17 @@ namespace TutoringSystemMobile.ViewModels.Student
         private async Task OnAddStudent()
         {
             IsBusy = true;
-            var status = await DependencyService.Get<IStudentService>().AddStudentToTutorAsync(new
-                NewExistingStudentDto(StudentId, double.Parse(HourRate), Note));
+            var student = new NewExistingStudentDto(StudentId, double.Parse(HourRate), Note);
+            var status = await studentService.AddStudentToTutorAsync(student);
             IsBusy = false;
 
             switch (status)
             {
                 case AddStudentToTutorStatus.InternalError:
-                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                    ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
                     break;
                 case AddStudentToTutorStatus.Added:
-                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedStudent);
+                    ToastHelper.MakeLongToast(ToastConstans.AddedStudent);
                     await DependencyService.Get<IImageSynchronizer>().SynchronizeStudentImages();
                     await Shell.Current.GoToAsync($"//{nameof(StudentsTutorPage)}");
                     break;
@@ -59,9 +62,9 @@ namespace TutoringSystemMobile.ViewModels.Student
 
         public bool CanAddStudent()
         {
-            return double.TryParse(HourRate, out double hourRate) &&
-                hourRate > 0 &&
-                !IsBusy;
+            return double.TryParse(HourRate, out double hourRate)
+                && hourRate > 0
+                && !IsBusy;
         }
     }
 }
