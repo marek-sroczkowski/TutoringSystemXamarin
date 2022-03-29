@@ -1,6 +1,7 @@
 ﻿using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Reservation;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -16,7 +17,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public RepeatedReservationService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "reservation/repeated";
+            baseUrl = Settings.BaseApiUrl + "reservation/repeated";
         }
 
         public async Task<IEnumerable<RepeatedReservationDto>> GetReservationsByStudentAsync()

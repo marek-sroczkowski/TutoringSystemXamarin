@@ -3,6 +3,7 @@ using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Subject;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
@@ -19,7 +20,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public SubjectService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "subject";
+            baseUrl = Settings.BaseApiUrl + "subject";
         }
 
         public async Task<long> AddSubjectAsync(NewSubjectDto newSubjectModel)

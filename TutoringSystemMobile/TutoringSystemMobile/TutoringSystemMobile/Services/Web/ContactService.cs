@@ -1,5 +1,6 @@
 ﻿using Flurl.Http;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Contact;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -15,7 +16,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public ContactService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "contact";
+            baseUrl = Settings.BaseApiUrl + "contact";
         }
 
         public async Task<ContactDetailsDto> GetContactByIdAsync(long contactId)

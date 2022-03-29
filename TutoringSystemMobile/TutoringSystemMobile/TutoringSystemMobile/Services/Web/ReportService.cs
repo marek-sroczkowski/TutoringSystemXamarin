@@ -8,6 +8,7 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 [assembly: Dependency(typeof(ReportService))]
 namespace TutoringSystemMobile.Services.Web
@@ -18,7 +19,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public ReportService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "report";
+            baseUrl = Settings.BaseApiUrl + "report";
         }
 
         public async Task<GeneralReportDto> GetGeneralReportAsync(ReportParameters parameters)

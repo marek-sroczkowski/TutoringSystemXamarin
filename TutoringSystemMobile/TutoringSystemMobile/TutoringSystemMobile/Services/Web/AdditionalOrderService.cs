@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Pagination;
@@ -21,7 +22,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public AdditionalOrderService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "order";
+            baseUrl = Settings.BaseApiUrl + "order";
         }
 
         public async Task<long> AddAdditionalOrderAsync(NewOrderDto newOrder)

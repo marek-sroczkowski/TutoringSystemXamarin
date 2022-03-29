@@ -1,6 +1,7 @@
 ﻿using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PhoneNumber;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -16,7 +17,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public PhoneNumberService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "contact";
+            baseUrl = Settings.BaseApiUrl + "contact";
         }
 
         public async Task<bool> AddPhoneNumberAsync(long contactId, NewPhoneNumberDto newPhoneNumber)

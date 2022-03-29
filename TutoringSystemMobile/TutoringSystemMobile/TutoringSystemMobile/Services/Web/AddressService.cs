@@ -1,5 +1,6 @@
 ﻿using Flurl.Http;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Address;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -15,7 +16,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public AddressService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "address";
+            baseUrl = Settings.BaseApiUrl + "address";
         }
 
         public async Task<AddressDetailsDto> GetAddressByIdAsync(long addressId)

@@ -3,6 +3,7 @@ using Flurl.Http;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Account;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Errors;
@@ -20,7 +21,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public UserService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "account";
+            baseUrl = Settings.BaseApiUrl + "account";
         }
 
         public async Task<bool> ActivateUserByTokenAsync(string activationToken)

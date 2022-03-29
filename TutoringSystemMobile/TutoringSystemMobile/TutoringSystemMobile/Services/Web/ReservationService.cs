@@ -9,6 +9,7 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 [assembly: Dependency(typeof(ReservationService))]
 namespace TutoringSystemMobile.Services.Web
@@ -19,7 +20,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public ReservationService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "reservation";
+            baseUrl = Settings.BaseApiUrl + "reservation";
         }
 
         public async Task<ReservationsCollectionDto> GetReservationsByStudentAsync(ReservationParameters parameters)

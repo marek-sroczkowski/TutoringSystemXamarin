@@ -1,6 +1,7 @@
 ﻿using Flurl.Http;
 using Plugin.FirebasePushNotification;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PushNotificationToken;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -16,7 +17,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public PushNotificationTokenService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "pushNotification/token";
+            baseUrl = Settings.BaseApiUrl + "pushNotification/token";
         }
 
         public async Task<bool> PutTokenAsync()

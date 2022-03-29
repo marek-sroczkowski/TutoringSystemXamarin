@@ -10,6 +10,7 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 [assembly: Dependency(typeof(SingleReservationService))]
 namespace TutoringSystemMobile.Services.Web
@@ -20,7 +21,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public SingleReservationService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "reservation/single";
+            baseUrl = Settings.BaseApiUrl + "reservation/single";
         }
 
         public async Task<long> AddReservationByStudentAsync(NewStudentSingleReservationDto newReservation)

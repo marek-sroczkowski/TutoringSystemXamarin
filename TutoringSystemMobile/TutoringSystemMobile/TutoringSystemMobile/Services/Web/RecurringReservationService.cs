@@ -11,6 +11,7 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 [assembly: Dependency(typeof(RecurringReservationService))]
 namespace TutoringSystemMobile.Services.Web
@@ -21,7 +22,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public RecurringReservationService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "reservation/recurring";
+            baseUrl = Settings.BaseApiUrl + "reservation/recurring";
         }
 
         public async Task<long> AddReservationByStudentAsync(NewStudentRecurringReservationDto newReservation)

@@ -12,6 +12,7 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 [assembly: Dependency(typeof(TutorService))]
 namespace TutoringSystemMobile.Services.Web
@@ -22,7 +23,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public TutorService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "tutor";
+            baseUrl = Settings.BaseApiUrl + "tutor";
         }
 
         public async Task<IEnumerable<TutorDto>> GetTutorsByStudentAsync()

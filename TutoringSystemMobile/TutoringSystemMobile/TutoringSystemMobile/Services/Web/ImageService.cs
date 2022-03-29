@@ -2,6 +2,7 @@
 using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Images;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
@@ -17,7 +18,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public ImageService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "image";
+            baseUrl = Settings.BaseApiUrl + "image";
         }
 
         public async Task<bool> SetProfileImageAsync(ProfileImageDto image)

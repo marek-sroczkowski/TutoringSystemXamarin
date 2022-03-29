@@ -9,6 +9,7 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 [assembly: Dependency(typeof(StudentRequestService))]
 namespace TutoringSystemMobile.Services.Web
@@ -19,7 +20,7 @@ namespace TutoringSystemMobile.Services.Web
 
         public StudentRequestService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "student/request";
+            baseUrl = Settings.BaseApiUrl + "student/request";
         }
 
         public async Task<AddTutorToStudentStatus> AddRequestAsync(long tutorId)
