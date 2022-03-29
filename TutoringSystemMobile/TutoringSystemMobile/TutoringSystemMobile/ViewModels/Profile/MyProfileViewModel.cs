@@ -48,12 +48,10 @@ namespace TutoringSystemMobile.ViewModels.Profile
             OnAppearing();
         }
 
-        private async void OnAppearing()
+        private void OnAppearing()
         {
             IsBusy = true;
-            var roleString = await SecureStorage.GetAsync($"{nameof(AccountStatus)}");
-            var role = roleString.GetAccountStatus();
-            IsDeactiveAccoutTabVisible = role == AccountStatus.LoggedAsTutor;
+            IsDeactiveAccoutTabVisible = Settings.LoginStatus == AccountStatus.LoggedAsTutor;
             IsBusy = false;
         }
 
@@ -131,7 +129,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
         private async Task OnLogout()
         {
             SecureStorage.Remove(SecureStorageConstans.Token);
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
+            Settings.LoginStatus = AccountStatus.LoggedOut;
             await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
     }

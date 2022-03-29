@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Models.Enums;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels

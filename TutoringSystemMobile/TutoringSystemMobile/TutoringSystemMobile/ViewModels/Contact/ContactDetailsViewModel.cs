@@ -57,7 +57,7 @@ namespace TutoringSystemMobile.ViewModels.Contact
 
         public ContactDetailsViewModel()
         {
-            GetLoggedInUserRole();
+            IsTutorLoggedIn = Settings.LoginStatus == AccountStatus.LoggedAsTutor;
 
             PhoneNumbers = new ObservableCollection<PhoneNumberDto>();
 
@@ -93,13 +93,6 @@ namespace TutoringSystemMobile.ViewModels.Contact
 
             PhoneNumbers.Clear();
             contact.PhoneNumbers.ToList().ForEach(phone => PhoneNumbers.Add(phone));
-        }
-
-        private async void GetLoggedInUserRole()
-        {
-            var statusString = await SecureStorage.GetAsync(nameof(AccountStatus));
-            var status = statusString.GetAccountStatus();
-            IsTutorLoggedIn = status == AccountStatus.LoggedAsTutor;
         }
 
         private async Task OnEditPhone(PhoneNumberDto phone)

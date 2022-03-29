@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using TutoringSystemMobile.Models.Enums;
+using Xamarin.Forms;
 
 namespace TutoringSystemMobile.Helpers
 {

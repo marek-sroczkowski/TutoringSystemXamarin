@@ -69,10 +69,7 @@ namespace TutoringSystemMobile
 
         private async Task NavigateByLoginStatus()
         {
-            var statusString = await SecureStorage.GetAsync(nameof(AccountStatus));
-            var status = statusString.GetAccountStatus();
-
-            switch (status)
+            switch (Settings.LoginStatus)
             {
                 case AccountStatus.LoggedAsTutor:
                     flyoutItemService.EnableTutorFlyoutItems();

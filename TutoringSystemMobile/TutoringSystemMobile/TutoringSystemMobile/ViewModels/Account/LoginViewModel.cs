@@ -9,6 +9,7 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Account
 {
@@ -90,32 +91,32 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         private async Task InactiveAccount()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.InactiveAccount.ToString());
+            Settings.LoginStatus = AccountStatus.InactiveAccount;
             await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
         }
 
         private async Task UnregisteredStudent()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.InactiveAccount.ToString());
+            Settings.LoginStatus = AccountStatus.InactiveAccount;
             await Shell.Current.GoToAsync($"{nameof(RegisterStudentPage)}");
         }
 
         private async Task InvalidUsernameOrPassword()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
+            Settings.LoginStatus = AccountStatus.LoggedOut;
             await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.InvalidLogin, GeneralConstans.Ok);
         }
 
         private async Task LoggedAsTutor()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
+            Settings.LoginStatus = AccountStatus.LoggedAsTutor;
             flyoutService.EnableTutorFlyoutItems();
             await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
         }
 
         private async Task LoggedAsStudent()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
+            Settings.LoginStatus = AccountStatus.LoggedAsStudent;
             flyoutService.EnableStudentFlyoutItems();
             await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
         }

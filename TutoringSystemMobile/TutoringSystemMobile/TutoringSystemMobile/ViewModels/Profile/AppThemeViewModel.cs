@@ -1,4 +1,5 @@
 ﻿using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Models.Enums;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.Profile

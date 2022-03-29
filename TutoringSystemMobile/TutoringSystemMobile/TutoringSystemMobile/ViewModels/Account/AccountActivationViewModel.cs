@@ -92,14 +92,14 @@ namespace TutoringSystemMobile.ViewModels.Account
         private async Task LogInAsTutor()
         {
             flyoutService.EnableTutorFlyoutItems();
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
+            Settings.LoginStatus = AccountStatus.LoggedAsTutor;
             await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
         }
 
         private async Task LogInAsStudent()
         {
             flyoutService.EnableStudentFlyoutItems();
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
+            Settings.LoginStatus = AccountStatus.LoggedAsStudent;
             await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
         }
     }

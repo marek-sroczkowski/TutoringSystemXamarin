@@ -181,7 +181,7 @@
     <MenuItem Text="Wyloguj się" 
               IconImageSource="{AppThemeBinding Dark=icon_logout_white.png, Light=icon_logout.png}" 
               StyleClass="MenuItemLayoutStyle" 
-              Clicked="OnMenuItemClicked">
+              Clicked="OnLogoutClicked">
     </MenuItem>
 
     <!--
