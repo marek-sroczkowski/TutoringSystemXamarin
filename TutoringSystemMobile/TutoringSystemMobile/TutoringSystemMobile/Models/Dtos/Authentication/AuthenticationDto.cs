@@ -1,15 +1,15 @@
-﻿namespace TutoringSystemMobile.Models.Dtos.Account
+﻿namespace TutoringSystemMobile.Models.Dtos.Authentication
 {
-    public class LoginUserDto
+    public class AuthenticationDto
     {
         public string Username { get; set; }
         public string Password { get; set; }
 
-        public LoginUserDto()
+        public AuthenticationDto()
         {
         }
 
-        public LoginUserDto(string username, string password)
+        public AuthenticationDto(string username, string password)
         {
             Username = username;
             Password = password;

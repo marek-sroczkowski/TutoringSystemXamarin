@@ -10,6 +10,7 @@ using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Models.Dtos.Authentication;
 
 namespace TutoringSystemMobile.ViewModels.Account
 {
@@ -24,7 +25,7 @@ namespace TutoringSystemMobile.ViewModels.Account
         public Command LoginCommand { get; }
         public Command RegisterTutorFormCommand { get; }
 
-        private readonly IUserService userService = DependencyService.Get<IUserService>();
+        private readonly IAuthenticationService authenticationService = DependencyService.Get<IAuthenticationService>();
         private readonly IFlyoutService flyoutService = DependencyService.Get<IFlyoutService>();
 
         public LoginViewModel()
@@ -52,22 +53,22 @@ namespace TutoringSystemMobile.ViewModels.Account
         private async Task OnLogin()
         {
             IsBusy = true;
-            var loginUser = new LoginUserDto(Username, Password);
-            var loginResult = await userService.TryLoginAsync(loginUser);
+            var loginUser = new AuthenticationDto(Username, Password);
+            var loginResult = await authenticationService.AuthenticateAsync(loginUser);
             IsBusy = false;
 
             switch (loginResult.LoginStatus)
             {
-                case LoginStatus.LoggedInCorrectly:
+                case AuthenticationStatus.Success:
                     await LoggedInCorrectly(loginResult.User);
                     break;
-                case LoginStatus.InactiveAccount:
+                case AuthenticationStatus.InactiveAccount:
                     await InactiveAccount();
                     break;
-                case LoginStatus.UnregisteredStudent:
+                case AuthenticationStatus.UnregisteredStudent:
                     await UnregisteredStudent();
                     break;
-                case LoginStatus.InvalidUsernameOrPassword:
+                case AuthenticationStatus.InvalidUsernameOrPassword:
                     await InvalidUsernameOrPassword();
                     break;
             }

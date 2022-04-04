@@ -1,10 +1,10 @@
 ﻿namespace TutoringSystemMobile.Models.Enums
 {
-    public enum LoginStatus
+    public enum AuthenticationStatus
     {
-        LoggedInCorrectly,
-        InactiveAccount,
+        Success,
         InvalidUsernameOrPassword,
+        InactiveAccount,
         UnregisteredStudent
     }
 }

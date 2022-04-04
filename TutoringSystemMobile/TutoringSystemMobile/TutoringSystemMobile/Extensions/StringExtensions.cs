@@ -60,5 +60,10 @@ namespace TutoringSystemMobile.Extensions
                 return false;
             }
         }
+
+        public static DateTime ToDateTime(this string date)
+        {
+            return date is null ? default : DateTime.Parse(date);
+        }
     }
 }

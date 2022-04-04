@@ -7,7 +7,6 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<LoginResposneDto> TryLoginAsync(LoginUserDto userModel);
         Task<RegisterErrors> RegisterStudentAsync(RegisteredStudentDto student);
         Task<RegisterErrors> RegisterTutorAsync(RegisteredTutorDto tutor);
         Task<bool> DeactivateUserAsync();

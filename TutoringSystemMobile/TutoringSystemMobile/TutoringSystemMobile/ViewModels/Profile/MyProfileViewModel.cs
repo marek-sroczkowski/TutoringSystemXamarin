@@ -128,9 +128,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
         private async Task OnLogout()
         {
-            SecureStorage.Remove(SecureStorageConstans.Token);
-            Settings.LoginStatus = AccountStatus.LoggedOut;
-            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            await AccountHelper.LogoutAsync();
         }
     }
 }

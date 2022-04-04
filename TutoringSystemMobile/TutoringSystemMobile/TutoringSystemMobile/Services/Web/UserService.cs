@@ -125,20 +125,6 @@ namespace TutoringSystemMobile.Services.Web
             return response.StatusCode == 200;
         }
 
-        public async Task<LoginResposneDto> TryLoginAsync(LoginUserDto userModel)
-        {
-            var response = await baseUrl
-                .AppendPathSegment("login")
-                .PostJsonAsync(userModel);
-
-            var loginResponse = await response.GetJsonAsync<LoginResposneDto>();
-
-            if (loginResponse.LoginStatus != LoginStatus.InvalidUsernameOrPassword)
-                await SecureStorage.SetAsync("token", response.Headers.FirstOrDefault("authorization"));
-
-            return loginResponse;
-        }
-
         private async Task<Role> GetUserRole(IFlurlResponse response)
         {
             var role = await response.GetStringAsync();

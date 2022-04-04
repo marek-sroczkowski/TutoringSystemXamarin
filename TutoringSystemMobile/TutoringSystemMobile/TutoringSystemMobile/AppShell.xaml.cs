@@ -1,9 +1,6 @@
 ﻿using System;
-using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Helpers;
-using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Views;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile
@@ -61,9 +58,7 @@ namespace TutoringSystemMobile
 
         private void OnLogoutClicked(object sender, EventArgs e)
         {
-            SecureStorage.Remove(SecureStorageConstans.Token);
-            Settings.LoginStatus = AccountStatus.LoggedOut;
-            Shell.Current.GoToAsync($"//{nameof(LoginPage)}").Wait();
+            AccountHelper.LogoutAsync().Wait();
         }
     }
 }
