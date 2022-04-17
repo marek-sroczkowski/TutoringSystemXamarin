@@ -37,6 +37,8 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         public bool IsUsernameLabelVisible { get => isUsernameLabelVisible; set => SetValue(ref isUsernameLabelVisible, value); }
 
+        public bool IsUsernameNotEmpty { get; set; }
+
         public Command RegisterCommand { get; }
 
         private readonly IUserService userService = DependencyService.Get<IUserService>();
@@ -49,7 +51,12 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         public bool CanRegister()
         {
-            if (FirstName.Length >= 3 && LastName.Length >= 3 && Username.IsEmpty())
+            if (!Username.IsEmpty())
+            {
+                IsUsernameNotEmpty = true;
+            }
+
+            if (FirstName.Length >= 3 && LastName.Length >= 3 && Username.IsEmpty() && !IsUsernameNotEmpty)
             {
                 Username = $"{FirstName[..3].ToLower()}{LastName[..3].ToLower()}{new Random().Next(100, 1000)}";
                 IsUsernameLabelVisible = true;
