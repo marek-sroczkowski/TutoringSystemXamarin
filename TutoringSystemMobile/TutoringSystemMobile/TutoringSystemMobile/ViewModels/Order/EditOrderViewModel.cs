@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -40,18 +40,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             set
             {
                 SetValue(ref selectedStatus, value);
-                switch (selectedStatus)
-                {
-                    case PickerConstans.PendingOrder:
-                        Status = AdditionalOrderStatus.Pending;
-                        break;
-                    case PickerConstans.InProgressOrder:
-                        Status = AdditionalOrderStatus.InProgress;
-                        break;
-                    case PickerConstans.RealizedOrder:
-                        Status = AdditionalOrderStatus.Realized;
-                        break;
-                }
+                Status = OrdersHelper.GetStatus(selectedStatus);
             }
         }
 
@@ -66,57 +55,47 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public Command EditOrderCommand { get; }
 
-        private readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
 
         public EditOrderViewModel()
         {
-            SetOrderStatuses();
-            orderService = DependencyService.Get<IAdditionalOrderService>();
+            Statuses = OrdersHelper.GetStatusesCollection();
+
             EditOrderCommand = new Command(async () => await OnEditOrder(), CanEditOrder);
             PropertyChanged += (_, __) => EditOrderCommand.ChangeCanExecute();
         }
 
         public bool CanEditOrder()
         {
-            return !Name.IsEmpty() &&
-                   !Cost.IsEmpty() &&
-                   double.TryParse(Cost, out double cost) &&
-                   cost > 0 &&
-                   Deadline.HasValue &&
-                   !IsBusy;
+            return !Name.IsEmpty()
+                && !Cost.IsEmpty()
+                && double.TryParse(Cost, out double cost)
+                && cost > 0
+                && Deadline.HasValue
+                && !IsBusy;
         }
 
         private async Task OnEditOrder()
         {
             IsBusy = true;
-            bool updated = await orderService
-                .UpdateAdditionalOrderAsync(new UpdatedOrderDto(Id, Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid, Status));
+            var updatedOrder = new UpdatedOrderDto(Id, Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid, Status);
+            bool updated = await orderService.UpdateOrderAsync(updatedOrder);
             IsBusy = false;
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                ToastHelper.MakeLongToast(ToastConstans.Updated);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={Id}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
-        }
-
-        private void SetOrderStatuses()
-        {
-            Statuses = new List<string>
-            {
-                PickerConstans.PendingOrder,
-                PickerConstans.InProgressOrder,
-                PickerConstans.RealizedOrder
-            };
         }
 
         private async void LoadOrderById(long orderId)
         {
-            var order = await orderService.GetAdditionalOrderByIdAsync(orderId);
+            var order = await orderService.GetOrderByIdAsync(orderId);
 
             Name = order.Name;
             Deadline = order.Deadline;
@@ -124,23 +103,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             IsPaid = order.IsPaid;
             Status = order.Status;
             Description = order.Description;
-            SetSelectedStatus();
-        }
-
-        public void SetSelectedStatus()
-        {
-            switch (Status)
-            {
-                case AdditionalOrderStatus.Pending:
-                    SelectedStatus = PickerConstans.PendingOrder;
-                    break;
-                case AdditionalOrderStatus.InProgress:
-                    SelectedStatus = PickerConstans.InProgressOrder;
-                    break;
-                case AdditionalOrderStatus.Realized:
-                    SelectedStatus = PickerConstans.RealizedOrder;
-                    break;
-            }
+            SelectedStatus = OrdersHelper.GetStatus(Status);
         }
     }
 }

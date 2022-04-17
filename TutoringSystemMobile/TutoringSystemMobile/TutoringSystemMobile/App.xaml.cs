@@ -1,11 +1,4 @@
-﻿using Plugin.FirebasePushNotification;
-using System.Threading.Tasks;
-using TutoringSystemMobile.Extensions;
-using TutoringSystemMobile.Helpers;
-using TutoringSystemMobile.Models.Enums;
-using TutoringSystemMobile.Models.Dtos.PushNotificationToken;
-using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Views;
+﻿using TutoringSystemMobile.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -13,13 +6,10 @@ namespace TutoringSystemMobile
 {
     public partial class App : Application
     {
-        private readonly IFlyoutItemService flyoutItemService;
-
         public App()
         {
             InitializeComponent();
-            TheTheme.SetTheme();
-            flyoutItemService = DependencyService.Get<IFlyoutItemService>();
+            ThemeHelper.SetTheme();
             MainPage = new AppShell();
 
             //CrossFirebasePushNotification.Current.OnTokenRefresh += async (s, p) =>
@@ -42,10 +32,9 @@ namespace TutoringSystemMobile
             //};
         }
 
-        protected override async void OnStart()
+        protected override void OnStart()
         {
             //await DependencyService.Get<IPushNotificationTokenService>().PutTokenAsync();
-            await NavigateByLoginStatus();
         }
 
         protected override void OnSleep()
@@ -55,7 +44,7 @@ namespace TutoringSystemMobile
 
         protected override void OnResume()
         {
-            TheTheme.SetTheme();
+            ThemeHelper.SetTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
 
@@ -63,31 +52,8 @@ namespace TutoringSystemMobile
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                TheTheme.SetTheme();
+                ThemeHelper.SetTheme();
             });
-        }
-
-        private async Task NavigateByLoginStatus()
-        {
-            var statusString = await SecureStorage.GetAsync(nameof(AccountStatus));
-            var status = statusString.GetAccountStatus();
-
-            switch (status)
-            {
-                case AccountStatus.LoggedAsTutor:
-                    flyoutItemService.EnableTutorFlyoutItems();
-                    await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
-                    break;
-                case AccountStatus.LoggedAsStudent:
-                    flyoutItemService.EnableStudentFlyoutItems();
-                    await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
-                    break;
-                case AccountStatus.InactiveAccount:
-                case AccountStatus.LoggedOut:
-                default:
-                    await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
-                    break;
-            }
         }
     }
 }

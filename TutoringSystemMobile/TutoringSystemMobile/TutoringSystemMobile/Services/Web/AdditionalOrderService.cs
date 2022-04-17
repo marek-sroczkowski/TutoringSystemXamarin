@@ -2,14 +2,15 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Pagination;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(AdditionalOrderService))]
@@ -21,56 +22,45 @@ namespace TutoringSystemMobile.Services.Web
 
         public AdditionalOrderService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "order";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Order;
         }
 
-        public async Task<long> AddAdditionalOrderAsync(NewOrderDto newOrder)
+        public async Task<long> AddOrderAsync(NewOrderDto newOrder)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PostJsonAsync(newOrder);
 
-            if (response.StatusCode != 201)
-                return -1;
-
-            string location = response.Headers.FirstOrDefault("location");
+            string location = response.Headers.FirstOrDefault(ServicesConstans.Location);
 
             return location is null ? -1 : location.GetIdByLocation();
         }
 
-        public async Task<bool> DeleteAdditionalOrderAsync(long orderId)
+        public async Task<bool> RemoveOrderAsync(long orderId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(orderId)
-                .WithOAuthBearerToken(token)
                 .DeleteAsync();
 
             return response.StatusCode == 204;
         }
 
-        public async Task<OrderDetailsDto> GetAdditionalOrderByIdAsync(long orderId)
+        public async Task<OrderDetailsDto> GetOrderByIdAsync(long orderId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(orderId)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<OrderDetailsDto>() : new OrderDetailsDto();
         }
 
-        public async Task<OrdersCollectionDto> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters)
+        public async Task<OrdersCollectionDto> GetOrdersAsync(AdditionalOrderParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .SetQueryParams(parameters)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return await GetOrdersAsync(response);
@@ -78,25 +68,23 @@ namespace TutoringSystemMobile.Services.Web
 
         private static async Task<OrdersCollectionDto> GetOrdersAsync(IFlurlResponse response)
         {
-            IEnumerable<OrderDto> orders = response.StatusCode == 200 ?
-                            await response.GetJsonAsync<IEnumerable<OrderDto>>() :
-                            new List<OrderDto>();
+            var orders = response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<OrderDto>>()
+                : new List<OrderDto>();
 
-            var pagination = response.StatusCode == 200 ?
-                JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination")) :
-                new PaginationMetadata();
+            var pagination = response.StatusCode == 200
+                ? JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination"))
+                : new PaginationMetadata();
 
             return new OrdersCollectionDto { Orders = orders, Pagination = pagination };
         }
 
         public async Task<bool> ChangeOrderStatusAsync(long orderId, AdditionalOrderStatus status)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegments("status", orderId)
-                .SetQueryParam("status", status.ToString())
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Status, orderId)
+                .SetQueryParam(ServicesConstans.Status, status.ToString())
                 .PatchAsync();
 
             return response.StatusCode == 204;
@@ -104,23 +92,19 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> ChangePaymentStatusAsync(long orderId, bool isPaid)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegments("payment", orderId)
-                .SetQueryParam("isPaid", isPaid.ToString())
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Payment, orderId)
+                .SetQueryParam(ServicesConstans.IsPaid, isPaid.ToString())
                 .PatchAsync();
 
             return response.StatusCode == 204;
         }
 
-        public async Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder)
+        public async Task<bool> UpdateOrderAsync(UpdatedOrderDto updatedOrder)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PutJsonAsync(updatedOrder);
 
             return response.StatusCode == 204;

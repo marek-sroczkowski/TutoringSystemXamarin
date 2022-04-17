@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Student;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.Student
@@ -33,11 +33,10 @@ namespace TutoringSystemMobile.ViewModels.Student
 
         public Command EditStudentCommand { get; }
 
-        private readonly IStudentService studentService;
+        private readonly IStudentService studentService = DependencyService.Get<IStudentService>();
 
         public EditStudentGeneralInformationViewModel()
         {
-            studentService = DependencyService.Get<IStudentService>();
             EditStudentCommand = new Command(async () => await OnEditStudent(), CanEditStudent);
             PropertyChanged += (_, __) => EditStudentCommand.ChangeCanExecute();
         }
@@ -45,14 +44,18 @@ namespace TutoringSystemMobile.ViewModels.Student
         private async Task OnEditStudent()
         {
             IsBusy = true;
-            var updated = await studentService.UpdateStudentAsync(new
-                UpdatedStudentDto(Id, double.Parse(HourRate), Note, FirstName, LastName));
+            var student = new UpdatedStudentDto(Id, double.Parse(HourRate), Note, FirstName, LastName);
+            var updated = await studentService.UpdateStudentAsync(student);
             IsBusy = false;
 
             if (updated)
+            {
                 await Shell.Current.GoToAsync($"..");
+            }
             else
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            {
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+            }
         }
 
         private async void LoadStudentById(long studentId)
@@ -70,10 +73,10 @@ namespace TutoringSystemMobile.ViewModels.Student
 
         public bool CanEditStudent()
         {
-            return !FirstName.IsEmpty() &&
-                double.TryParse(HourRate, out double hourRate) &&
-                hourRate > 0 &&
-                !IsBusy;
+            return !FirstName.IsEmpty()
+                && double.TryParse(HourRate, out double hourRate)
+                && hourRate > 0
+                && !IsBusy;
         }
     }
 }

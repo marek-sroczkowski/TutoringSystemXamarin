@@ -15,6 +15,8 @@ using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.Order;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
+using TutoringSystemMobile.ViewModels.Reservation;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Start
 {
@@ -46,11 +48,16 @@ namespace TutoringSystemMobile.ViewModels.Start
         public Command<StudentRequestDto> AcceptRequestCommand { get; set; }
         public Command<StudentRequestDto> DeclineRequestCommand { get; set; }
 
+        private readonly IReservationService reservationService = DependencyService.Get<IReservationService>();
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
+        private readonly IStudentRequestService requestService = DependencyService.Get<IStudentRequestService>();
+
         public TutorStartPageViewModel()
         {
             Reservations = new ObservableCollection<DisplayedReservationDto>();
             Orders = new ObservableCollection<DisplayedOrderDto>();
             Requests = new ObservableCollection<StudentRequestDto>();
+
             LoadCollectionsCommand = new Command(async () => await OnLoadCollection());
             PageAppearingCommand = new Command(async () => await OnAppearing());
             NewReservationCommand = new Command(async () => await OnNewReservation());
@@ -63,7 +70,9 @@ namespace TutoringSystemMobile.ViewModels.Start
         private async Task OnOrderTapped(DisplayedOrderDto order)
         {
             if (order is null)
+            {
                 return;
+            }
 
             await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={order.Id}");
         }
@@ -75,7 +84,7 @@ namespace TutoringSystemMobile.ViewModels.Start
 
         private async Task OnNewReservation()
         {
-            //
+            await Shell.Current.GoToAsync($"{nameof(NewReservationTutorPage)}?{nameof(NewTutorReservationViewModel.StartDate)}={DateTime.Now.ToShortDateString()}");
         }
 
         private async Task OnAppearing()
@@ -88,7 +97,9 @@ namespace TutoringSystemMobile.ViewModels.Start
         private async Task OnLoadCollection()
         {
             if (IsRefreshing)
+            {
                 return;
+            }
 
             IsRefreshing = true;
             await LoadReservations();
@@ -119,8 +130,8 @@ namespace TutoringSystemMobile.ViewModels.Start
             var displayedOrders = orders.Select(order => new DisplayedOrderDto(order)).ToList();
             Orders.Clear();
             displayedOrders.ForEach(order => Orders.Add(order));
-            IsNoOrders = Orders.Count == 0;
-            IsOrders = !IsNoOrders;
+            IsOrders = Orders.Any();
+            IsNoOrders = !IsOrders;
 
             IsBusy = false;
         }
@@ -129,47 +140,26 @@ namespace TutoringSystemMobile.ViewModels.Start
         {
             IsBusy = true;
 
-            var requests = await DependencyService.Get<IStudentRequestService>().GetRequestsByTutorId();
+            var requests = await requestService.GetRequestsByTutorId();
             Requests.Clear();
             requests.ToList().ForEach(request => Requests.Add(request));
-            IsRequests = Requests.Count > 0;
+            IsRequests = Requests.Any();
 
             IsBusy = false;
         }
 
-        private static async Task<IEnumerable<ReservationDto>> GetReservationsAsync()
+        private async Task<IEnumerable<ReservationDto>> GetReservationsAsync()
         {
-            var reservation = await DependencyService.Get<IReservationService>()
-                .GetReservationsByTutorAsync(new ReservationParameters
-                {
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now,
-                    IsAtStudent = true,
-                    IsAtTutor = true,
-                    IsOnline = true,
-                    OrderBy = SortingConstans.SortByStartTimeAsc
-                });
+            var parameters = GetReservationsParameters();
+            var reservation = await reservationService.GetReservationsByTutorAsync(parameters);
 
             return reservation.Reservations.ToList();
         }
 
-        private static async Task<IEnumerable<OrderDto>> GetOrdersAsync()
+        private async Task<IEnumerable<OrderDto>> GetOrdersAsync()
         {
-            var orders = await DependencyService.Get<IAdditionalOrderService>()
-                .GetAdditionalOrdersAsync(new AdditionalOrderParameters
-                {
-                    IsNotPaid = true,
-                    IsPaid = true,
-                    IsPending = true,
-                    IsInProgress = true,
-                    IsRealized = false,
-                    ReceiptStartDate = DateTime.Now.AddYears(-1),
-                    ReceiptEndDate = DateTime.Now,
-                    DeadlineStart = DateTime.Now.AddYears(-1),
-                    DeadlineEnd = DateTime.Now.AddYears(10),
-                    OrderBy = SortingConstans.SortByDeadlineAsc,
-                    PageSize = 50
-                });
+            var parameters = GetOrdersParameters();
+            var orders = await orderService.GetOrdersAsync(parameters);
 
             return orders.Orders;
         }
@@ -177,7 +167,9 @@ namespace TutoringSystemMobile.ViewModels.Start
         private async Task DeclineRequest(StudentRequestDto request)
         {
             if (request is null)
+            {
                 return;
+            }
 
             var result = await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.ConfirmationStudentRequestDeletion, GeneralConstans.Yes, GeneralConstans.No);
             if (result)
@@ -188,24 +180,57 @@ namespace TutoringSystemMobile.ViewModels.Start
 
         private async Task RemoveRequestAsync(long requestId)
         {
-            var removed = await DependencyService.Get<IStudentRequestService>().DeclineRequest(requestId);
+            var removed = await requestService.DeclineRequest(requestId);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.StudentRequestRemoved);
+                ToastHelper.MakeLongToast(ToastConstans.StudentRequestRemoved);
                 await OnLoadCollection();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
         private async Task AcceptRequest(StudentRequestDto request)
         {
             if (request is null)
+            {
                 return;
+            }
 
             await PopupNavigation.Instance.PushAsync(new NewExistingStudentTutorPopupPage(request.StudentId));
+        }
+
+        private ReservationParameters GetReservationsParameters()
+        {
+            return new ReservationParameters
+            {
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                IsAtStudent = true,
+                IsAtTutor = true,
+                IsOnline = true,
+                OrderBy = SortingConstans.SortByStartTimeAsc
+            };
+        }
+
+        private AdditionalOrderParameters GetOrdersParameters()
+        {
+            return new AdditionalOrderParameters
+            {
+                IsNotPaid = true,
+                IsPaid = true,
+                IsPending = true,
+                IsInProgress = true,
+                IsRealized = false,
+                ReceiptStartDate = DateTime.Now.AddYears(-1),
+                ReceiptEndDate = DateTime.Now,
+                DeadlineStart = DateTime.Now.AddYears(-1),
+                DeadlineEnd = DateTime.Now.AddYears(10),
+                OrderBy = SortingConstans.SortByDeadlineAsc,
+                PageSize = 50
+            };
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Reservation;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(RepeatedReservationService))]
@@ -16,16 +18,14 @@ namespace TutoringSystemMobile.Services.Web
 
         public RepeatedReservationService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "reservation/repeated";
+            baseUrl = $"{Settings.BaseApiUrl}{ServicesConstans.Reservation}/{ServicesConstans.Repeated}";
         }
 
         public async Task<IEnumerable<RepeatedReservationDto>> GetReservationsByStudentAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("student")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Student)
                 .GetAsync();
 
             return response.StatusCode == 200
@@ -35,11 +35,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<RepeatedReservationDto>> GetReservationsByTutorAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("tutor")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Tutor)
                 .GetAsync();
 
             return response.StatusCode == 200

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PhoneNumber;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.PhoneNumber
@@ -21,35 +21,39 @@ namespace TutoringSystemMobile.ViewModels.PhoneNumber
 
         public Command AddPhoneNumberCommand { get; }
 
+        private readonly IPhoneNumberService phoneNumberService = DependencyService.Get<IPhoneNumberService>();
+        private readonly IReloadContactService reloadContactService = DependencyService.Get<IReloadContactService>();
+
         public NewPhoneNumberViewModel(long contactId)
         {
             ContactId = contactId;
+
             AddPhoneNumberCommand = new Command(async () => await OnAddPhoneNumber(), CanAddPhoneNumber);
             PropertyChanged += (_, __) => AddPhoneNumberCommand.ChangeCanExecute();
         }
 
         public bool CanAddPhoneNumber()
         {
-            return !Owner.IsEmpty() &&
-                !Number.IsEmpty() &&
-                !IsBusy;
+            return !Owner.IsEmpty()
+                && !Number.IsEmpty()
+                && !IsBusy;
         }
 
         private async Task OnAddPhoneNumber()
         {
             IsBusy = true;
-            var added = await DependencyService.Get<IPhoneNumberService>()
-                .AddPhoneNumberAsync(ContactId, new NewPhoneNumberDto(Owner, Number));
+            var newPhone = new NewPhoneNumberDto(Owner, Number);
+            var added = await phoneNumberService.AddPhoneNumberAsync(ContactId, newPhone);
             IsBusy = false;
 
             if (added)
             {
                 await PopupNavigation.Instance.PopAsync();
-                DependencyService.Get<IReloadContactService>().ReloadContact();
+                reloadContactService.ReloadContact();
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

@@ -1,9 +1,10 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
-using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -39,15 +40,34 @@ namespace TutoringSystemMobile.ViewModels.Order
         public Command<OrderDto> ChangeOrderStatusCommand { get; }
         public Command<OrderDto> ChangePaymentStatusCommand { get; }
 
-        private readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
 
         public OrdersViewModel()
+        {
+            SubscribeEvents();
+            OrderParameters = new AdditionalOrderParameters();
+            Orders = new ObservableCollection<OrderDto>();
+            SortBy = SortingConstans.SortByReceiptDateDesc;
+
+            LoadOrdersCommand = new Command(async () => await OnLoadOrders());
+            ItemTresholdReachedCommand = new Command(async () => await OrdersTresholdReached());
+            NewOrderFormCommand = new Command(async () => await OnNewOrderClick());
+            OpenFilteringPopupCommand = new Command(async () => await OnOpenFilteringPopup());
+            OpenSortingPopupCommand = new Command(async () => await OnOpenSortingPopup());
+            OrderTappedCommand = new Command<OrderDto>(async (order) => await OnOrderSelected(order));
+            PageAppearingCommand = new Command(async () => await OnAppearing());
+            ChangeOrderStatusCommand = new Command<OrderDto>(async (order) => await OnChangeOrderStatus(order));
+            ChangePaymentStatusCommand = new Command<OrderDto>(async (order) => await OnChangePaymentStatus(order));
+        }
+
+        private void SubscribeEvents()
         {
             MessagingCenter.Subscribe<OrderSortingViewModel>(this, MessagingCenterConstans.OrderSorting, async (sender) =>
             {
                 SortBy = sender.SortBy;
                 await OnLoadOrders();
             });
+
             MessagingCenter.Subscribe<OrderFilteringViewModel>(this, MessagingCenterConstans.OrderFiltering, async (sender) =>
             {
                 OrderParameters.DeadlineEnd = sender.DeadlineEnd;
@@ -61,59 +81,50 @@ namespace TutoringSystemMobile.ViewModels.Order
                 OrderParameters.ReceiptStartDate = sender.ReceiptStartDate;
                 await OnLoadOrders();
             });
-            OrderParameters = new AdditionalOrderParameters();
-
-            orderService = DependencyService.Get<IAdditionalOrderService>();
-            Orders = new ObservableCollection<OrderDto>();
-
-            LoadOrdersCommand = new Command(async () => await OnLoadOrders());
-            ItemTresholdReachedCommand = new Command(async () => await OrdersTresholdReached());
-            NewOrderFormCommand = new Command(async () => await OnNewOrderClick());
-            OpenFilteringPopupCommand = new Command(async () => await OnOpenFilteringPopup());
-            OpenSortingPopupCommand = new Command(async () => await OnOpenSortingPopup());
-            OrderTappedCommand = new Command<OrderDto>(async (order) => await OnOrderSelected(order));
-            PageAppearingCommand = new Command(async () => await OnAppearing());
-            ChangeOrderStatusCommand = new Command<OrderDto>(async (order) => await OnChangeOrderStatus(order));
-            ChangePaymentStatusCommand = new Command<OrderDto>(async (order) => await OnChangePaymentStatus(order));
-
-            SortBy = SortingConstans.SortByReceiptDateDesc;
         }
 
         private async Task OnLoadOrders()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
+            await GetOrdersAsync();
+            IsRefreshing = false;
+            IsBusy = false;
+        }
 
+        private async Task GetOrdersAsync()
+        {
             OrderParameters.PageNumber = 1;
             OrderParameters.PageSize = 20;
             OrderParameters.OrderBy = SortBy;
-            var ordersCollection = await orderService.GetAdditionalOrdersAsync(OrderParameters);
+
+            var ordersCollection = await orderService.GetOrdersAsync(OrderParameters);
             CurrentPage = ordersCollection.Pagination.CurrentPage;
             HasNext = ordersCollection.Pagination.HasNext;
             Orders.Clear();
-            foreach (var order in ordersCollection.Orders)
-                Orders.Add(order);
-
-            IsRefreshing = false;
-            IsBusy = false;
+            ordersCollection.Orders.ToList().ForEach(order => Orders.Add(order));
         }
 
         private async Task OrdersTresholdReached()
         {
             if (IsBusy || !HasNext)
+            {
                 return;
+            }
 
             IsBusy = true;
             OrderParameters.PageNumber = ++CurrentPage;
             OrderParameters.PageSize = 20;
             OrderParameters.OrderBy = SortBy;
-            var ordersCollection = await orderService.GetAdditionalOrdersAsync(OrderParameters);
+
+            var ordersCollection = await orderService.GetOrdersAsync(OrderParameters);
             HasNext = ordersCollection.Pagination.HasNext;
-            foreach (var order in ordersCollection.Orders)
-                Orders.Add(order);
+            ordersCollection.Orders.ToList().ForEach(order => Orders.Add(order));
 
             IsBusy = false;
         }
@@ -126,7 +137,9 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async Task OnOrderSelected(OrderDto order)
         {
             if (order == null)
+            {
                 return;
+            }
 
             await Shell.Current.GoToAsync($"{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={order.Id}");
         }
@@ -149,69 +162,50 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async Task OnChangeOrderStatus(OrderDto order)
         {
             if (order is null)
+            {
                 return;
+            }
 
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderStatus, GeneralConstans.Cancel, null, PickerConstans.PendingOrder, PickerConstans.InProgressOrder, PickerConstans.RealizedOrder);
             if (result is null || result == GeneralConstans.Cancel)
+            {
                 return;
+            }
 
-            var status = GetOrderStatus(result);
+            var status = OrdersHelper.GetStatus(result);
             if (await orderService.ChangeOrderStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedOrderStatus);
+                ToastHelper.MakeLongToast(ToastConstans.ChangedOrderStatus);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
         private async Task OnChangePaymentStatus(OrderDto order)
         {
             if (order is null)
+            {
                 return;
+            }
 
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderPaymentStatus, GeneralConstans.Cancel, null, PickerConstans.OrderIsPaid, PickerConstans.OrderIsNotPaid);
             if (result is null || result == GeneralConstans.Cancel)
+            {
                 return;
+            }
 
-            var status = GetPaymentStatus(result);
+            var status = OrdersHelper.GetPaymentStatus(result);
             if (await orderService.ChangePaymentStatusAsync(order.Id, status))
             {
                 await OnLoadOrders();
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ChangedOrderPaymentStatus);
+                ToastHelper.MakeLongToast(ToastConstans.ChangedOrderPaymentStatus);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
-            }
-        }
-
-        private AdditionalOrderStatus GetOrderStatus(string statusString)
-        {
-            switch (statusString)
-            {
-                case PickerConstans.PendingOrder:
-                    return AdditionalOrderStatus.Pending;
-                case PickerConstans.InProgressOrder:
-                    return AdditionalOrderStatus.InProgress;
-                case PickerConstans.RealizedOrder:
-                    return AdditionalOrderStatus.Realized;
-                default:
-                    return AdditionalOrderStatus.Pending;
-            }
-        }
-
-        private bool GetPaymentStatus(string paymentStatusString)
-        {
-            switch (paymentStatusString)
-            {
-                case PickerConstans.OrderIsPaid:
-                    return true;
-                case PickerConstans.OrderIsNotPaid:
-                default:
-                    return false;
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

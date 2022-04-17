@@ -6,9 +6,10 @@ using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.Dtos.Tutor;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
+using System.Linq;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Tutor
 {
@@ -33,11 +34,11 @@ namespace TutoringSystemMobile.ViewModels.Tutor
         public Command ItemTresholdReachedCommand { get; }
         public Command<TutorSimpleDto> TutorTappedCommand { get; }
 
-        private readonly ITutorService tutorService;
+        private readonly ITutorService tutorService = DependencyService.Get<ITutorService>();
+        private readonly IStudentRequestService requestService = DependencyService.Get<IStudentRequestService>();
 
         public SearchTutorsViewModel()
         {
-            tutorService = DependencyService.Get<ITutorService>();
             Tutors = new ObservableCollection<TutorSimpleDto>();
             SearchedUserParameters = new SearchedUserParameters();
             SearchTutorsCommand = new Command(async () => await OnSearchTutors(), CanSearchTutors);
@@ -60,11 +61,19 @@ namespace TutoringSystemMobile.ViewModels.Tutor
         private async Task OnLoadTutors()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
+            await GetTutorsAsync();
+            IsRefreshing = false;
+            IsBusy = false;
+        }
 
+        private async Task GetTutorsAsync()
+        {
             SearchedUserParameters.PageNumber = 1;
             SearchedUserParameters.PageSize = 50;
             SearchedUserParameters.Params = SearchedParams;
@@ -72,19 +81,15 @@ namespace TutoringSystemMobile.ViewModels.Tutor
             CurrentPage = tutorsCollection.Pagination.CurrentPage;
             HasNext = tutorsCollection.Pagination.HasNext;
             Tutors.Clear();
-            foreach (var tutor in tutorsCollection.Tutors)
-            {
-                Tutors.Add(tutor);
-            }
-
-            IsRefreshing = false;
-            IsBusy = false;
+            tutorsCollection.Tutors.ToList().ForEach(tutor => Tutors.Add(tutor));
         }
 
         private async Task TutorsTresholdReached()
         {
             if (IsBusy || !HasNext)
+            {
                 return;
+            }
 
             IsBusy = true;
             SearchedUserParameters.PageNumber = ++CurrentPage;
@@ -92,10 +97,7 @@ namespace TutoringSystemMobile.ViewModels.Tutor
             SearchedUserParameters.Params = SearchedParams;
             var tutorsCollection = await tutorService.GetTutorsByParamsAsync(SearchedUserParameters);
             HasNext = tutorsCollection.Pagination.HasNext;
-            foreach (var tutor in tutorsCollection.Tutors)
-            {
-                Tutors.Add(tutor);
-            }
+            tutorsCollection.Tutors.ToList().ForEach(tutor => Tutors.Add(tutor));
 
             IsBusy = false;
         }
@@ -103,27 +105,31 @@ namespace TutoringSystemMobile.ViewModels.Tutor
         private async Task OnTutorSelected(TutorSimpleDto tutor)
         {
             if (tutor == null)
+            {
                 return;
+            }
 
             var result = await Shell.Current.DisplayAlert(AlertConstans.Confirmation,
                 $"{AlertConstans.ConfirmationTutorAdding} {tutor.Username} {AlertConstans.ToYourTutors}",
                 GeneralConstans.Yes, GeneralConstans.No);
 
             if (result)
+            {
                 await TryAddTutor(tutor);
+            }
         }
 
         private async Task TryAddTutor(TutorSimpleDto tutor)
         {
             IsBusy = true;
-            var status = await DependencyService.Get<IStudentRequestService>().AddRequestAsync(tutor.Id);
+            var status = await requestService.AddRequestAsync(tutor.Id);
             IsBusy = false;
 
             switch (status)
             {
                 case AddTutorToStudentStatus.InternalError:
                 case AddTutorToStudentStatus.IncorrectTutor:
-                    DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                    ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
                     break;
                 case AddTutorToStudentStatus.RequestCreated:
                     await Application.Current.MainPage.DisplayAlert(AlertConstans.RequestSent, AlertConstans.NewTutorRequestCreated, GeneralConstans.Ok);

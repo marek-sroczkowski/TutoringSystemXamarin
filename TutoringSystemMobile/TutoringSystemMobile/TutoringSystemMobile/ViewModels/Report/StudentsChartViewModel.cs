@@ -10,6 +10,7 @@ using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.Dtos.Report;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Report
 {
@@ -33,12 +34,11 @@ namespace TutoringSystemMobile.ViewModels.Report
 
         public Command PageAppearingCommand { get; }
 
-        private readonly IReportService reportService;
-
         public Chart DonutChart { get => donutChart; set => SetValue(ref donutChart, value); }
 
         public List<string> ChartDataSources { get; set; }
         public List<string> ChartTypes { get; set; }
+
         public string SelectedDataSource
         {
             get => selectedDataSource;
@@ -48,6 +48,7 @@ namespace TutoringSystemMobile.ViewModels.Report
                 InitData();
             }
         }
+
         public string SelectedChartType
         {
             get => selectedChartType;
@@ -58,61 +59,52 @@ namespace TutoringSystemMobile.ViewModels.Report
             }
         }
 
+        private readonly IReportService reportService = DependencyService.Get<IReportService>();
+
         public StudentsChartViewModel()
         {
-            reportService = DependencyService.Get<IReportService>();
             StudentReports = new ObservableCollection<StudentReportDto>();
             PageAppearingCommand = new Command(async () => await OnLoadReport());
-            ChartDataSources = new List<string>
-            {
-                PickerConstans.Profit,
-                PickerConstans.ReservationCount,
-                PickerConstans.TotalHours
-            };
+            ChartDataSources = ChartHelper.GetReportTypes();
+            ChartTypes = ChartHelper.GetChartTypes();
             SelectedDataSource = ChartDataSources[0];
-            ChartTypes = new List<string>
-            {
-                PickerConstans.DonutChart,
-                PickerConstans.BarChart
-            };
             SelectedChartType = ChartTypes[0];
         }
 
         private async Task OnLoadReport()
         {
             if (IsBusy || StartDate == default || EndDate == default)
+            {
                 return;
+            }
 
             IsBusy = true;
+            await GetReportAsync();
+            InitData();
+            IsBusy = false;
+        }
 
+        private async Task GetReportAsync()
+        {
             StudentReports.Clear();
+
             var reports = await reportService.GetStudentsReportAsync(new ReportParameters(StartDate, EndDate, string.Empty));
             if (!IsIncludeZeroProfit)
+            {
                 reports = reports.Where(r => r.TotalProfit > 0 && r.TotalHours > 0 && r.ReservationsCount > 0);
-            foreach (var report in reports)
-                StudentReports.Add(report);
+            }
 
-            InitData();
-
-            IsBusy = false;
+            reports.ToList().ForEach(report => StudentReports.Add(report));
         }
 
         private void InitData()
         {
-            IEnumerable<ChartEntry> donutChartEntries;
-            switch (SelectedDataSource)
+            IEnumerable<ChartEntry> donutChartEntries = SelectedDataSource switch
             {
-                case PickerConstans.Profit:
-                default:
-                    donutChartEntries = GetProfitEntries();
-                    break;
-                case PickerConstans.ReservationCount:
-                    donutChartEntries = GetReservationsCountEntries();
-                    break;
-                case PickerConstans.TotalHours:
-                    donutChartEntries = GetHoursEntries();
-                    break;
-            }
+                PickerConstans.ReservationCount => GetReservationsCountEntries(),
+                PickerConstans.TotalHours => GetHoursEntries(),
+                _ => GetProfitEntries(),
+            };
 
             if (SelectedChartType == PickerConstans.BarChart)
             {
@@ -139,14 +131,16 @@ namespace TutoringSystemMobile.ViewModels.Report
         private IEnumerable<ChartEntry> GetProfitEntries()
         {
             var donutChartEntries = new List<ChartEntry>();
+
             foreach (var report in StudentReports)
             {
-                var label = SelectedChartType == PickerConstans.DonutChart ?
-                    report.StudentName.Length > 17 ? report.StudentName.Substring(0, 17) : report.StudentName :
-                    report.StudentName;
+                var label = SelectedChartType == PickerConstans.DonutChart
+                    ? report.StudentName.Length > 17
+                        ? report.StudentName[..17]
+                        : report.StudentName
+                    : report.StudentName;
 
                 string color = string.Format("#{0:X6}", new Random().Next(0x1000000));
-
                 donutChartEntries.Add(new ChartEntry((float)report.TotalProfit)
                 {
                     Color = SKColor.Parse(color),
@@ -162,14 +156,16 @@ namespace TutoringSystemMobile.ViewModels.Report
         private IEnumerable<ChartEntry> GetHoursEntries()
         {
             var donutChartEntries = new List<ChartEntry>();
+
             foreach (var report in StudentReports)
             {
-                var label = SelectedChartType == PickerConstans.DonutChart ?
-                    report.StudentName.Length > 17 ? report.StudentName.Substring(0, 17) : report.StudentName :
-                    report.StudentName;
+                var label = SelectedChartType == PickerConstans.DonutChart
+                    ? report.StudentName.Length > 17
+                        ? report.StudentName[..17]
+                        : report.StudentName
+                    : report.StudentName;
 
                 string color = string.Format("#{0:X6}", new Random().Next(0x1000000));
-
                 donutChartEntries.Add(new ChartEntry((float)report.TotalHours)
                 {
                     Color = SKColor.Parse(color),
@@ -185,14 +181,16 @@ namespace TutoringSystemMobile.ViewModels.Report
         private IEnumerable<ChartEntry> GetReservationsCountEntries()
         {
             var donutChartEntries = new List<ChartEntry>();
+
             foreach (var report in StudentReports)
             {
-                var label = SelectedChartType == PickerConstans.DonutChart ?
-                    report.StudentName.Length > 17 ? report.StudentName.Substring(0, 17) : report.StudentName :
-                    report.StudentName;
+                var label = SelectedChartType == PickerConstans.DonutChart
+                    ? report.StudentName.Length > 17
+                        ? report.StudentName[..17]
+                        : report.StudentName
+                    : report.StudentName;
 
                 string color = string.Format("#{0:X6}", new Random().Next(0x1000000));
-
                 donutChartEntries.Add(new ChartEntry(report.ReservationsCount)
                 {
                     Color = SKColor.Parse(color),

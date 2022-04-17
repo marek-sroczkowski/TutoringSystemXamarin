@@ -7,11 +7,11 @@ namespace TutoringSystemMobile.Services.Interfaces
 {
     public interface IAdditionalOrderService
     {
-        Task<OrdersCollectionDto> GetAdditionalOrdersAsync(AdditionalOrderParameters parameters);
-        Task<OrderDetailsDto> GetAdditionalOrderByIdAsync(long orderId);
-        Task<long> AddAdditionalOrderAsync(NewOrderDto newOrder);
-        Task<bool> UpdateAdditionalOrderAsync(UpdatedOrderDto updatedOrder);
-        Task<bool> DeleteAdditionalOrderAsync(long orderId);
+        Task<OrdersCollectionDto> GetOrdersAsync(AdditionalOrderParameters parameters);
+        Task<OrderDetailsDto> GetOrderByIdAsync(long orderId);
+        Task<long> AddOrderAsync(NewOrderDto newOrder);
+        Task<bool> UpdateOrderAsync(UpdatedOrderDto updatedOrder);
+        Task<bool> RemoveOrderAsync(long orderId);
         Task<bool> ChangeOrderStatusAsync(long orderId, AdditionalOrderStatus status);
         Task<bool> ChangePaymentStatusAsync(long orderId, bool isPaid);
     }

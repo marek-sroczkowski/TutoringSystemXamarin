@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -26,6 +26,8 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public Command AddNewOrderCommand { get; }
 
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
+
         public NewOrderViewModel()
         {
             AddNewOrderCommand = new Command(async () => await OnAddNewOrder(), CanAddNewOrder);
@@ -34,28 +36,28 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         public bool CanAddNewOrder()
         {
-            return !Name.IsEmpty() &&
-                !Cost.IsEmpty() &&
-                double.TryParse(Cost, out double cost) &&
-                cost > 0 &&
-                Deadline.HasValue &&
-                !IsBusy;
+            return !Name.IsEmpty()
+                && !Cost.IsEmpty()
+                && double.TryParse(Cost, out double cost)
+                && cost > 0
+                && Deadline.HasValue
+                && !IsBusy;
         }
 
         private async Task OnAddNewOrder()
         {
             IsBusy = true;
-            long newOrderId = await DependencyService.Get<IAdditionalOrderService>()
-                .AddAdditionalOrderAsync(new NewOrderDto(Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid));
+            var newOrder = new NewOrderDto(Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid);
+            long newOrderId = await orderService.AddOrderAsync(newOrder);
             IsBusy = false;
 
             if (newOrderId == -1)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.AddedOrder);
+                ToastHelper.MakeLongToast(ToastConstans.AddedOrder);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}/{nameof(OrderDetailsTutorPage)}?{nameof(OrderDetailsViewModel.Id)}={newOrderId}");
             }
         }

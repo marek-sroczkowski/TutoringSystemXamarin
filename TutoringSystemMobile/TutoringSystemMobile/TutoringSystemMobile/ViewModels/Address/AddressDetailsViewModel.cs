@@ -20,50 +20,22 @@ namespace TutoringSystemMobile.ViewModels.Address
         public long Id { get => id; set => SetValue(ref id, value); }
         public string Street
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(street))
-                    return street;
-                else
-                    return GeneralConstans.NoValue;
-            }
-
+            get => string.IsNullOrEmpty(street) ? GeneralConstans.NoValue : street;
             set => SetValue(ref street, value);
         }
         public string HouseAndFlatNumber
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(houseAndFlatNumber))
-                    return houseAndFlatNumber;
-                else
-                    return GeneralConstans.NoValue;
-            }
-
+            get => string.IsNullOrEmpty(houseAndFlatNumber) ? GeneralConstans.NoValue : houseAndFlatNumber;
             set => SetValue(ref houseAndFlatNumber, value);
         }
         public string City
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(city))
-                    return city;
-                else
-                    return GeneralConstans.NoValue;
-            }
-
+            get => string.IsNullOrEmpty(city) ? GeneralConstans.NoValue : city;
             set => SetValue(ref city, value);
         }
         public string PostalCode
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(postalCode))
-                    return postalCode;
-                else
-                    return GeneralConstans.NoValue;
-            }
-
+            get => string.IsNullOrEmpty(postalCode) ? GeneralConstans.NoValue : postalCode;
             set => SetValue(ref postalCode, value);
         }
         public string Description { get => description; set => SetValue(ref description, value); }
@@ -72,22 +44,22 @@ namespace TutoringSystemMobile.ViewModels.Address
         public Command PageAppearingCommand { get; }
         public Command NavigateToStudentCommand { get; }
 
-        private readonly IAddressService addressService;
+        private readonly IAddressService addressService = DependencyService.Get<IAddressService>();
 
         public AddressDetailsViewModel()
         {
-            addressService = DependencyService.Get<IAddressService>();
             PageAppearingCommand = new Command(async () => await OnAppearing());
+
             NavigateToStudentCommand = new Command(async () => await OnNavigateToStudent(), CanNavigateToStudent);
             PropertyChanged += (_, __) => NavigateToStudentCommand.ChangeCanExecute();
         }
 
         public bool CanNavigateToStudent()
         {
-            return !Street.IsEmpty() &&
-                !HouseAndFlatNumber.IsEmpty() &&
-                !City.IsEmpty() &&
-                !PostalCode.IsEmpty();
+            return !Street.IsEmpty()
+                && !HouseAndFlatNumber.IsEmpty()
+                && !City.IsEmpty()
+                && !PostalCode.IsEmpty();
         }
 
         private async Task OnNavigateToStudent()
@@ -108,12 +80,12 @@ namespace TutoringSystemMobile.ViewModels.Address
             if (HouseAndFlatNumber.Contains("\\"))
             {
                 int endIndex = HouseAndFlatNumber.IndexOf("\\");
-                houseNumber = HouseAndFlatNumber.Substring(0, endIndex);
+                houseNumber = HouseAndFlatNumber[..endIndex];
             }
             else if (HouseAndFlatNumber.Contains("/"))
             {
                 int endIndex = HouseAndFlatNumber.IndexOf("/");
-                houseNumber = HouseAndFlatNumber.Substring(0, endIndex);
+                houseNumber = HouseAndFlatNumber[..endIndex];
             }
 
             return $"{houseNumber}+{Street}+{PostalCode}+{City}";

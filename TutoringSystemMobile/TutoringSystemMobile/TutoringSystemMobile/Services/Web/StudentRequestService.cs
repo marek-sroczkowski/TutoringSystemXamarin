@@ -1,14 +1,15 @@
 ﻿using Flurl;
 using Flurl.Http;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Dtos.StudentRequest;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Constans;
 
 [assembly: Dependency(typeof(StudentRequestService))]
 namespace TutoringSystemMobile.Services.Web
@@ -19,30 +20,24 @@ namespace TutoringSystemMobile.Services.Web
 
         public StudentRequestService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "student/request";
+            baseUrl = $"{Settings.BaseApiUrl}{ServicesConstans.Student}/{ServicesConstans.Request}";
         }
 
         public async Task<AddTutorToStudentStatus> AddRequestAsync(long tutorId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(tutorId)
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
                 .PostAsync();
 
-            return response.StatusCode == 200 ?
-                await GetAddedStatusAsync(response) :
-                AddTutorToStudentStatus.InternalError;
+            return response.StatusCode == 200 ? await response.GetAddedTutorStatusAsync() : AddTutorToStudentStatus.InternalError;
         }
 
         public async Task<bool> DeclineRequest(long requestId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("decline", requestId)
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Decline, requestId)
                 .PutAsync();
 
             return response.StatusCode == 200;
@@ -50,37 +45,26 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<StudentRequestDto>> GetRequestsByStudentId()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("byStudent")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.ByStudent)
                 .GetAsync();
 
-            return response.StatusCode == 200 ?
-                await response.GetJsonAsync<IEnumerable<StudentRequestDto>>() :
-                new List<StudentRequestDto>();
+            return response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<StudentRequestDto>>()
+                : new List<StudentRequestDto>();
         }
 
         public async Task<IEnumerable<StudentRequestDto>> GetRequestsByTutorId()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("byTutor")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.ByTutor)
                 .GetAsync();
 
-            return response.StatusCode == 200 ?
-                await response.GetJsonAsync<IEnumerable<StudentRequestDto>>() :
-                new List<StudentRequestDto>();
-        }
-
-        private async Task<AddTutorToStudentStatus> GetAddedStatusAsync(IFlurlResponse response)
-        {
-            var status = await response.GetStringAsync();
-
-            return (AddTutorToStudentStatus)Enum.Parse(typeof(AddTutorToStudentStatus), status.Trim('\"'));
+            return response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<StudentRequestDto>>()
+                : new List<StudentRequestDto>();
         }
     }
 }

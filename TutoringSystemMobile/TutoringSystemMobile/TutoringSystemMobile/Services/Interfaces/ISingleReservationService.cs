@@ -12,7 +12,7 @@ namespace TutoringSystemMobile.Services.Interfaces
         Task<long> AddReservationByStudentAsync(NewStudentSingleReservationDto newReservation);
         Task<long> AddReservationByTutorAsync(NewTutorSingleReservationDto newReservation);
         Task<bool> UpdateTutorReservationAsync(UpdatedTutorReservationDto updatedReservation);
-        Task<bool> DeleteReservationAsync(long reservationId);
+        Task<bool> RemoveReservationAsync(long reservationId);
         Task<bool> UpdateStudentReservationAsync(UpdatedStudentReservationDto updatedReservation);
     }
 }

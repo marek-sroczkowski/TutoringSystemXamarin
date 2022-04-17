@@ -12,6 +12,7 @@ using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.Tutor;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Reservation
 {
@@ -67,6 +68,9 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         public Command RemoveReservationCommand { get; }
         public Command TutorTappedCommand { get; }
 
+        private readonly ISingleReservationService singleReservationService = DependencyService.Get<ISingleReservationService>();
+        private readonly IRecurringReservationService recurringReservationService = DependencyService.Get<IRecurringReservationService>();
+
         public StudentReservationDetailsViewModel()
         {
             EditReservationCommand = new Command(async () => await OnEditReservation());
@@ -102,16 +106,16 @@ namespace TutoringSystemMobile.ViewModels.Reservation
 
         private async Task RemoveSingleReservationAsync()
         {
-            bool removed = await DependencyService.Get<ISingleReservationService>().DeleteReservationAsync(Id);
+            bool removed = await singleReservationService.RemoveReservationAsync(Id);
 
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ReservationRemoved);
+                ToastHelper.MakeLongToast(ToastConstans.ReservationRemoved);
                 await Shell.Current.GoToAsync($"//{nameof(ReservationsTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -119,20 +123,22 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         {
             var result = await Shell.Current.DisplayActionSheet(AlertConstans.ChangeOrderPaymentStatus, GeneralConstans.Cancel, null, AlertConstans.OneLessonRemoving, AlertConstans.OneLessonAndFutureRemoving);
             if (result is null || result == GeneralConstans.Cancel)
+            {
                 return;
+            }
 
             bool removed = result == AlertConstans.OneLessonRemoving
-                ? await DependencyService.Get<IRecurringReservationService>().DeleteReservationAsync(Id, RecurringReservationRemovingMode.OneLesson)
-                : await DependencyService.Get<IRecurringReservationService>().DeleteReservationAsync(Id, RecurringReservationRemovingMode.OneLessonAndFuture);
+                ? await recurringReservationService.RemoveReservationAsync(Id, RecurringReservationRemovingMode.OneLesson)
+                : await recurringReservationService.RemoveReservationAsync(Id, RecurringReservationRemovingMode.OneLessonAndFuture);
 
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ReservationRemoved);
+                ToastHelper.MakeLongToast(ToastConstans.ReservationRemoved);
                 await Shell.Current.GoToAsync($"//{nameof(ReservationsTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
@@ -156,10 +162,10 @@ namespace TutoringSystemMobile.ViewModels.Reservation
             LessonDate = DateTime.Parse(StartDate.ToShortDateString(), new CultureInfo("pl-PL")).ToString("dd MMMM yyyy");
             Duration = $"{reservation.Duration} {PickerConstans.MinutesShort}";
             Description = reservation.Description;
-            SetPlace(reservation.Place);
             SetImage(reservation.TutorId);
             SetType(reservation);
-            SetPaymentStatus(reservation.IsPaid);
+            Place = ReservationsHelper.GetPlace(reservation.Place);
+            Type = ReservationsHelper.GetPaymentStatus(reservation.IsPaid);
 
             IsBusy = false;
         }
@@ -172,35 +178,11 @@ namespace TutoringSystemMobile.ViewModels.Reservation
                 : ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(image.ProfilePictureBase64)));
         }
 
-        private void SetPlace(ReservationPlace place)
-        {
-            Place = place switch
-            {
-                ReservationPlace.AtTutor => PickerConstans.AtTutor,
-                ReservationPlace.AtStudent => PickerConstans.AtStudent,
-                ReservationPlace.Online => PickerConstans.Online,
-                _ => PickerConstans.LessonOtherPlace
-            };
-        }
-
         private void SetType(ReservationDetailsDto reservation)
         {
             Type = reservation.Type == ReservationType.Single
                 ? PickerConstans.SingleReservation
-                : reservation.Frequency.Value switch
-                {
-                    ReservationFrequency.Weekly => PickerConstans.WeeklyReservation,
-                    ReservationFrequency.OnceTwoWeeks => PickerConstans.OnceTwoWeeksReservation,
-                    ReservationFrequency.Monthly => PickerConstans.MonthlyReservation,
-                    _ => PickerConstans.OtherReservationType
-                };
-        }
-
-        private void SetPaymentStatus(bool isPaid)
-        {
-            PaymentStatus = isPaid
-                ? PickerConstans.ReservationIsPaid
-                : PickerConstans.ReservationIsNotPaid;
+                : ReservationsHelper.GetRecurringReservationType(reservation.Frequency.Value);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Address;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels.Address
@@ -34,11 +34,10 @@ namespace TutoringSystemMobile.ViewModels.Address
 
         public Command EditAddressCommand { get; }
 
-        private readonly IAddressService addressService;
+        private readonly IAddressService addressService = DependencyService.Get<IAddressService>();
 
         public EditAddressViewModel()
         {
-            addressService = DependencyService.Get<IAddressService>();
             EditAddressCommand = new Command(async () => await OnEditAddress(), CanEditAddress);
             PropertyChanged += (_, __) => EditAddressCommand.ChangeCanExecute();
         }
@@ -51,18 +50,18 @@ namespace TutoringSystemMobile.ViewModels.Address
         private async Task OnEditAddress()
         {
             IsBusy = true;
-            var updated = await addressService
-                .UpdateAddressAsync(new UpdatedAddressDto(Id, Street, HouseAndFlatNumber, City, PostalCode, Description));
+            var updatedAddress = new UpdatedAddressDto(Id, Street, HouseAndFlatNumber, City, PostalCode, Description);
+            var updated = await addressService.UpdateAddressAsync(updatedAddress);
             IsBusy = false;
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                ToastHelper.MakeLongToast(ToastConstans.Updated);
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 

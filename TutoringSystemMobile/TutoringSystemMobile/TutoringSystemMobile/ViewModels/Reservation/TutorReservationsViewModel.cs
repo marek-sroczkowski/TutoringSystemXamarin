@@ -11,6 +11,7 @@ using TutoringSystemMobile.ViewModels.Availability;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 using Xamarin.Plugin.Calendar.Models;
+using TutoringSystemMobile.Helpers;
 
 namespace TutoringSystemMobile.ViewModels.Reservation
 {
@@ -29,30 +30,8 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         public List<ReservationDto> RepeatedReservations { get; set; }
         public CultureInfo Culture => new CultureInfo("pl-PL");
         public int Year { get => year; set => SetValue(ref year, value); }
-        public int Month
-        {
-            get => month;
-            set
-            {
-                int newMonth;
-                if (value > 12)
-                {
-                    newMonth = 1;
-                    Year++;
-                }
-                else if (value < 1)
-                {
-                    newMonth = 12;
-                    Year--;
-                }
-                else
-                {
-                    newMonth = value;
-                }
-                MonthLabel = months[newMonth - 1];
-                SetValue(ref month, newMonth);
-            }
-        }
+        public int Month { get => month; set => SetMonthValue(value); }
+
         public string MonthLabel { get => monthLabel; set => SetValue(ref monthLabel, value); }
         public bool IsRefreshing { get => isRefreshing; set => SetValue(ref isRefreshing, value); }
 
@@ -66,9 +45,12 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         public Command AddAvailabilityCommand { get; }
         public Command<DisplayedSimpleReservationDto> ReservationTappedCommand { get; }
 
+        private readonly ISingleReservationService singleReservationService = DependencyService.Get<ISingleReservationService>();
+        private readonly IRepeatedReservationService repeatedReservationService = DependencyService.Get<IRepeatedReservationService>();
+
         public TutorReservationsViewModel()
         {
-            SetMonths();
+            months = DateTimeHelper.GetMonthNames();
             MonthLabel = months[Month - 1];
             Reservations = new EventCollection();
             LoadReservationCommand = new Command(async () => await OnLoadReservations());
@@ -95,7 +77,9 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         private async Task OnReservationTapped(DisplayedSimpleReservationDto reservation)
         {
             if (reservation is null)
+            {
                 return;
+            }
 
             await Shell.Current.GoToAsync($"{nameof(ReservationDetailsTutorPage)}?{nameof(TutorReservationDetailsViewModel.Id)}={reservation.Id}&{nameof(TutorReservationDetailsViewModel.StartTime)}={reservation.StartTime.ToShortTimeString()}&{nameof(TutorReservationDetailsViewModel.StartDate)}={reservation.StartTime.ToShortDateString()}");
         }
@@ -133,7 +117,9 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         private async Task OnLoadReservations()
         {
             if (IsRefreshing)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
@@ -150,7 +136,9 @@ namespace TutoringSystemMobile.ViewModels.Reservation
         private void AddRecurringReservations(ReservationDto reservation, List<ReservationDto> reservations)
         {
             if (reservations.FirstOrDefault(r => r.RepeatedReservationId.Equals(reservation.RepeatedReservationId)) != null)
+            {
                 return;
+            }
 
             int i = 0;
             var endDate = new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)).AddDays(14).Date;
@@ -175,7 +163,7 @@ namespace TutoringSystemMobile.ViewModels.Reservation
 
         private async Task<List<ReservationDto>> GetSingleReservationsAsync()
         {
-            var reservationCollection = await DependencyService.Get<ISingleReservationService>()
+            var reservationCollection = await singleReservationService
                 .GetReservationsByTutorAsync(GetReservationParameters());
 
             return reservationCollection.Reservations.ToList();
@@ -183,7 +171,7 @@ namespace TutoringSystemMobile.ViewModels.Reservation
 
         private async Task<List<ReservationDto>> GetRepeatedReservationsAsync()
         {
-            var reservations = await DependencyService.Get<IRepeatedReservationService>()
+            var reservations = await repeatedReservationService
                 .GetReservationsByTutorAsync();
 
             return reservations.Select(reservation => new ReservationDto(reservation)).ToList();
@@ -202,23 +190,25 @@ namespace TutoringSystemMobile.ViewModels.Reservation
             };
         }
 
-        private void SetMonths()
+        private void SetMonthValue(int value)
         {
-            months = new List<string>
+            int newMonth;
+            if (value > 12)
             {
-                PickerConstans.January,
-                PickerConstans.February,
-                PickerConstans.March,
-                PickerConstans.April,
-                PickerConstans.May,
-                PickerConstans.June,
-                PickerConstans.July,
-                PickerConstans.August,
-                PickerConstans.September,
-                PickerConstans.October,
-                PickerConstans.November,
-                PickerConstans.December
-            };
+                newMonth = 1;
+                Year++;
+            }
+            else if (value < 1)
+            {
+                newMonth = 12;
+                Year--;
+            }
+            else
+            {
+                newMonth = value;
+            }
+            MonthLabel = months[newMonth - 1];
+            SetValue(ref month, newMonth);
         }
     }
 }

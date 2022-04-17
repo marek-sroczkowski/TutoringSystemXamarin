@@ -1,7 +1,6 @@
 ﻿using Flurl;
 using Flurl.Http;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Models.Enums;
@@ -10,8 +9,10 @@ using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.Dtos.Student;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Constans;
 
 [assembly: Dependency(typeof(StudentService))]
 namespace TutoringSystemMobile.Services.Web
@@ -22,61 +23,43 @@ namespace TutoringSystemMobile.Services.Web
 
         public StudentService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "student";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Student;
         }
 
         public async Task<AddStudentToTutorStatus> AddStudentToTutorAsync(NewExistingStudentDto student)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PostJsonAsync(student);
 
-            return response.StatusCode == 200 ?
-                await GetAddedStatusAsync(response) :
-                AddStudentToTutorStatus.InternalError;
+            return response.StatusCode == 200 ? await response.GetAddedStudentStatusAsync() : AddStudentToTutorStatus.InternalError;
         }
 
         public async Task<StudentDetailsDto> GetStudentByIdAsync(long studentId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(studentId)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<StudentDetailsDto>() : new StudentDetailsDto();
         }
 
-        public async Task<StudentsCollectionDto> GetTutorsByParamsAsync(SearchedUserParameters parameters)
+        public async Task<StudentsCollectionDto> GetStudentsByParamsAsync(SearchedUserParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("all")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.All)
                 .SetQueryParams(parameters)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
-            IEnumerable<StudentSimpleDto> tutors = response.StatusCode == 200 ?
-                await response.GetJsonAsync<IEnumerable<StudentSimpleDto>>() :
-                new List<StudentSimpleDto>();
-
-            var pagination = response.StatusCode == 200 ?
-                JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination")) :
-                new PaginationMetadata();
-
-            return new StudentsCollectionDto { Students = tutors, Pagination = pagination };
+            return await GetStudentsAsync(response);
         }
 
         public async Task<IEnumerable<StudentDto>> GetStudentsAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<StudentDto>>() : new List<StudentDto>();
@@ -84,11 +67,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> RemoveAllStudentsAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("all")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.All)
                 .DeleteAsync();
 
             return response.StatusCode == 204;
@@ -96,11 +77,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> RemoveStudentAsync(long studentId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(studentId)
-                .WithOAuthBearerToken(token)
                 .DeleteAsync();
 
             return response.StatusCode == 204;
@@ -108,20 +87,24 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> UpdateStudentAsync(UpdatedStudentDto student)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PutJsonAsync(student);
 
             return response.StatusCode == 204;
         }
 
-        private async Task<AddStudentToTutorStatus> GetAddedStatusAsync(IFlurlResponse response)
+        private static async Task<StudentsCollectionDto> GetStudentsAsync(IFlurlResponse response)
         {
-            var status = await response.GetStringAsync();
+            var tutors = response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<StudentSimpleDto>>()
+                : new List<StudentSimpleDto>();
 
-            return (AddStudentToTutorStatus)Enum.Parse(typeof(AddStudentToTutorStatus), status.Trim('\"'));
+            var pagination = response.StatusCode == 200
+                ? JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination"))
+                : new PaginationMetadata();
+
+            return new StudentsCollectionDto { Students = tutors, Pagination = pagination };
         }
     }
 }

@@ -36,8 +36,7 @@ namespace TutoringSystemMobile.ViewModels.Report
         public Command OpenStudentsChartCommand { get; }
         public Command PageAppearingCommand { get; }
 
-        private readonly IReportService reportService;
-
+        private readonly IReportService reportService = DependencyService.Get<IReportService>();
 
         public SubjectsReportViewModel()
         {
@@ -48,6 +47,7 @@ namespace TutoringSystemMobile.ViewModels.Report
                 IsIncludeZeroProfit = sender.IsIncludeZeroProfit;
                 await OnLoadReport();
             });
+
             MessagingCenter.Subscribe<ReportSortingViewModel>(this, MessagingCenterConstans.ReportSorting, async (sender) =>
             {
                 SortBy = sender.SortBy;
@@ -87,21 +87,29 @@ namespace TutoringSystemMobile.ViewModels.Report
         private async Task OnLoadReport()
         {
             if (IsBusy)
+            {
                 return;
+            }
 
             IsBusy = true;
             IsRefreshing = true;
-
-            SubjectReports.Clear();
-            var reports = await reportService.GetSubjectReportAsync(new ReportParameters(StartDate, EndDate, SortBy));
-            if (!IsIncludeZeroProfit)
-                reports = reports.Where(r => r.TotalProfit > 0 && r.TotalHours > 0 && r.ReservationsCount > 0);
-            var formattedReports = reports.Select(r => new SubjectSummaryDto(r.SubjectName, r.ReservationsCount, r.TotalHours, r.TotalProfit));
-            foreach (var report in formattedReports)
-                SubjectReports.Add(report);
-
+            await GetReportAsync();
             IsBusy = false;
             IsRefreshing = false;
+        }
+
+        private async Task GetReportAsync()
+        {
+            SubjectReports.Clear();
+
+            var reports = await reportService.GetSubjectReportAsync(new ReportParameters(StartDate, EndDate, SortBy));
+            if (!IsIncludeZeroProfit)
+            {
+                reports = reports.Where(r => r.TotalProfit > 0 && r.TotalHours > 0 && r.ReservationsCount > 0);
+            }
+
+            var formattedReports = reports.Select(r => new SubjectSummaryDto(r.SubjectName, r.ReservationsCount, r.TotalHours, r.TotalProfit));
+            formattedReports.ToList().ForEach(report => SubjectReports.Add(report));
         }
     }
 }

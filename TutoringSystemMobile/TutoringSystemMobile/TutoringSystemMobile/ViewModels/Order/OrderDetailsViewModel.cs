@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -46,11 +46,10 @@ namespace TutoringSystemMobile.ViewModels.Order
         public Command EditOrderCommand { get; }
         public Command RemoveOrderCommand { get; }
 
-        private readonly IAdditionalOrderService orderService;
+        private readonly IAdditionalOrderService orderService = DependencyService.Get<IAdditionalOrderService>();
 
         public OrderDetailsViewModel()
         {
-            orderService = DependencyService.Get<IAdditionalOrderService>();
             EditOrderCommand = new Command(async () => await OnRedirectToOrderEditPage());
             RemoveOrderCommand = new Command(async () => await OnRemoveRequest());
         }
@@ -58,7 +57,7 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async void LoadOrderById(long orderId)
         {
             IsBusy = true;
-            var order = await orderService.GetAdditionalOrderByIdAsync(orderId);
+            var order = await orderService.GetOrderByIdAsync(orderId);
 
             Name = order.Name;
             Deadline = order.Deadline;
@@ -68,31 +67,10 @@ namespace TutoringSystemMobile.ViewModels.Order
             ReceiptDate = order.ReceiptDate;
             Description = order.Description;
 
-            SetPaidStatus();
-            SetOrderStatus();
+            PaidStatus = OrdersHelper.GetPaymentStatus(IsPaid);
+            OrderStatus = OrdersHelper.GetStatus(Status);
 
             IsBusy = false;
-        }
-
-        private void SetPaidStatus()
-        {
-            PaidStatus = isPaid ? PickerConstans.OrderIsPaid : PickerConstans.OrderIsNotPaid;
-        }
-
-        private void SetOrderStatus()
-        {
-            switch (Status)
-            {
-                case AdditionalOrderStatus.Pending:
-                    OrderStatus = PickerConstans.PendingOrder;
-                    break;
-                case AdditionalOrderStatus.InProgress:
-                    OrderStatus = PickerConstans.InProgressOrder;
-                    break;
-                case AdditionalOrderStatus.Realized:
-                    OrderStatus = PickerConstans.RealizedOrder;
-                    break;
-            }
         }
 
         private async Task OnRedirectToOrderEditPage()
@@ -111,15 +89,15 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         private async Task RemoveOrderAsync()
         {
-            var removed = await orderService.DeleteAdditionalOrderAsync(Id);
+            var removed = await orderService.RemoveOrderAsync(Id);
             if (removed)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.OrderRemoved);
+                ToastHelper.MakeLongToast(ToastConstans.OrderRemoved);
                 await Shell.Current.GoToAsync($"//{nameof(OrdersTutorPage)}");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
     }

@@ -1,10 +1,12 @@
 ﻿using Flurl.Http;
 using Plugin.FirebasePushNotification;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PushNotificationToken;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(PushNotificationTokenService))]
@@ -16,17 +18,17 @@ namespace TutoringSystemMobile.Services.Web
 
         public PushNotificationTokenService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "pushNotification/token";
+            baseUrl = $"{Settings.BaseApiUrl}{ServicesConstans.PushNotification}/{ServicesConstans.Token}";
         }
 
         public async Task<bool> PutTokenAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
             var deviceToken = CrossFirebasePushNotification.Current.Token;
-            var response = await baseUrl
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
-                .PutJsonAsync(new PushNotificationTokenDto { RegistrationToken = deviceToken });
+            var token = new PushNotificationTokenDto { RegistrationToken = deviceToken };
+
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .PutJsonAsync(token);
 
             return response.StatusCode == 204;
         }

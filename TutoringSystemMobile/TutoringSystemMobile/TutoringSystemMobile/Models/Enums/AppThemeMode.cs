@@ -1,4 +1,4 @@
-﻿namespace TutoringSystemMobile.Helpers
+﻿namespace TutoringSystemMobile.Models.Enums
 {
     public enum AppThemeMode
     {

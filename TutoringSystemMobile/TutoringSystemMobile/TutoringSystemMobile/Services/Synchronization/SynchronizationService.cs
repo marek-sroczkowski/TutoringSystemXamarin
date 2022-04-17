@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using Xamarin.Essentials;
@@ -42,9 +43,7 @@ namespace TutoringSystemMobile.Services.Synchronization
             //if (lastSynchronizationDate.AddHours(1) > DateTime.Now)
             //    return;
 
-            var statusString = await SecureStorage.GetAsync(nameof(AccountStatus));
-            var status = statusString.GetAccountStatus();
-            switch (status)
+            switch (Settings.LoginStatus)
             {
                 case AccountStatus.LoggedAsTutor:
                     await DependencyService.Get<IImageSynchronizer>().SynchronizeStudentImages();

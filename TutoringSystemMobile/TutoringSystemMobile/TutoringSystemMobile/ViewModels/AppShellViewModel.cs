@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -23,9 +24,19 @@ namespace TutoringSystemMobile.ViewModels
         public string User { get => user; set => SetValue(ref user, value); }
         public ImageSource ProfileImage { get => profileImage; set => SetValue(ref profileImage, value); }
 
+        private readonly IImageService imageService = DependencyService.Get<IImageService>();
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
+        private readonly IFlyoutService flyoutItemService = DependencyService.Get<IFlyoutService>();
+
         public AppShellViewModel()
         {
-            MessagingCenter.Subscribe<FlyoutItemService>(this, message: Role.Tutor.ToString(), async (sender) =>
+            SubscribeEvents();
+            OnAppearing();
+        }
+
+        private void SubscribeEvents()
+        {
+            MessagingCenter.Subscribe<FlyoutService>(this, message: Role.Tutor.ToString(), async (sender) =>
             {
                 IsTutor = true;
                 IsStudent = false;
@@ -33,7 +44,7 @@ namespace TutoringSystemMobile.ViewModels
                 await LoadPictureAsync();
             });
 
-            MessagingCenter.Subscribe<FlyoutItemService>(this, message: Role.Student.ToString(), async (sender) =>
+            MessagingCenter.Subscribe<FlyoutService>(this, message: Role.Student.ToString(), async (sender) =>
             {
                 IsTutor = false;
                 IsStudent = true;
@@ -50,29 +61,35 @@ namespace TutoringSystemMobile.ViewModels
             {
                 await LoadUserAsync();
             });
-
-            OnAppearing();
         }
 
-        private async void OnAppearing()
+        private void OnAppearing()
         {
-            await LoadUserAsync();
-            await LoadPictureAsync();
+            switch (Settings.LoginStatus)
+            {
+                case AccountStatus.LoggedAsTutor:
+                    flyoutItemService.EnableTutorFlyoutItems();
+                    break;
+                case AccountStatus.LoggedAsStudent:
+                    flyoutItemService.EnableStudentFlyoutItems();
+                    break;
+            }
         }
 
         private async Task LoadUserAsync()
         {
             User = await SecureStorage.GetAsync(SecureStorageConstans.UserName);
-            var user = await DependencyService.Get<IUserService>().GetGeneralUserInfoAsync();
+            var user = await userService.GetGeneralUserInfoAsync();
             User = $"{user.FirstName} {user.LastName}";
         }
 
         private async Task LoadPictureAsync()
         {
-            var picture = await DependencyService.Get<IImageService>()?.GetProfileImageAsync();
-            ProfileImage = picture.ProfilePictureFirebaseUrl != null ?
-                ImageSource.FromUri(new Uri(picture.ProfilePictureFirebaseUrl)) :
-                ResourceConstans.DefaultUserPicture;
+            var picture = await imageService.GetProfileImageAsync();
+
+            ProfileImage = picture.ProfilePictureFirebaseUrl != null
+                ? ImageSource.FromUri(new Uri(picture.ProfilePictureFirebaseUrl))
+                : ResourceConstans.DefaultUserPicture;
         }
     }
 }

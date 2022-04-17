@@ -34,6 +34,8 @@ namespace TutoringSystemMobile.ViewModels.Report
         public Command SubjectCategoriesReportCommand { get; }
         public Command PlacesReportCommand { get; }
 
+        private readonly IReportService reportService = DependencyService.Get<IReportService>();
+
         public MainReportViewModel()
         {
             MessagingCenter.Subscribe<ReportFilteringViewModel>(this, MessagingCenterConstans.FilterByDates, async (sender) =>
@@ -86,7 +88,7 @@ namespace TutoringSystemMobile.ViewModels.Report
         {
             IsBusy = true;
 
-            var generalSummary = await DependencyService.Get<IReportService>().GetGeneralReportAsync(new ReportParameters(StartDate, EndDate, SortingConstans.SortByTotalProfitDesc));
+            var generalSummary = await reportService.GetGeneralReportAsync(new ReportParameters(StartDate, EndDate, SortingConstans.SortByTotalProfitDesc));
             TutoringProfit = $"{generalSummary.TutoringProfit} zł";
             OrderProfit = $"{generalSummary.OrderProfit} zł";
             TotalProfit = $"{generalSummary.TotalProfit} zł";

@@ -8,7 +8,7 @@ namespace TutoringSystemMobile.Helpers
     {
         public static async Task<string> StoreImage(Stream imageStream, string fileName)
         {
-            var imageUrl = await new FirebaseStorage(AppSettingsManager.Settings["FirebaseStorageUrl"])
+            var imageUrl = await new FirebaseStorage(Settings.FirebaseStorageUrl)
                 .Child("ProfilePictures")
                 .Child(fileName)
                 .PutAsync(imageStream);
@@ -18,7 +18,7 @@ namespace TutoringSystemMobile.Helpers
 
         public static async Task RemoveImageFirebase(string fileName)
         {
-            await new FirebaseStorage(AppSettingsManager.Settings["FirebaseStorageUrl"])
+            await new FirebaseStorage(Settings.FirebaseStorageUrl)
                 .Child("ProfilePictures")
                 .Child(fileName)
                 .DeleteAsync();

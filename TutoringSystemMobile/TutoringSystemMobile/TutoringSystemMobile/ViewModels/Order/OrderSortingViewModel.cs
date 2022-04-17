@@ -1,7 +1,7 @@
 ﻿using Rg.Plugins.Popup.Services;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
-using TutoringSystemMobile.Models.Dtos.AdditionalOrder;
 using TutoringSystemMobile.Models.Helpers;
 using Xamarin.Forms;
 
@@ -120,21 +120,37 @@ namespace TutoringSystemMobile.ViewModels.Order
         private void SetSortingParams()
         {
             if (IsSortingByNameAsc)
+            {
                 SortBy = SortingConstans.SortByNameAsc;
+            }
             else if (IsSortingByNameDesc)
+            {
                 SortBy = SortingConstans.SortByNameDesc;
+            }
             else if (IsSortingByPriceAsc)
+            {
                 SortBy = SortingConstans.SortByCostAsc;
+            }
             else if (IsSortingByPriceDesc)
+            {
                 SortBy = SortingConstans.SortByCostDesc;
+            }
             else if (IsSortingByDeadlineAsc)
+            {
                 SortBy = SortingConstans.SortByDeadlineAsc;
+            }
             else if (IsSortingByDeadlineDesc)
+            {
                 SortBy = SortingConstans.SortByDeadlineDesc;
+            }
             else if (IsSortingByCreatedDateAsc)
+            {
                 SortBy = SortingConstans.SortByReceiptDateAsc;
+            }
             else if (IsSortingByCreatedDateDesc)
+            {
                 SortBy = SortingConstans.SortByReceiptDateDesc;
+            }
         }
 
         private void OnSetOrderBy()
@@ -211,8 +227,10 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         private async Task SortOrdersAsync(OrderSortingRadioButtonsActivity buttonsActivity)
         {
-            if (IsBusy || PopupNavigation.Instance.PopupStack.Count == 0)
+            if (IsBusy || !PopupNavigation.Instance.PopupStack.Any())
+            {
                 return;
+            }
 
             IsBusy = true;
             SetButtonsActivity(buttonsActivity);

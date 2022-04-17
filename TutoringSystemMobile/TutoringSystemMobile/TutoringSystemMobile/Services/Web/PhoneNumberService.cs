@@ -1,10 +1,12 @@
 ﻿using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.PhoneNumber;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(PhoneNumberService))]
@@ -16,16 +18,14 @@ namespace TutoringSystemMobile.Services.Web
 
         public PhoneNumberService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "contact";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Contact;
         }
 
         public async Task<bool> AddPhoneNumberAsync(long contactId, NewPhoneNumberDto newPhoneNumber)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegments(contactId, "phoneNumber")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(contactId, ServicesConstans.PhoneNumber)
                 .PostJsonAsync(newPhoneNumber);
 
             return response.StatusCode == 201;
@@ -33,11 +33,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> DeletePhoneNumberAsync(long contactId, long phoneNumberId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegments(contactId, "phoneNumber", phoneNumberId)
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(contactId, ServicesConstans.PhoneNumber, phoneNumberId)
                 .DeleteAsync();
 
             return response.StatusCode == 204;
@@ -45,11 +43,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<PhoneNumberDetailsDto> GetPhoneNumberById(long contactId, long phoneNumberId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegments(contactId, "phoneNumber", phoneNumberId)
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(contactId, ServicesConstans.PhoneNumber, phoneNumberId)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<PhoneNumberDetailsDto>() : new PhoneNumberDetailsDto();
@@ -57,11 +53,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<PhoneNumberDto>> GetPhoneNumbersByContactIdAsync(long contactId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegments(contactId, "phoneNumber")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(contactId, ServicesConstans.PhoneNumber)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<PhoneNumberDto>>() : new List<PhoneNumberDto>();
@@ -69,11 +63,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> UpdatePhoneNumberAsync(long contactId, UpdatedPhoneNumberDto updatedPhoneNumber)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegments(contactId, "phoneNumber")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(contactId, ServicesConstans.PhoneNumber)
                 .PutJsonAsync(updatedPhoneNumber);
 
             return response.StatusCode == 204;

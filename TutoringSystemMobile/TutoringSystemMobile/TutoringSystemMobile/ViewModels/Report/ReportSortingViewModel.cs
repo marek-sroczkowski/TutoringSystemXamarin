@@ -125,17 +125,29 @@ namespace TutoringSystemMobile.ViewModels.Report
         private void SetSortingParams()
         {
             if (IsSortingByProfitAsc)
+            {
                 SortBy = SortingConstans.SortByTotalProfitAsc;
+            }
             else if (IsSortingByProfitDesc)
+            {
                 SortBy = SortingConstans.SortByTotalProfitDesc;
+            }
             else if (IsSortingByHoursAsc)
+            {
                 SortBy = SortingConstans.SortByTotalHoursAsc;
+            }
             else if (IsSortingByHoursDesc)
+            {
                 SortBy = SortingConstans.SortByTotalHoursDesc;
+            }
             else if (IsSortingByReservationsCountAsc)
+            {
                 SortBy = SortingConstans.SortByReservationsCountAsc;
+            }
             else if (IsSortingByReservationsCountDesc)
+            {
                 SortBy = SortingConstans.SortByReservationsCountDesc;
+            }
         }
 
         private void OnSetOrderBy()
@@ -166,7 +178,9 @@ namespace TutoringSystemMobile.ViewModels.Report
         private async Task SortOrdersAsync(ReportSortingRadioButtonsActivity buttonsActivity)
         {
             if (IsBusy || PopupNavigation.Instance.PopupStack.Count == 0)
+            {
                 return;
+            }
 
             IsBusy = true;
             SetButtonsActivity(buttonsActivity);

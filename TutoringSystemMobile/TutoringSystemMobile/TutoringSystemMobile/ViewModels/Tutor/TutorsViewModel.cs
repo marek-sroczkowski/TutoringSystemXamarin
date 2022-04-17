@@ -17,12 +17,11 @@ namespace TutoringSystemMobile.ViewModels.Tutor
         public Command<DisplayedTutorDto> TutorTapped { get; }
         public Command PageAppearingCommand { get; }
 
-        public readonly ITutorService tutorService;
+        public readonly ITutorService tutorService = DependencyService.Get<ITutorService>();
 
         public TutorsViewModel()
         {
             Tutors = new ObservableCollection<DisplayedTutorDto>();
-            tutorService = DependencyService.Get<ITutorService>();
             LoadTutorsCommand = new Command(async () => await LoadTutorsAsync());
             AddTutorCommand = new Command(async () => await OnAddTutor());
             TutorTapped = new Command<DisplayedTutorDto>(async (tutor) => await OnTutorSelected(tutor));
@@ -41,10 +40,7 @@ namespace TutoringSystemMobile.ViewModels.Tutor
             var tutors = await tutorService.GetTutorsByStudentAsync();
             var displayedTutors = tutors.Select(t => new DisplayedTutorDto(t));
             Tutors.Clear();
-            foreach (var tutor in displayedTutors)
-            {
-                Tutors.Add(tutor);
-            }
+            displayedTutors.ToList().ForEach(tutor => Tutors.Add(tutor));
 
             IsBusy = false;
         }
@@ -52,7 +48,9 @@ namespace TutoringSystemMobile.ViewModels.Tutor
         private async Task OnTutorSelected(DisplayedTutorDto tutor)
         {
             if (tutor == null)
+            {
                 return;
+            }
 
             await Shell.Current.GoToAsync($"{nameof(TutorDetailsStudentPage)}?{nameof(TutorDetailsViewModel.Id)}={tutor.Id}");
         }

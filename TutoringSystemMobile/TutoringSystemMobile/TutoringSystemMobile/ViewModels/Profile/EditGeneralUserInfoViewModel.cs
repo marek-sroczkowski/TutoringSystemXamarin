@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Account;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -22,6 +22,8 @@ namespace TutoringSystemMobile.ViewModels.Profile
         public Command PageAppearingCommand { get; }
         public Command EditUserCommand { get; set; }
 
+        private readonly IUserService userService = DependencyService.Get<IUserService>();
+
         public EditGeneralUserInfoViewModel()
         {
             PageAppearingCommand = new Command(async () => await OnAppearing());
@@ -31,33 +33,33 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
         public bool CanEditUser()
         {
-            return !FirstName.IsEmpty() &&
-                !IsBusy;
+            return !FirstName.IsEmpty()
+                && !IsBusy;
         }
 
         private async Task OnEditUser()
         {
             IsBusy = true;
-            var updated = await DependencyService.Get<IUserService>()
-                .UpdateGeneralUserInfoAsync(new UpdatedUserDto(FirstName, LastName));
+            var user = new UpdatedUserDto(FirstName, LastName);
+            var updated = await userService.UpdateGeneralUserInfoAsync(user);
             IsBusy = false;
 
             if (updated)
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.Updated);
+                ToastHelper.MakeLongToast(ToastConstans.Updated);
                 await SecureStorage.SetAsync(SecureStorageConstans.UserName, $"{FirstName} {LastName}");
                 MessagingCenter.Send(this, MessagingCenterConstans.NameChanged);
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                DependencyService.Get<IToast>()?.MakeLongToast(ToastConstans.ErrorTryAgainLater);
+                ToastHelper.MakeLongToast(ToastConstans.ErrorTryAgainLater);
             }
         }
 
         private async Task OnAppearing()
         {
-            var user = await DependencyService.Get<IUserService>()?.GetGeneralUserInfoAsync();
+            var user = await userService.GetGeneralUserInfoAsync();
             Id = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;

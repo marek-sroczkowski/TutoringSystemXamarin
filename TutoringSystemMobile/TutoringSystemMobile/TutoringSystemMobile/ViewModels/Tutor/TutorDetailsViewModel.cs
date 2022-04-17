@@ -30,11 +30,10 @@ namespace TutoringSystemMobile.ViewModels.Tutor
 
         public Command PageAppearingCommand { get; }
 
-        private readonly ITutorService tutorService;
+        private readonly ITutorService tutorService = DependencyService.Get<ITutorService>();
 
         public TutorDetailsViewModel()
         {
-            tutorService = DependencyService.Get<ITutorService>();
             PageAppearingCommand = new Command(async () => await OnAppearing());
         }
 

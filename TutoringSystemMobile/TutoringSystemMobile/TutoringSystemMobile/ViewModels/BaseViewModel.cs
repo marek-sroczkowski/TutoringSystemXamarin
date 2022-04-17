@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Models.Enums;
 using Xamarin.Forms;
 
 namespace TutoringSystemMobile.ViewModels
@@ -41,9 +42,13 @@ namespace TutoringSystemMobile.ViewModels
             await Task.Run(async () =>
             {
                 if (Settings.Theme == AppThemeMode.Dark)
+                {
                     TabBackgroundColor = Color.FromHex("1f1f1f");
+                }
                 else if (Settings.Theme == AppThemeMode.Light)
+                {
                     TabBackgroundColor = Color.FromHex("dedede");
+                }
 
                 await Task.Delay(100);
                 TabBackgroundColor = Color.Transparent;

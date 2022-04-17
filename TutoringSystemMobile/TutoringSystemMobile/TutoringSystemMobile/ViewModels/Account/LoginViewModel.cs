@@ -9,6 +9,8 @@ using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Models.Dtos.Authentication;
 
 namespace TutoringSystemMobile.ViewModels.Account
 {
@@ -23,10 +25,15 @@ namespace TutoringSystemMobile.ViewModels.Account
         public Command LoginCommand { get; }
         public Command RegisterTutorFormCommand { get; }
 
+        private readonly IAuthenticationService authenticationService = DependencyService.Get<IAuthenticationService>();
+        private readonly IFlyoutService flyoutService = DependencyService.Get<IFlyoutService>();
+        private readonly IEnvironment environment = DependencyService.Get<IEnvironment>();
+
         public LoginViewModel()
         {
             LoginCommand = new Command(async () => await OnLogin(), CanLogin);
             PropertyChanged += (_, __) => LoginCommand.ChangeCanExecute();
+
             RegisterTutorFormCommand = new Command(async () => await OnRegisterFormClick());
         }
 
@@ -47,21 +54,22 @@ namespace TutoringSystemMobile.ViewModels.Account
         private async Task OnLogin()
         {
             IsBusy = true;
-            var loginResult = await DependencyService.Get<IUserService>().TryLoginAsync(new LoginUserDto(Username, Password));
+            var loginUser = new AuthenticationDto(Username, Password, environment.GetDeviceId());
+            var loginResult = await authenticationService.AuthenticateAsync(loginUser);
             IsBusy = false;
 
-            switch (loginResult.LoginStatus)
+            switch (loginResult.Status)
             {
-                case LoginStatus.LoggedInCorrectly:
+                case AuthenticationStatus.Success:
                     await LoggedInCorrectly(loginResult.User);
                     break;
-                case LoginStatus.InactiveAccount:
+                case AuthenticationStatus.InactiveAccount:
                     await InactiveAccount();
                     break;
-                case LoginStatus.UnregisteredStudent:
+                case AuthenticationStatus.UnregisteredStudent:
                     await UnregisteredStudent();
                     break;
-                case LoginStatus.InvalidUsernameOrPassword:
+                case AuthenticationStatus.InvalidUsernameOrPassword:
                     await InvalidUsernameOrPassword();
                     break;
             }
@@ -85,33 +93,33 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         private async Task InactiveAccount()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.InactiveAccount.ToString());
+            Settings.LoginStatus = AccountStatus.InactiveAccount;
             await Shell.Current.GoToAsync($"//{nameof(AccountActivationPage)}");
         }
 
         private async Task UnregisteredStudent()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.InactiveAccount.ToString());
+            Settings.LoginStatus = AccountStatus.InactiveAccount;
             await Shell.Current.GoToAsync($"{nameof(RegisterStudentPage)}");
         }
 
         private async Task InvalidUsernameOrPassword()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedOut.ToString());
+            Settings.LoginStatus = AccountStatus.LoggedOut;
             await Application.Current.MainPage.DisplayAlert(AlertConstans.Attention, AlertConstans.InvalidLogin, GeneralConstans.Ok);
         }
 
         private async Task LoggedAsTutor()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsTutor.ToString());
-            DependencyService.Get<IFlyoutItemService>().EnableTutorFlyoutItems();
+            Settings.LoginStatus = AccountStatus.LoggedAsTutor;
+            flyoutService.EnableTutorFlyoutItems();
             await Shell.Current.GoToAsync($"//{nameof(StartTutorPage)}");
         }
 
         private async Task LoggedAsStudent()
         {
-            await SecureStorage.SetAsync(nameof(AccountStatus), AccountStatus.LoggedAsStudent.ToString());
-            DependencyService.Get<IFlyoutItemService>().EnableStudentFlyoutItems();
+            Settings.LoginStatus = AccountStatus.LoggedAsStudent;
+            flyoutService.EnableStudentFlyoutItems();
             await Shell.Current.GoToAsync($"//{nameof(StartStudentPage)}");
         }
     }

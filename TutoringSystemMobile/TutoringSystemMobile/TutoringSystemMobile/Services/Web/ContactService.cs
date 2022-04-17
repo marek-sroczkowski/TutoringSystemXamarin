@@ -1,9 +1,11 @@
 ﻿using Flurl.Http;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Contact;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ContactService))]
@@ -15,16 +17,14 @@ namespace TutoringSystemMobile.Services.Web
 
         public ContactService()
         {
-            baseUrl = AppSettingsManager.Settings["BaseApiUrl"] + "contact";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Contact;
         }
 
         public async Task<ContactDetailsDto> GetContactByIdAsync(long contactId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(contactId)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<ContactDetailsDto>() : new ContactDetailsDto();
@@ -32,10 +32,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<ContactDetailsDto> GetContactByLoggedInUserAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<ContactDetailsDto>() : new ContactDetailsDto();
@@ -43,10 +41,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> UpdateContactAsync(UpdatedContactDto updatedContact)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PutJsonAsync(updatedContact);
 
             return response.StatusCode == 204;
