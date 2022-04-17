@@ -38,5 +38,6 @@
         public const string ReservationRemoved = "Usunięto lekcję";
         public const string AddedReservation = "Zaplanowano lekcję";
         public const string SubjectNameTaken = "Nazwa przedmiotu jest już użyta";
+        public const string RefreshTokenError = "Błąd autoryzacyjny. Wymagane ponowne logowanie";
     }
 }
