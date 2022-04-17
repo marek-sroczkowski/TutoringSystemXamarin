@@ -78,7 +78,7 @@ namespace TutoringSystemMobile.ViewModels.Subject
 
         private async Task RemoveSubjectAsync()
         {
-            var removed = await subjectService.DeleteSubjectAsync(Id);
+            var removed = await subjectService.RemoveSubjectAsync(Id);
             if (removed)
             {
                 ToastHelper.MakeLongToast(ToastConstans.SubjectRemoved);

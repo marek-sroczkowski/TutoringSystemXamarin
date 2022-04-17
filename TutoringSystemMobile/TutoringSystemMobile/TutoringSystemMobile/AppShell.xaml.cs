@@ -1,5 +1,6 @@
 ﻿using System;
 using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Views;
 using Xamarin.Forms;
 
@@ -10,6 +11,7 @@ namespace TutoringSystemMobile
         public AppShell()
         {
             InitializeComponent();
+            SetStartPage();
 
             Routing.RegisterRoute(nameof(RegisterTutorPage), typeof(RegisterTutorPage));
             Routing.RegisterRoute(nameof(RegisterStudentPage), typeof(RegisterStudentPage));
@@ -58,7 +60,17 @@ namespace TutoringSystemMobile
 
         private void OnLogoutClicked(object sender, EventArgs e)
         {
-            AccountHelper.LogoutAsync().Wait();
+            AuthenticationHelper.Logout();
+        }
+
+        private void SetStartPage()
+        {
+            CurrentItem = Settings.LoginStatus switch
+            {
+                AccountStatus.LoggedAsTutor => StartTutorPage,
+                AccountStatus.LoggedAsStudent => StartStudentPage,
+                _ => LoginPage,
+            };
         }
     }
 }

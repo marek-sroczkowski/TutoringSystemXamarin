@@ -5,9 +5,10 @@ namespace TutoringSystemMobile.Models.Dtos.Authentication
 {
     public class AuthenticationResposneDto
     {
-        public AuthenticationStatus LoginStatus { get; set; }
+        public AuthenticationStatus Status { get; set; }
         public UserDto User { get; set; }
-        public JwtTokenDto Token { get; set; }
+        public TokenDto JwtToken { get; set; }
+        public TokenDto RefreshToken { get; set; }
 
         public AuthenticationResposneDto()
         {
@@ -15,7 +16,7 @@ namespace TutoringSystemMobile.Models.Dtos.Authentication
 
         public AuthenticationResposneDto(AuthenticationStatus loginStatus, UserDto user)
         {
-            LoginStatus = loginStatus;
+            Status = loginStatus;
             User = user;
         }
     }

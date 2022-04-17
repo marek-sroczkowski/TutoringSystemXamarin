@@ -103,7 +103,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             OrderParameters.PageSize = 20;
             OrderParameters.OrderBy = SortBy;
 
-            var ordersCollection = await orderService.GetAdditionalOrdersAsync(OrderParameters);
+            var ordersCollection = await orderService.GetOrdersAsync(OrderParameters);
             CurrentPage = ordersCollection.Pagination.CurrentPage;
             HasNext = ordersCollection.Pagination.HasNext;
             Orders.Clear();
@@ -122,7 +122,7 @@ namespace TutoringSystemMobile.ViewModels.Order
             OrderParameters.PageSize = 20;
             OrderParameters.OrderBy = SortBy;
 
-            var ordersCollection = await orderService.GetAdditionalOrdersAsync(OrderParameters);
+            var ordersCollection = await orderService.GetOrdersAsync(OrderParameters);
             HasNext = ordersCollection.Pagination.HasNext;
             ordersCollection.Orders.ToList().ForEach(order => Orders.Add(order));
 

@@ -79,7 +79,7 @@ namespace TutoringSystemMobile.ViewModels.Order
         {
             IsBusy = true;
             var updatedOrder = new UpdatedOrderDto(Id, Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid, Status);
-            bool updated = await orderService.UpdateAdditionalOrderAsync(updatedOrder);
+            bool updated = await orderService.UpdateOrderAsync(updatedOrder);
             IsBusy = false;
 
             if (updated)
@@ -95,7 +95,7 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         private async void LoadOrderById(long orderId)
         {
-            var order = await orderService.GetAdditionalOrderByIdAsync(orderId);
+            var order = await orderService.GetOrderByIdAsync(orderId);
 
             Name = order.Name;
             Deadline = order.Deadline;

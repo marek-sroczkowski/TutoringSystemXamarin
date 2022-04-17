@@ -107,7 +107,7 @@ namespace TutoringSystemMobile.ViewModels.Reservation
 
         private async Task RemoveSingleReservationAsync()
         {
-            bool removed = await singleReservationService.DeleteReservationAsync(Id);
+            bool removed = await singleReservationService.RemoveReservationAsync(Id);
 
             if (removed)
             {
@@ -129,8 +129,8 @@ namespace TutoringSystemMobile.ViewModels.Reservation
             }
 
             bool removed = result == AlertConstans.OneLessonRemoving
-                ? await recurringReservationService.DeleteReservationAsync(Id, RecurringReservationRemovingMode.OneLesson)
-                : await recurringReservationService.DeleteReservationAsync(Id, RecurringReservationRemovingMode.OneLessonAndFuture);
+                ? await recurringReservationService.RemoveReservationAsync(Id, RecurringReservationRemovingMode.OneLesson)
+                : await recurringReservationService.RemoveReservationAsync(Id, RecurringReservationRemovingMode.OneLessonAndFuture);
 
             if (removed)
             {

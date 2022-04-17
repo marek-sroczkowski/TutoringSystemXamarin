@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Flurl.Http;
+using System;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Models.Enums;
+using TutoringSystemMobile.Services.Interceptors;
 using Xamarin.Essentials;
 
 namespace TutoringSystemMobile.Extensions
@@ -14,22 +17,18 @@ namespace TutoringSystemMobile.Extensions
         {
             var locationItems = location?.Split('/');
             if (locationItems is null || locationItems.Length == 0)
+            {
                 return -1;
+            }
 
             var id = locationItems.LastOrDefault();
 
-            if (!long.TryParse(id, out long result))
-                return -1;
-
-            return result;
+            return !long.TryParse(id, out long result) ? -1 : result;
         }
 
         public static double ToDouble(this string number)
         {
-            if (!double.TryParse(number, out double result))
-                return 0;
-
-            return result;
+            return !double.TryParse(number, out double result) ? 0 : result;
         }
 
         public static bool IsEmpty(this string property)
@@ -64,6 +63,19 @@ namespace TutoringSystemMobile.Extensions
         public static DateTime ToDateTime(this string date)
         {
             return date is null ? default : DateTime.Parse(date);
+        }
+
+        public static async Task<IFlurlRequest> BaseRequest(this string url)
+        {
+            var handler = new TokenRefresher();
+            var httpClient = new HttpClient(handler);
+            IFlurlClient client = new FlurlClient(httpClient);
+            string token = await SecureStorage.GetAsync(SecureStorageConstans.JwtToken);
+
+            return url
+                .WithClient(client)
+                .AllowAnyHttpStatus()
+                .WithOAuthBearerToken(token);
         }
     }
 }

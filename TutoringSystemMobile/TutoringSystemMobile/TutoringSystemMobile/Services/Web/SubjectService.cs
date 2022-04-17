@@ -2,13 +2,13 @@
 using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
 using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Subject;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(SubjectService))]
@@ -20,27 +20,23 @@ namespace TutoringSystemMobile.Services.Web
 
         public SubjectService()
         {
-            baseUrl = Settings.BaseApiUrl + "subject";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Subject;
         }
 
         public async Task<long> AddSubjectAsync(NewSubjectDto newSubjectModel)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PostJsonAsync(newSubjectModel);
 
             return await GetAddedResultAsync(response);
         }
 
-        public async Task<bool> DeleteSubjectAsync(long subjectId)
+        public async Task<bool> RemoveSubjectAsync(long subjectId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(subjectId)
-                .WithOAuthBearerToken(token)
                 .DeleteAsync();
 
             return response.StatusCode == 204;
@@ -48,11 +44,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<SubjectDetailsDto> GetSubjectByIdAsync(long subjectId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(subjectId)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<SubjectDetailsDto>() : new SubjectDetailsDto();
@@ -60,10 +54,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<SubjectDto>> GetSubjectsAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<SubjectDto>>() : new List<SubjectDto>();
@@ -71,11 +63,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<SubjectDto>> GetSubjectByTutorId(long tutorId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("student", tutorId)
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Student, tutorId)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<SubjectDto>>() : new List<SubjectDto>();
@@ -83,10 +73,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<long> UpdateSubjectAsync(UpdatedSubjectDto updatedSubject)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PutJsonAsync(updatedSubject);
 
             return await GetUpdatedResultAsync(response);
@@ -99,12 +87,8 @@ namespace TutoringSystemMobile.Services.Web
             {
                 return -2;
             }
-            else if (response.StatusCode != 201)
-            {
-                return -1;
-            }
 
-            string location = response.Headers.FirstOrDefault("location");
+            string location = response.Headers.FirstOrDefault(ServicesConstans.Location);
 
             return location is null ? -1 : location.GetIdByLocation();
         }
@@ -115,10 +99,6 @@ namespace TutoringSystemMobile.Services.Web
             if (content?.Errors?.Name != null)
             {
                 return -2;
-            }
-            else if (response.StatusCode != 204)
-            {
-                return -1;
             }
 
             return 1;

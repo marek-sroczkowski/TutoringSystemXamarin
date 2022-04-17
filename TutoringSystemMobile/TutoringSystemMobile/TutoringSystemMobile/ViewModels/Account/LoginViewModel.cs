@@ -27,6 +27,7 @@ namespace TutoringSystemMobile.ViewModels.Account
 
         private readonly IAuthenticationService authenticationService = DependencyService.Get<IAuthenticationService>();
         private readonly IFlyoutService flyoutService = DependencyService.Get<IFlyoutService>();
+        private readonly IEnvironment environment = DependencyService.Get<IEnvironment>();
 
         public LoginViewModel()
         {
@@ -53,11 +54,11 @@ namespace TutoringSystemMobile.ViewModels.Account
         private async Task OnLogin()
         {
             IsBusy = true;
-            var loginUser = new AuthenticationDto(Username, Password);
+            var loginUser = new AuthenticationDto(Username, Password, environment.GetDeviceId());
             var loginResult = await authenticationService.AuthenticateAsync(loginUser);
             IsBusy = false;
 
-            switch (loginResult.LoginStatus)
+            switch (loginResult.Status)
             {
                 case AuthenticationStatus.Success:
                     await LoggedInCorrectly(loginResult.User);

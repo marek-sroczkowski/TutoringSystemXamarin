@@ -2,11 +2,12 @@
 using Flurl.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Images;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ImageService))]
@@ -18,15 +19,13 @@ namespace TutoringSystemMobile.Services.Web
 
         public ImageService()
         {
-            baseUrl = Settings.BaseApiUrl + "image";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Image;
         }
 
         public async Task<bool> SetProfileImageAsync(ProfileImageDto image)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PatchJsonAsync(image);
 
             return response.StatusCode == 204;
@@ -34,10 +33,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> RemoveProfileImageAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .DeleteAsync();
 
             return response.StatusCode == 204;
@@ -45,10 +42,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<ProfileImageDetailsDto> GetProfileImageAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<ProfileImageDetailsDto>() : new ProfileImageDetailsDto();
@@ -56,30 +51,26 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<ProfileImageDetailsDto>> GetStudentPhotos()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment("students")
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Students)
                 .GetAsync();
 
-            return response.StatusCode == 200 ?
-                await response.GetJsonAsync<IEnumerable<ProfileImageDetailsDto>>() :
-                new List<ProfileImageDetailsDto>();
+            return response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<ProfileImageDetailsDto>>()
+                : new List<ProfileImageDetailsDto>();
         }
 
         public async Task<IEnumerable<ProfileImageDetailsDto>> GetTutorPhotos()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment("tutors")
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Tutors)
                 .GetAsync();
 
-            return response.StatusCode == 200 ?
-                await response.GetJsonAsync<IEnumerable<ProfileImageDetailsDto>>() :
-                new List<ProfileImageDetailsDto>();
+            return response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<ProfileImageDetailsDto>>()
+                : new List<ProfileImageDetailsDto>();
         }
     }
 }

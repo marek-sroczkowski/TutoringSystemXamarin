@@ -159,7 +159,7 @@ namespace TutoringSystemMobile.ViewModels.Start
         private async Task<IEnumerable<OrderDto>> GetOrdersAsync()
         {
             var parameters = GetOrdersParameters();
-            var orders = await orderService.GetAdditionalOrdersAsync(parameters);
+            var orders = await orderService.GetOrdersAsync(parameters);
 
             return orders.Orders;
         }

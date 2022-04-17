@@ -48,7 +48,7 @@ namespace TutoringSystemMobile.ViewModels.Order
         {
             IsBusy = true;
             var newOrder = new NewOrderDto(Name, Deadline.Value, Description, Cost.ToDouble(), IsPaid);
-            long newOrderId = await orderService.AddAdditionalOrderAsync(newOrder);
+            long newOrderId = await orderService.AddOrderAsync(newOrder);
             IsBusy = false;
 
             if (newOrderId == -1)

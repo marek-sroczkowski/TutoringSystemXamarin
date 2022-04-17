@@ -1,10 +1,11 @@
 ﻿using Flurl.Http;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Address;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(AddressService))]
@@ -16,16 +17,14 @@ namespace TutoringSystemMobile.Services.Web
 
         public AddressService()
         {
-            baseUrl = Settings.BaseApiUrl + "address";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Address;
         }
 
         public async Task<AddressDetailsDto> GetAddressByIdAsync(long addressId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(addressId)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<AddressDetailsDto>() : new AddressDetailsDto();
@@ -33,10 +32,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<AddressDetailsDto> GetAddressOfLoggedInUserAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<AddressDetailsDto>() : new AddressDetailsDto();
@@ -44,10 +41,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> UpdateAddressAsync(UpdatedAddressDto updatedAddress)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PutJsonAsync(updatedAddress);
 
             return response.StatusCode == 204;

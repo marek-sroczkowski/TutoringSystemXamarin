@@ -6,9 +6,10 @@ using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.Dtos.Report;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Constans;
 
 [assembly: Dependency(typeof(ReportService))]
 namespace TutoringSystemMobile.Services.Web
@@ -19,17 +20,15 @@ namespace TutoringSystemMobile.Services.Web
 
         public ReportService()
         {
-            baseUrl = Settings.BaseApiUrl + "report";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Report;
         }
 
         public async Task<GeneralReportDto> GetGeneralReportAsync(ReportParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment("summary")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Summary)
                 .SetQueryParams(parameters)
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<GeneralReportDto>() : new GeneralReportDto();
@@ -37,25 +36,23 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<GeneralTimedReportDto>> GetGeneralTimedReport(ReportParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("summary", "timed")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Summary, ServicesConstans.Timed)
                 .SetQueryParams(parameters)
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
-            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<GeneralTimedReportDto>>() : new List<GeneralTimedReportDto>();
+            return response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<GeneralTimedReportDto>>()
+                : new List<GeneralTimedReportDto>();
         }
 
         public async Task<IEnumerable<StudentReportDto>> GetStudentsReportAsync(ReportParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("summary", "students")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Summary, ServicesConstans.Students)
                 .SetQueryParams(parameters)
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<StudentReportDto>>() : new List<StudentReportDto>();
@@ -63,25 +60,23 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<SubjectCategoryReportDto>> GetSubjectCategoryReportAsync(ReportParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("summary", "subjects", "categories")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Summary, ServicesConstans.Subjects, ServicesConstans.Categories)
                 .SetQueryParams(parameters)
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
-            return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<SubjectCategoryReportDto>>() : new List<SubjectCategoryReportDto>();
+            return response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<SubjectCategoryReportDto>>()
+                : new List<SubjectCategoryReportDto>();
         }
 
         public async Task<IEnumerable<SubjectReportDto>> GetSubjectReportAsync(ReportParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("summary", "subjects")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Summary, ServicesConstans.Subjects)
                 .SetQueryParams(parameters)
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<SubjectReportDto>>() : new List<SubjectReportDto>();
@@ -89,12 +84,10 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<IEnumerable<PlaceReportDto>> GetPlaceReportAsync(ReportParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("summary", "places")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Summary, ServicesConstans.Places)
                 .SetQueryParams(parameters)
-                .AllowAnyHttpStatus()
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<IEnumerable<PlaceReportDto>>() : new List<PlaceReportDto>();

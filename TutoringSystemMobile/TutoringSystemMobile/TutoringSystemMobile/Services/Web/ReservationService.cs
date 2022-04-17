@@ -7,9 +7,10 @@ using TutoringSystemMobile.Models.Parameters;
 using TutoringSystemMobile.Models.Dtos.Reservation;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using TutoringSystemMobile.Helpers;
+using TutoringSystemMobile.Extensions;
+using TutoringSystemMobile.Constans;
 
 [assembly: Dependency(typeof(ReservationService))]
 namespace TutoringSystemMobile.Services.Web
@@ -20,17 +21,15 @@ namespace TutoringSystemMobile.Services.Web
 
         public ReservationService()
         {
-            baseUrl = Settings.BaseApiUrl + "reservation";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Reservation;
         }
 
         public async Task<ReservationsCollectionDto> GetReservationsByStudentAsync(ReservationParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("student")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Student)
                 .SetQueryParams(parameters)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return await GetReservationsAsync(response);
@@ -38,12 +37,10 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<ReservationsCollectionDto> GetReservationsByTutorAsync(ReservationParameters parameters)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
-                .AppendPathSegment("tutor")
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Tutor)
                 .SetQueryParams(parameters)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return await GetReservationsAsync(response);
@@ -51,11 +48,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<ReservationDetailsDto> GetReservationByIdAsync(long reservationId)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .AppendPathSegment(reservationId)
-                .WithOAuthBearerToken(token)
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<ReservationDetailsDto>() : new ReservationDetailsDto();
@@ -63,13 +58,13 @@ namespace TutoringSystemMobile.Services.Web
 
         private static async Task<ReservationsCollectionDto> GetReservationsAsync(IFlurlResponse response)
         {
-            var reservations = response.StatusCode == 200 ?
-                            await response.GetJsonAsync<IEnumerable<ReservationDto>>() :
-                            new List<ReservationDto>();
+            var reservations = response.StatusCode == 200
+                ? await response.GetJsonAsync<IEnumerable<ReservationDto>>()
+                : new List<ReservationDto>();
 
-            var pagination = response.StatusCode == 200 ?
-                JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault("X-Pagination")) :
-                new PaginationMetadata();
+            var pagination = response.StatusCode == 200
+                ? JsonConvert.DeserializeObject<PaginationMetadata>(response.Headers.FirstOrDefault(ServicesConstans.XPagination))
+                : new PaginationMetadata();
 
             return new ReservationsCollectionDto { Reservations = reservations, Pagination = pagination };
         }

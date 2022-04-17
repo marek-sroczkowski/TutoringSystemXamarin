@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Utils;
@@ -25,8 +26,15 @@ namespace TutoringSystemMobile.ViewModels
 
         private readonly IImageService imageService = DependencyService.Get<IImageService>();
         private readonly IUserService userService = DependencyService.Get<IUserService>();
+        private readonly IFlyoutService flyoutItemService = DependencyService.Get<IFlyoutService>();
 
         public AppShellViewModel()
+        {
+            SubscribeEvents();
+            OnAppearing();
+        }
+
+        private void SubscribeEvents()
         {
             MessagingCenter.Subscribe<FlyoutService>(this, message: Role.Tutor.ToString(), async (sender) =>
             {
@@ -53,14 +61,19 @@ namespace TutoringSystemMobile.ViewModels
             {
                 await LoadUserAsync();
             });
-
-            OnAppearing();
         }
 
-        private async void OnAppearing()
+        private void OnAppearing()
         {
-            await LoadUserAsync();
-            await LoadPictureAsync();
+            switch (Settings.LoginStatus)
+            {
+                case AccountStatus.LoggedAsTutor:
+                    flyoutItemService.EnableTutorFlyoutItems();
+                    break;
+                case AccountStatus.LoggedAsStudent:
+                    flyoutItemService.EnableStudentFlyoutItems();
+                    break;
+            }
         }
 
         private async Task LoadUserAsync()

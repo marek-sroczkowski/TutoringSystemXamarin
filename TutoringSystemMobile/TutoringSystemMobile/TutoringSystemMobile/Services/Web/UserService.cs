@@ -3,16 +3,17 @@ using Flurl.Http;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringSystemMobile.Constans;
+using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Dtos.Account;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Models.Errors;
 using TutoringSystemMobile.Services.Interfaces;
 using TutoringSystemMobile.Services.Web;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
-[assembly:Dependency(typeof(UserService))]
+[assembly: Dependency(typeof(UserService))]
 namespace TutoringSystemMobile.Services.Web
 {
     public class UserService : IUserService
@@ -21,17 +22,15 @@ namespace TutoringSystemMobile.Services.Web
 
         public UserService()
         {
-            baseUrl = Settings.BaseApiUrl + "account";
+            baseUrl = Settings.BaseApiUrl + ServicesConstans.Account;
         }
 
         public async Task<bool> ActivateUserByTokenAsync(string activationToken)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment("activate")
-                .SetQueryParam("token", activationToken)
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Activate)
+                .SetQueryParam(ServicesConstans.Token, activationToken)
                 .PostAsync();
 
             return response.StatusCode == 200;
@@ -39,11 +38,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<PasswordChangeError> ChangePasswordAsync(PasswordDto passwordModel)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment("password")
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Password)
                 .PatchJsonAsync(passwordModel);
 
             return await GetPasswordChangeError(response);
@@ -51,10 +48,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> DeactivateUserAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .DeleteAsync();
 
             return response.StatusCode == 204;
@@ -62,24 +57,21 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<Role> GetUserRole()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment("role")
-                .WithOAuthBearerToken(token)
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.Role)
                 .GetAsync();
 
-            var userRole = await GetUserRole(response);
+            var userRole = await response.GetUserRole();
 
             return userRole;
         }
 
         public async Task<RegisterErrors> RegisterStudentAsync(RegisteredStudentDto student)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("register", "student")
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Register, ServicesConstans.Student)
                 .PostJsonAsync(student);
 
             var content = await response.GetJsonAsync<ResponseError<RegisterErrors>>();
@@ -89,11 +81,9 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<RegisterErrors> CreateStudentAsync(NewStudentDto student)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegments("create", "student")
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegments(ServicesConstans.Create, ServicesConstans.Student)
                 .PostJsonAsync(student);
 
             var content = await response.GetJsonAsync<ResponseError<RegisterErrors>>();
@@ -104,7 +94,7 @@ namespace TutoringSystemMobile.Services.Web
         public async Task<RegisterErrors> RegisterTutorAsync(RegisteredTutorDto tutor)
         {
             var response = await baseUrl
-                .AppendPathSegments("register", "tutor")
+                .AppendPathSegments(ServicesConstans.Register, ServicesConstans.Tutor)
                 .AllowAnyHttpStatus()
                 .PostJsonAsync(tutor);
 
@@ -115,29 +105,18 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<bool> SendNewActivationTokenAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .AppendPathSegment("newCode")
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
+                .AppendPathSegment(ServicesConstans.NewCode)
                 .PostAsync();
 
             return response.StatusCode == 200;
         }
 
-        private async Task<Role> GetUserRole(IFlurlResponse response)
-        {
-            var role = await response.GetStringAsync();
-
-            return (Role)Enum.Parse(typeof(Role), role.Trim('\"'));
-        }
-
         public async Task<bool> UpdateGeneralUserInfoAsync(UpdatedUserDto updatedUser)
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .PutJsonAsync(updatedUser);
 
             return response.StatusCode == 204;
@@ -145,10 +124,8 @@ namespace TutoringSystemMobile.Services.Web
 
         public async Task<ShortUserDto> GetGeneralUserInfoAsync()
         {
-            string token = await SecureStorage.GetAsync("token");
-            var response = await baseUrl
-                .WithOAuthBearerToken(token)
-                .AllowAnyHttpStatus()
+            var baseRequest = await baseUrl.BaseRequest();
+            var response = await baseRequest
                 .GetAsync();
 
             return response.StatusCode == 200 ? await response.GetJsonAsync<ShortUserDto>() : new ShortUserDto();

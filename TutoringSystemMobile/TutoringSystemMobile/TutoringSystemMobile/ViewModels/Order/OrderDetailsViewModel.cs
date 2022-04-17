@@ -57,7 +57,7 @@ namespace TutoringSystemMobile.ViewModels.Order
         private async void LoadOrderById(long orderId)
         {
             IsBusy = true;
-            var order = await orderService.GetAdditionalOrderByIdAsync(orderId);
+            var order = await orderService.GetOrderByIdAsync(orderId);
 
             Name = order.Name;
             Deadline = order.Deadline;
@@ -89,7 +89,7 @@ namespace TutoringSystemMobile.ViewModels.Order
 
         private async Task RemoveOrderAsync()
         {
-            var removed = await orderService.DeleteAdditionalOrderAsync(Id);
+            var removed = await orderService.RemoveOrderAsync(Id);
             if (removed)
             {
                 ToastHelper.MakeLongToast(ToastConstans.OrderRemoved);

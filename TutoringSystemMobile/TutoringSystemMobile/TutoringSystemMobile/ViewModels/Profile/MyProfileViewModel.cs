@@ -1,11 +1,9 @@
 ﻿using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
 using TutoringSystemMobile.Constans;
-using TutoringSystemMobile.Extensions;
 using TutoringSystemMobile.Helpers;
 using TutoringSystemMobile.Models.Enums;
 using TutoringSystemMobile.Services.Interfaces;
-using TutoringSystemMobile.Services.Utils;
 using TutoringSystemMobile.ViewModels.Address;
 using TutoringSystemMobile.ViewModels.PhoneNumber;
 using TutoringSystemMobile.Views;
@@ -43,7 +41,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
             DeactivateAccountCommand = new Command(async () => await OnDeactivateAccount());
             DarkModeCommand = new Command(async () => await OnDarkMode());
             RateAppCommand = new Command(async () => await OnRateApp());
-            LogoutCommand = new Command(async () => await OnLogout());
+            LogoutCommand = new Command(OnLogout);
 
             OnAppearing();
         }
@@ -108,7 +106,7 @@ namespace TutoringSystemMobile.ViewModels.Profile
 
             if (removed)
             {
-                await OnLogout();
+                OnLogout();
             }
             else
             {
@@ -126,9 +124,9 @@ namespace TutoringSystemMobile.ViewModels.Profile
             await Launcher.OpenAsync($"http://play.google.com/store/apps/details?id=com.facebook.orca&gl=PL");
         }
 
-        private async Task OnLogout()
+        private void OnLogout()
         {
-            await AccountHelper.LogoutAsync();
+            AuthenticationHelper.Logout();
         }
     }
 }
