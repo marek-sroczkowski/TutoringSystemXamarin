@@ -17,7 +17,7 @@ namespace TutoringSystemMobile.ViewModels.Reservation
 {
     public class TutorReservationsViewModel : BaseViewModel
     {
-        private List<string> months;
+        private readonly List<string> months;
 
         private DateTime selectedDate = DateTime.Now;
         private int year = DateTime.Now.Year;

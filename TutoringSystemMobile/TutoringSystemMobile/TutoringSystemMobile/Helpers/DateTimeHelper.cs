@@ -20,7 +20,7 @@ namespace TutoringSystemMobile.Helpers
                 PickerConstans.September,
                 PickerConstans.October,
                 PickerConstans.November,
-                PickerConstans.October
+                PickerConstans.December
             };
 
             return months;
